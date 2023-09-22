@@ -4,7 +4,7 @@
           <Location :storeInfo="storeInfo"/>
       </block>
       <block>
-          <Search tips="请输入搜索关键字..." @event="$navTo('pages/search/index')"/>
+          <Search tips="请输入搜索关键字" @event="$navTo('pages/search/index')"/>
       </block>
       <block>
           <Banner :itemStyle="options.bannerStyle" :params="options.bannerParam" :dataList="banner"/>
@@ -129,8 +129,9 @@
      * 生命周期函数--监听页面显示
      */
     onShow() {
-      const app = this
+      const app = this;
       showMessage();
+      setCartTabBadge();
       app.onGetStoreInfo();
       let isReflash = uni.getStorageSync("reflashHomeData");
       app.isReflash = isReflash;
@@ -142,13 +143,12 @@
           success(res){
               uni.setStorageSync('latitude', res.latitude);
               uni.setStorageSync('longitude', res.longitude);
-            app.onGetStoreInfo();
+              app.onGetStoreInfo();
           },
           fail(e) {
              // empty
           }
       })
-      
     },
 
     methods: {

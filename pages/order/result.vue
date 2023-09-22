@@ -119,8 +119,8 @@
         app.isLoading = true
         OrderApi.detail(app.orderId)
           .then(result => {
-            app.isSuccess = result.data.payStatus === 'B' ? true : false
-            app.isLoading = false
+              app.isSuccess = result.data.payStatus === 'B' ? true : false;
+              app.isLoading = false;
           })
       },
     }

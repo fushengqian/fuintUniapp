@@ -4,7 +4,7 @@
     <Location v-if="storeInfo" :storeInfo="storeInfo"/>
     
     <!-- 搜索框 -->
-    <Search tips="请输入搜索关键字..." @event="$navTo('pages/search/index')" />
+    <Search tips="请输入搜索关键字" @event="$navTo('pages/search/index')" />
 
     <view class="cate-content dis-flex" v-if="list.length > 0">
     
@@ -132,13 +132,10 @@
      * 生命周期函数--监听页面显示
      */
     onShow() {
-      const app = this
+      const app = this;
       // 获取页面数据
-      app.getPageData()
-      // 更新购物车角标
-      setCartTabBadge()
-      app.onGetStoreInfo()
-      
+      app.getPageData();
+      app.onGetStoreInfo();
       uni.getLocation({
           type: 'gcj02',
           success(res){
@@ -167,12 +164,11 @@
           ])
           .then(result => {
             // 初始化分类列表数据
-            app.list = result[0].data
-            app.totalNum = result[1].data.totalNum
-            app.goodsCart = result[1].data.list
-            
-            setCartTotalNum(app.totalNum)
-            setCartTabBadge()
+            app.list = result[0].data;
+            app.totalNum = result[1].data.totalNum;
+            app.goodsCart = result[1].data.list;
+            setCartTotalNum(app.totalNum);
+            setCartTabBadge();
           })
           .finally(() => {
               app.isLoading = false
@@ -183,9 +179,9 @@
                       let totalBuyNum = 0
                       app.goodsCart.forEach(function(cart){
                          if (goods.id == cart.goodsId) {
-                            total = total + cart.num
-                            totalBuyNum = totalBuyNum + cart.num
-                            app.totalPrice = app.totalPrice + (cart.goodsInfo.price * cart.num)
+                             total = total + cart.num
+                             totalBuyNum = totalBuyNum + cart.num
+                             app.totalPrice = app.totalPrice + (cart.goodsInfo.price * cart.num)
                          } 
                       })
                       app.$set(app.list[index].goodsList[key], 'buyNum', totalBuyNum)
