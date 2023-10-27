@@ -107,16 +107,16 @@
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-       let type = options.type !== undefined ? options.type : ''
+       let type = options.type !== undefined ? options.type : '';
        this.type = type;
        uni.setNavigationBarTitle({
-         title: "我的" + CouponTypeEnum[type].name
+           title: "我的" + CouponTypeEnum[type].name
        })
     },
     
     onShow() {
       // 获取页面数据
-      this.getCouponList(1)
+      this.getCouponList(1);
     },
 
     methods: {
@@ -136,11 +136,11 @@
       // 卡券详情
       onDetail(userCouponId, type) {
           if (type === 'C') {
-              this.$navTo(`pages/coupon/detail`, { userCouponId })
-          } else if(type === 'T'){
-              this.$navTo(`pages/timer/detail`, { userCouponId })
+              this.$navTo(`pages/coupon/detail`, { userCouponId });
+          } else if(type === 'T') {
+              this.$navTo(`pages/timer/detail`, { userCouponId });
           } else if(type === 'P') {
-              this.$navTo(`pages/prestore/detail`, { userCouponId })
+              this.$navTo(`pages/prestore/detail`, { userCouponId });
           }
       },
       
@@ -148,40 +148,39 @@
        * 获取卡券列表
        */
       getCouponList(pageNo = 1) {
-        const app = this
+        const app = this;
         return new Promise((resolve, reject) => {
           MyCouponApi.list({ type: app.type, status: app.getTabValue(), page: pageNo }, { load: false })
             .then(result => {
               // 合并新数据
-              const newList = result.data
-              app.list.content = getMoreListData(newList, app.list, pageNo)
-              resolve(newList)
+              const newList = result.data;
+              app.list.content = getMoreListData(newList, app.list, pageNo);
+              resolve(newList);
             })
         })
       },
 
       // 类型
       getTabValue() {
-        return this.tabs[this.curTab].value
+        return this.tabs[this.curTab].value;
       },
 
       // 切换标签项
       onChangeTab(index) {
-        const app = this
+        const app = this;
         // 设置当前选中的标签
-        app.curTab = index
+        app.curTab = index;
         // 刷新优惠券列表
-        app.onRefreshList()
+        app.onRefreshList();
       },
 
       // 刷新优惠券列表
       onRefreshList() {
-        this.list = getEmptyPaginateObj()
+        this.list = getEmptyPaginateObj();
         setTimeout(() => {
-          this.mescroll.resetUpScroll()
+          this.mescroll.resetUpScroll();
         }, 120)
-      },
-
+      }
     }
   }
 </script>
@@ -219,10 +218,10 @@
   
     .goods-name {
       margin-top: 45rpx;
-      height: 64rpx;
-      line-height: 1.3;
+      height: 45rpx;
       white-space: normal;
       color: #484848;
+      font-weight: bold;
       font-size: 30rpx;
     }
   }
@@ -231,8 +230,8 @@
     margin-top: 0rpx;
     .coupon-attr {
        .attr-l {
-           float:left;
-           width: 70%;
+           float: left;
+           width: 100%;
        }
        .attr-r {
            margin-top: 5rpx;

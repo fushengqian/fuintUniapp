@@ -105,10 +105,10 @@
           .then(result => app.onSubmitCallback(result))
           .catch(err => {
             if (err.result) {
-              const errData = err.result.data;
-              if (errData) {
-                  return false;
-              }
+                const errData = err.result.data;
+                if (errData) {
+                    return false;
+                }
             }
         })
       },

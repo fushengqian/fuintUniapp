@@ -573,7 +573,7 @@
   .my-asset {
     display: flex;
     background: #fff;
-    margin: 0rpx 20rpx 0rpx 20rpx;
+    margin: 10rpx 20rpx 10rpx 20rpx;
     padding: 40rpx 0;
     border: 2rpx #f5f5f5 solid;
 
@@ -604,7 +604,7 @@
   // 订单操作
   .order-navbar {
     display: flex;
-    margin: 10rpx auto 10rpx auto;
+    margin: 12rpx auto 10rpx auto;
     padding: 20rpx 0;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
@@ -612,17 +612,16 @@
     border-radius: 5rpx;
     background: #fff;
     border: 2rpx #f5f5f5 solid;
-
     &-item {
       position: relative;
       width: 33%;
-
       .item-icon {
         text-align: center;
         margin: 0 auto;
         padding: 10rpx 0;
         color: #545454;
-        font-size: 40rpx;
+        font-size: 48rpx;
+        font-weight: bold;
       }
 
       .item-name {
@@ -697,7 +696,7 @@
   
   // 会员升级
   .member-update {
-      margin: 22rpx auto 22rpx auto;
+      margin: 22rpx auto 0rpx auto;
       padding: 20rpx 0;
       border-radius: 5rpx;
       box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);

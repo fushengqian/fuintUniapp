@@ -132,7 +132,7 @@
         padding: 15rpx 0rpx 15rpx 15rpx;
         border-radius: 10rpx;
         margin: 20rpx;
-        min-height: 220rpx;
+        min-height: 240rpx;
         .coupon-image {
             float: left;
             margin-top: 10rpx;

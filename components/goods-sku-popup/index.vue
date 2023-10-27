@@ -474,7 +474,6 @@
             []
           ]
         );
-        // console.timeEnd('计算有多小种可选路径需要的时间是');
       },
       // 检测sku选项是否已全部选完,且有库存
       checkSelectComplete(obj = {}) {
@@ -585,7 +584,6 @@
     bottom: 0;
     z-index: 9999;
     overflow: hidden;
-
     &.show {
       display: block;
 
@@ -624,13 +622,15 @@
     .layer {
       display: flex;
       width: 100%;
-      max-height: 1200rpx;
+      max-height: 960rpx;
       flex-direction: column;
       position: fixed;
-      z-index: 999;
+      z-index: 999999;
       bottom: 0;
       border-radius: 10rpx 10rpx 0 0;
-      background-color: #fff;
+      background-color: #ffffff;
+      margin-top: 10rpx;
+      overflow-y: scroll;
       .btn-option {
           padding: 1rpx;
           display: block;
@@ -639,6 +639,7 @@
       }
       .specification-wrapper {
         width: 100%;
+        margin-top: 20rpx;
         padding: 30rpx 25rpx;
         box-sizing: border-box;
         .specification-wrapper-content {
