@@ -79,21 +79,21 @@
 
       // 获取微信用户信息
       getUserProfile() {
-        const app = this
+        const app = this;
         wx.canIUse('getUserProfile') && wx.getUserProfile({
           lang: 'zh_CN',
           desc: '获取用户相关信息',
           success({ userInfo }) {
             console.log('userInfo == ', userInfo)
             if (app.needPhone) {
-                app.isProfile = true
+                app.isProfile = true;
             }
             // 授权成功事件
-            userInfo.type = "profile"
-            app.onAuthSuccess(userInfo)
+            userInfo.type = "profile";
+            app.onAuthSuccess(userInfo);
           },
-          fail() {
-            console.log('用户拒绝了授权')
+          fail: function(res) {
+            console.log('登录授权失败，返回信息： ', res);
           }
         })
       },

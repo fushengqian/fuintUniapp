@@ -121,7 +121,12 @@
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad() {
+    onLoad({ storeId }) {
+      storeId = storeId ? parseInt(storeId) : 0;
+      if (storeId > 0) {
+          uni.setStorageSync('storeId', storeId);
+          uni.setStorageSync("reflashHomeData", true);
+      }
       this.getPageData();
     },
 
@@ -186,9 +191,10 @@
             const app = this
             settingApi.systemConfig()
              .then(result => {
-               app.storeInfo = result.data.storeInfo
+               app.storeInfo = result.data.storeInfo;
                if (app.storeInfo) {
-                   uni.setStorageSync("storeId", app.storeInfo.id)
+                   uni.setStorageSync("storeId", app.storeInfo.id);
+                   uni.setStorageSync("merchantNo", app.storeInfo.merchantNo);
                }
              })
          }

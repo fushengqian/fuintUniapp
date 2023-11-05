@@ -70,7 +70,7 @@ $http.requestStart = options => {
   // 请求前加入Token
   options.header['Access-Token'] = store.getters.token ? String(store.getters.token) : ''
   // 商户号
-  options.header['merchantNo'] = merchantNo; 
+  options.header['merchantNo'] = uni.getStorageSync("merchantNo") ? uni.getStorageSync("merchantNo") : merchantNo; 
   // 店铺ID
   options.header['storeId'] = uni.getStorageSync("storeId") ? uni.getStorageSync("storeId") : 0;
   options.header['latitude'] = uni.getStorageSync("latitude") ? uni.getStorageSync("latitude") : '';
