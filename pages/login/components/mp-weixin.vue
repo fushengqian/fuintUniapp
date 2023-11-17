@@ -19,7 +19,7 @@
         </view>
     </view>
     <view class="no-login-btn">
-      <button class="button btn-normal" @click="handleCancel">暂不登录</button>
+      <button class="button btn-normal" @click="cancelLogin">暂不登录</button>
     </view>
   </view>
 </template>
@@ -145,9 +145,9 @@
       /**
        * 暂不登录
        */
-      handleCancel() {
+      cancelLogin() {
         // 跳转回原页面
-        this.onNavigateBack()
+        this.onNavigateBack();
       },
 
       /**

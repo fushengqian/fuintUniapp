@@ -18,7 +18,16 @@
           <text class="name">手机</text>
           <button class="button btn-normal value" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
               <text v-if="userInfo.mobile">{{ userInfo.mobile }}</text>
-              <text style="color: #f9211c;margin-left: 2px;">更换手机号</text>
+              <text style="color: #f9211c;margin-left: 2px;">更换</text>
+          </button>
+        </view>
+      </view>
+      <view class="info-item">
+        <view class="contacts">
+          <text class="name">密码</text>
+          <button class="button btn-normal value" @click="changePassword">
+              <text class="password">********</text>
+              <text style="color: #f9211c;margin-left: 2px;">修改</text>
           </button>
         </view>
       </view>
@@ -36,7 +45,7 @@
       <view class="info-item">
         <view class="contacts">
           <text class="name">生日</text>
-          <picker class="value" mode="date" :value="userInfo.birthday" start="1970-01-01" @change="bindDateChange">
+          <picker class="value" mode="date" :value="userInfo.birthday" start="1990-01-01" @change="bindDateChange">
               <view class="picker">{{ userInfo.birthday ? userInfo.birthday : '-' }}</view>
            </picker>
         </view>
@@ -58,14 +67,18 @@
   import * as UserApi from '@/api/user'
   import * as UploadApi from '@/api/upload'
   import store from '@/store'
+  import keyWords from "@/components/bian-keywords/index.vue"
   export default {
+    components: {
+      keyWords
+    },
     data() {
       return {
         //当前页面参数
         options: {},
         // 正在加载
         isLoading: true,
-        userInfo: { avatar: '', name: '', sex: 0, birthday: '' },
+        userInfo: { avatar: '', name: '', sex: 0, birthday: '', hasPassword: '' },
         code: "",
         nickname: "",
         avatar: ""
@@ -77,12 +90,11 @@
      */
     onLoad(options) {
       // 当前页面参数
-      this.options = options
-      this.getUserInfo()
+      this.options = options;
+      this.getUserInfo();
     },
 
     methods: {
-      
       /**
        * 用户信息
        * */
@@ -135,6 +147,11 @@
       onAuthSuccess(e) {
          this.getCode(e)
       },
+      // 修改密码
+      changePassword() {
+         this.$navTo('pages/user/password?hasPassword=' + this.userInfo.hasPassword);
+         console.log(this.userInfo.hasPassword);
+      },
       // 选择图片
       chooseImage() {
         const app = this
@@ -163,7 +180,6 @@
           }
         });
       },
-      
       /**
        * 保存个人信息
        */
@@ -175,6 +191,8 @@
               app.userInfo = result.data
               app.isLoading = false
               app.$success('保存成功！')
+         }).catch(err => {
+            app.isLoading = false;
          })
       },
       /**
@@ -219,6 +237,11 @@
         .second {
             margin-left: .6rem;
         }
+    }
+    .password {
+        text-align: right;
+        float: left;
+        padding-right: 5rpx;
     }
     .avatar {
         width: 120rpx;

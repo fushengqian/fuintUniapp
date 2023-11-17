@@ -62,6 +62,12 @@
       }
     },
     {
+      "path": "pages/user/password",
+      "style": {
+        "navigationBarTitleText": "我的密码"
+      }
+    },
+    {
       "path": "pages/custom/index",
       "style": {
         "enablePullDownRefresh": true
@@ -83,12 +89,6 @@
       "path": "pages/login/index",
       "style": {
         "navigationBarTitleText": "会员登录"
-      }
-    },
-    {
-      "path": "pages/login/auth",
-      "style": {
-        "navigationBarTitleText": "授权登录"
       }
     },
     {

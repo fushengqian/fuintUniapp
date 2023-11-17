@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MpWeixin v-if="isShowUserInfo" @success="onGetUserInfoSuccess" />
+    <MpWeixin v-if="isShowUserInfo" @passwordLogin="passwordLogin" @success="onGetUserInfoSuccess" />
     <Main v-else :isParty="isExistUserInfo" :partyData="partyData" />
   </div>
 </template>
@@ -50,9 +50,6 @@ import * as LoginApi from '@/api/login'
       // #endif
       
       const code = options.code;
-      
-      console.log("code == ", code);
-      
       if (code) {
           app.getMpLogin(code);
       }
@@ -71,6 +68,11 @@ import * as LoginApi from '@/api/login'
             })
             .catch(err => reject(err))
         })
+      },
+      
+      // 使用账号密码登录
+      passwordLogin(show) {
+         this.isShowUserInfo = show;
       },
 
       // 获取到用户信息的回调函数

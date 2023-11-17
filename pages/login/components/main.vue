@@ -1,9 +1,5 @@
 <template>
-  <view class="container">
-    <view class="fast-icon">
-         <text class="iconfont icon-home" @click="toHome()"></text>
-    </view>
-      
+  <view class="container">      
     <!-- 页面头部 -->
     <view class="header">
       <view class="title">
@@ -151,24 +147,26 @@
     methods: {
       // 切换登录方式
       switchLoginType(loginType) {
-        this.loginType = loginType
+        this.loginType = loginType;
+        this.mobile = "";
+        this.account = "";
+        this.password = "";
+        this.password1 = "";
+        this.smsCode = "";
+        this.getCaptcha();
         if (loginType === 'sms') {
             this.isRegister = false;
             this.accountTitle = '账号登录';
         }
       },
-      // 返回首页
-      toHome() {
-        this.$navTo('pages/index/index');
-      },
       // 注册新用户
       toRegister() {
          if (!this.isRegister) {
-             this.accountTitle = '注册新账号'
-             this.isRegister = true
+             this.accountTitle = '注册新账号';
+             this.isRegister = true;
          } else {
-             this.accountTitle = '账号登录'
-             this.isRegister = false
+             this.accountTitle = '账号登录';
+             this.isRegister = false;
          }
       },
       // 获取图形验证码
@@ -176,8 +174,9 @@
         const app = this
         LoginApi.captcha()
           .then(result => {
-            app.captcha = result.data.captcha
-            app.captchaUuid = result.data.uuid
+            app.captcha = result.data.captcha;
+            app.captchaUuid = result.data.uuid;
+            app.captchaCode = "";
         })
       },
 
@@ -242,8 +241,8 @@
             this.$toast('请先输入您的用户名')
             return false
         }
-        if (str.length < 6) {
-            this.$toast('用户名不能少于6位')
+        if (str.length < 5) {
+            this.$toast('用户名不能少于5位')
             return false
         }
         return true
@@ -364,15 +363,15 @@
             uuid: app.captchaUuid
           })
           .then(result => {
-            // 显示登录信息
-            app.$toast(result.message)
-                  if (result.code === 200) {
-                      // 注册成功，去认证
-                      app.isNeedAuth(result.data);
-                  } else {
-                      app.$error(result.message);
-                      app.getCaptcha();
-                }
+              // 显示登录信息
+              app.$toast(result.message)
+              if (result.code === 200) {
+                  // 注册成功，去认证
+                  app.isNeedAuth(result.data);
+              } else {
+                  app.$error(result.message);
+                  app.getCaptcha();
+              }
           })
           .finally(() => app.isLoading = false)
       },
@@ -411,14 +410,17 @@
       isNeedAuth(loginInfo) {
          console.log("loginInfo == ", loginInfo);
          if (loginInfo && loginInfo.appId && loginInfo.domain && !loginInfo.openId) {
+             console.log('to auth...')
+             // #ifdef H5
              const appId = loginInfo.appId;
              const domain = loginInfo.domain;
              const redirect_uri = encodeURIComponent(domain + "#pages/login/auth");
              const url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri="+ redirect_uri +"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
              window.location.href = url;
-         } else {
-             this.onNavigateBack(1);
+             return true;
+             // #endif
          }
+         this.onNavigateBack(1);
       },
 
       /**
