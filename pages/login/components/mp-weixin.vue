@@ -9,7 +9,7 @@
     <view v-if="isProfile">
         <view class="auth-subtitle">获得您微信绑定的手机号码</view>
         <view class="login-btn">
-          <button class="button btn-success" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">授权手机号</button>
+          <button class="button-mobile btn-primary" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">授权手机号</button>
         </view>
     </view>
     <view v-if="!isProfile">
@@ -93,7 +93,8 @@
             app.onAuthSuccess(userInfo);
           },
           fail: function(res) {
-            console.log('登录授权失败，返回信息： ', res);
+            console.log('登录授权失败，请设置小程序隐私保护协议，返回信息： ', res);
+            app.$error("抱歉，登录授权失败.");
           }
         })
       },
@@ -210,6 +211,15 @@
       font-size: 30rpx;
       border-radius: 12rpx;
       text-align: center;
+    }
+    .button-mobile {
+        height: 88rpx;
+        line-height: 88rpx;
+        background: #00acac;
+        color: #fff;
+        font-size: 30rpx;
+        border-radius: 12rpx;
+        text-align: center;
     }
   }
 
