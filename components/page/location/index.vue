@@ -44,18 +44,18 @@
 </script>
 
 <style lang="scss" scoped>
-.main-loc{
-  height: 100rpx;
+.main-loc {
+  height: 90rpx;
+  color: #ffffff;
   .diy-location {
-    background: #fff;
-    padding: 0rpx 20rpx 20rpx 20rpx;
+    background: linear-gradient(to bottom, #00acac, #02b9b9);
+    padding: 10rpx 20rpx 0rpx 20rpx;
     /* #ifdef H5 */
     padding-top: 20rpx;
     /* #endif */
     position: fixed;
     z-index: 99999;
     width: 100%;
-    border-bottom: solid 1rpx #CCCCCC;
   }
 
   .inner {
@@ -78,11 +78,12 @@
       .name {
           font-size: 32rpx;
           font-weight: bold;
+          color: #ffffff;
       }
       .switch {
           margin-left: 15rpx;
           font-size: 22rpx;
-          color: #00acac;
+          color: #ffffff;
       }
       .address {
           clear: bold;
@@ -90,9 +91,12 @@
           margin-top: 6rpx;
           font-size: 25rpx;
           margin-left: 0rpx;
+          color: #ffffff;
           .location-icon {
             margin-right: 8rpx;
-            font-size: 26rpx;
+            font-size: 32rpx;
+            color: #f03c3c;
+            font-weight: bold;
           }
       }
   }

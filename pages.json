@@ -27,13 +27,17 @@
       "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "首页",
+        "navigationBarBackgroundColor": "#00acac",
+        "navigationBarTextStyle": "white",
         "enablePullDownRefresh": true
       }
     },
     {
       "path": "pages/category/index",
       "style": {
-        "navigationBarTitleText": "微店"
+        "navigationBarTitleText": "微店",
+        "navigationBarBackgroundColor": "#00acac",
+        "navigationBarTextStyle": "white"
       }
     },
     {

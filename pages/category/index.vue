@@ -7,7 +7,6 @@
     <Search tips="请输入搜索关键字" @event="$navTo('pages/search/index')" />
 
     <view class="cate-content dis-flex" v-if="list.length > 0">
-    
       <!-- 左侧 分类 -->
       <scroll-view class="cate-left f-28" :scroll-y="true" :style="{ height: `${scrollHeight}px` }">
           <view v-for="(item, index) in list" :key="index">
@@ -320,6 +319,10 @@
 <style lang="scss" scoped>
   .cate-content {
     background: #fff;
+    margin-top: 118rpx;
+    /* #ifdef H5 */
+    margin-top: 124rpx;
+    /* #endif */
   }
 
   .cate-wrapper {

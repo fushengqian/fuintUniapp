@@ -91,6 +91,10 @@
   .diy-banner {
     position: relative;
     max-height: 400rpx;
+    margin-top: 110rpx;
+    /* #ifdef H5 */
+    margin-top: 120rpx;
+    /* #endif */
     // swiper组件
     .swiper-box {
       height: 100%;
