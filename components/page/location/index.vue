@@ -49,7 +49,7 @@
   color: #ffffff;
   .diy-location {
     background: linear-gradient(to bottom, #00acac, #02b9b9);
-    padding: 10rpx 20rpx 0rpx 20rpx;
+    padding: 10rpx 20rpx 10rpx 20rpx;
     /* #ifdef H5 */
     padding-top: 20rpx;
     /* #endif */
@@ -88,7 +88,7 @@
       .address {
           clear: bold;
           display: block;
-          margin-top: 6rpx;
+          margin-top: 3rpx;
           font-size: 25rpx;
           margin-left: 0rpx;
           color: #ffffff;

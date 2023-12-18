@@ -7,7 +7,7 @@
             <text class="search-icon iconfont icon-sousuo"></text>
           </view>
           <view class="right">
-            <input v-model="searchValue" class="input" placeholder="查找店铺" type="text"></input>
+            <input v-model="searchValue" class="input" placeholder="请输入店铺关键字" type="text"></input>
           </view>
         </view>
       </view>
@@ -111,32 +111,30 @@
 
   .search-wrapper {
     display: flex;
-    height: 64rpx;
+    height: 78rpx;
   }
 
   // 搜索输入框
   .search-input {
     width: 80%;
     background: #fff;
-    border-radius: 10rpx 0 0 10rpx;
+    border-radius: 50rpx 0 0 50rpx;
     box-sizing: border-box;
     overflow: hidden;
-
+    border: solid 1px #cccccc;
     .search-input-wrapper {
       display: flex;
-
       .left {
         display: flex;
         width: 60rpx;
         justify-content: center;
         align-items: center;
-
         .search-icon {
           display: block;
-          color: #b4b4b4;
-          font-size: 28rpx;
+          color: #666666;
+          font-size: 30rpx;
+          font-weight: bold;
         }
-
       }
 
       .right {
@@ -144,9 +142,8 @@
 
         input {
           font-size: 28rpx;
-          height: 64rpx;
-          line-height: 64rpx;
-
+          height: 78rpx;
+          line-height: 78rpx;
           .input-placeholder {
             color: #aba9a9;
           }
@@ -162,8 +159,8 @@
     box-sizing: border-box;
 
     .button {
-      line-height: 64rpx;
-      height: 64rpx;
+      line-height: 78rpx;
+      height: 78rpx;
       font-size: 28rpx;
       border-radius: 0 20px 20px 0;
       background: #00acac;
@@ -198,10 +195,10 @@
           }
       }
       .loc-info {
-          color: #666666;
+        color: #666666;
         dispaly:flex;
         line-height: 240rpx;
-          float: left;
+        float: left;
         overflow: hidden;
         width: 30%;
         text-align: right;

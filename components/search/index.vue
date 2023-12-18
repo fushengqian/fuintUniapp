@@ -33,7 +33,7 @@
 
 <style lang="scss" scoped>
   .search-wrapper {
-    padding: 5rpx 12rpx 10rpx 12rpx;
+    padding: 0rpx 12rpx 10rpx 12rpx;
     display: block;
     position: fixed;
     z-index: 999999;
@@ -60,7 +60,7 @@
     margin-top: 10rpx;
     .index-cont-search {
       width: 100%;
-      font-size: 30rpx;
+      font-size: 28rpx;
       background: #f5f5f5;
       text-align: left;
       display: flex;
@@ -69,12 +69,12 @@
     }
 
     .index-cont-search .search-icon {
-      font-size: 38rpx;
+      font-size: 30rpx;
       font-weight: bold;
     }
 
     .index-cont-search .search-text {
-      margin-left: 14rpx;
+      margin-left: 5rpx;
     }
 
   }
