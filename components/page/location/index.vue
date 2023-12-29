@@ -49,9 +49,9 @@
   color: #ffffff;
   .diy-location {
     background: linear-gradient(to bottom, #00acac, #02b9b9);
-    padding: 10rpx 20rpx 10rpx 20rpx;
+    padding: 3rpx 10rpx 10rpx 10rpx;
     /* #ifdef H5 */
-    padding-top: 20rpx;
+    padding-top: 15rpx;
     /* #endif */
     position: fixed;
     z-index: 99999;

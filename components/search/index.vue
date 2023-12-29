@@ -33,12 +33,12 @@
 
 <style lang="scss" scoped>
   .search-wrapper {
-    padding: 0rpx 12rpx 10rpx 12rpx;
+    padding: 0rpx 10rpx 10rpx 10rpx;
     display: block;
     position: fixed;
     z-index: 999999;
     width: 100%;
-    background: linear-gradient(to bottom, #02b9b9, #03cece);
+    background: #ffffff;
     /* #ifdef H5 */
     margin-top: 13rpx;
     /* #endif */
@@ -47,7 +47,7 @@
   .index-search {
     border-bottom: 0;
     background: #fff;
-    border-radius: 40rpx;
+    border-radius: 10rpx;
     overflow: hidden;
     font-size: 28rpx;
     color: #6d6d6d;
@@ -61,7 +61,7 @@
     .index-cont-search {
       width: 100%;
       font-size: 28rpx;
-      background: #f5f5f5;
+      background: #ffffff;
       text-align: left;
       display: flex;
       justify-content: center;

@@ -91,14 +91,14 @@
   .diy-banner {
     position: relative;
     max-height: 400rpx;
-    margin-top: 110rpx;
+    margin-top: 100rpx;
     /* #ifdef H5 */
     margin-top: 120rpx;
     /* #endif */
     // swiper组件
     .swiper-box {
       height: 100%;
-      padding: 5rpx 10rpx 0rpx 10rpx;
+      padding: 0rpx 10rpx 0rpx 10rpx;
       max-width: 750rpx;
       max-height: 450rpx;
       .slide-image {
