@@ -164,12 +164,9 @@
       text-align: center;
     }
   }
-
-
   .no-login-btn {
     margin-top: 24rpx;
     padding: 0 20rpx;
-
     .button {
       height: 88rpx;
       line-height: 88rpx;

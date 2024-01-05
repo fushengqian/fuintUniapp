@@ -289,6 +289,8 @@
         storeInfo: null,
         // 支付方式弹窗
         showPayPopup: false,
+        // 订单ID
+        orderId: ""
       }
     },
 
@@ -296,7 +298,7 @@
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-      this.options = options
+      this.options = options;
     },
 
     /**
@@ -304,6 +306,9 @@
      */
     onShow() {
         const app = this;
+        if (app.orderId) {
+            app.navToOrderResult(app.orderId);
+        }
         // 获取购物车信息
         app.getCartList();
         // 获取默认收货地址
@@ -368,8 +373,8 @@
           const couponItem = app.couponList[index];
           // 记录选中的卡券id
           if (couponItem.status != 'A') {
-              app.$error('该卡券不可用')
-              return false
+              app.$error('该卡券不可用');
+              return false;
           }
           app.selectCouponId = couponItem.userCouponId;
           // 重新获取购物车信息
@@ -447,20 +452,20 @@
 
       // 订单提交
       doSubmitOrder(payType) {
-        const app = this
+        const app = this;
         if (app.disabled) {
-            return false
+            return false;
         }
         
         if (app.totalPrice < 0 || app.goodsCart.length < 1) {
-            app.disabled = true
-            return false
+            app.disabled = true;
+            return false;
         }
         
         // 表单验证
         if (!app.orderMode && app.address == undefined) {
-            app.$toast('请先选择配送地址哦')
-            return false
+            app.$toast('请先选择配送地址哦');
+            return false;
         }
         
         // 配送或自取
@@ -474,27 +479,29 @@
         
         // 请求api
         SettlementApi.submit(0, "", "goods", app.remark, 0, app.usePoint, app.selectCouponId, app.options.cartIds, app.options.goodsId, app.options.skuId, app.options.buyNum, orderMode, payType)
-          .then(result => app.onSubmitCallback(result))
+          .then(result => {
+              app.onSubmitCallback(result);
+          })
           .catch(err => {
             if (err.result) {
-                const errData = err.result.data
+                const errData = err.result.data;
                 if (errData.isCreated) {
-                    app.navToOrderResult(errData.orderInfo.id)
-                    return false
+                    app.navToOrderResult(errData.orderInfo.id);
+                    return false;
                 }
             }
-            app.disabled = false
+            app.disabled = false;
           })
       },
 
       // 订单提交成功后回调
       onSubmitCallback(result) {
-        const app = this
+        const app = this;
         if (result.code != '200' && !result.data) {
             if (result.message) {
-                app.$error(result.message)
+                app.$error(result.message);
             } else {
-                app.$error('订单提交失败')
+                app.$error('订单提交失败');
             }
             app.disabled = false
             return false
@@ -502,25 +509,32 @@
         
         // 发起微信支付
         if (result.data.payType == PayTypeEnum.WECHAT.value) {
+            // #ifdef H5
+            app.orderId = result.data.orderInfo.id;
+            // #endif
             wxPayment(result.data.payment)
-            .then(() => app.$success('支付成功'))
-            .catch(err => app.$error('支付失败'))
+            .then(() => {
+                app.$success('支付成功');
+            })
+            .catch(err => {
+                app.$error('支付失败');
+            })
             .finally(() => {
-                 app.disabled = false;
-                 app.navToOrderResult(result.data.orderInfo.id, '');
+                app.disabled = false;
+                app.navToOrderResult(result.data.orderInfo.id, '');
             })
         }
         
         // 余额支付
         if (result.data.payType == PayTypeEnum.BALANCE.value) {
-            app.disabled = false
-            app.navToOrderResult(result.data.orderInfo.id, result.message)
+            app.disabled = false;
+            app.navToOrderResult(result.data.orderInfo.id, result.message);
         }
       },
 
-      // 跳转到订单结果页(等待1秒)
+      // 跳转到订单结果页
       navToOrderResult(orderId, message) {
-          this.$navTo('pages/order/result?orderId='+orderId+'&message=' + message)
+         this.$navTo('pages/order/result?orderId='+orderId+'&message=' + message);
       }
     }
   }

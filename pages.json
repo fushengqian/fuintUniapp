@@ -96,6 +96,12 @@
       }
     },
     {
+      "path": "pages/login/auth",
+      "style": {
+        "navigationBarTitleText": "授权登录"
+      }
+    },
+    {
       "path": "pages/help/index",
       "style": {
         "navigationBarTitleText": "帮助中心"
