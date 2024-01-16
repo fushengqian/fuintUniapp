@@ -3,19 +3,19 @@
     <view class="info-item" v-if="hasPassword == 'Y'">
       <view class="contacts">
         <text class="name">旧密码：</text>
-        <input class="weui-input value" type="password" @click="inputPassword(1)" v-model="passwordOld" placeholder="请输入旧密码"/>
+        <input class="weui-input value" type="password" disabled="true" @click="inputPassword(1)" v-model="passwordOld" placeholder="请输入旧密码"/>
       </view>
     </view>
     <view class="info-item">
       <view class="contacts">
         <text class="name">新密码：</text>
-        <input class="weui-input value" type="password" @click="inputPassword(2)" v-model="password" placeholder="请输入新密码"/>
+        <input class="weui-input value" type="password" disabled="true" @click="inputPassword(2)" v-model="password" placeholder="请输入新密码"/>
       </view>
     </view>
     <view class="info-item">
       <view class="contacts">
         <text class="name">新密码确认：</text>
-        <input class="weui-input value" type="password" @click="inputPassword(3)" v-model="passwordCopy" placeholder="请输入新密码确认"/>
+        <input class="weui-input value" type="password" disabled="true" @click="inputPassword(3)" v-model="passwordCopy" placeholder="请输入新密码确认"/>
       </view>
     </view>
     <!-- 底部操作按钮 -->
