@@ -47,6 +47,7 @@
 .main-loc {
   height: 90rpx;
   color: #ffffff;
+  background: #00acac;
   .diy-location {
     background: linear-gradient(to bottom, #00acac, #02b9b9);
     padding: 3rpx 10rpx 10rpx 10rpx;
@@ -88,13 +89,13 @@
       .address {
           clear: bold;
           display: block;
-          margin-top: 3rpx;
-          font-size: 25rpx;
+          margin-top: 2rpx;
+          font-size: 23rpx;
           margin-left: 0rpx;
           color: #ffffff;
           .location-icon {
-            margin-right: 8rpx;
-            font-size: 32rpx;
+            margin-right: 4rpx;
+            font-size: 24rpx;
             color: #f03c3c;
             font-weight: bold;
           }

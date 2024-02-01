@@ -1,25 +1,26 @@
 <template>
   <view class="container">
-      <block v-if="storeInfo">
-          <Location :storeInfo="storeInfo"/>
+      <empty v-if="!storeInfo" :isLoading="isLoading" tips="亲,空空如也..."></empty>
+      <block>
+          <Location v-if="storeInfo" :storeInfo="storeInfo"/>
       </block>
       <block>
-          <Search tips="请输入搜索关键字" @event="$navTo('pages/search/index')"/>
+          <Search v-if="storeInfo" tips="请输入搜索关键字" @event="$navTo('pages/search/index')"/>
       </block>
       <block>
-          <Banner :itemStyle="options.bannerStyle" :params="options.bannerParam" :dataList="banner"/>
+          <Banner v-if="storeInfo" :itemStyle="options.bannerStyle" :params="options.bannerParam" :dataList="banner"/>
       </block>
       <block>
-          <Blank :itemStyle="options.blankStyle"/>
+          <Blank v-if="storeInfo" :itemStyle="options.blankStyle"/>
       </block>
       <block>
-          <NavBar :itemStyle="options.navStyle" :params="{}" :dataList="options.navBar"/>
+          <NavBar v-if="storeInfo" :itemStyle="options.navStyle" :params="{}" :dataList="options.navBar"/>
       </block>
       <block>
-          <Blank :itemStyle="options.blankStyle"/>
+          <Blank v-if="storeInfo" :itemStyle="options.blankStyle"/>
       </block>
       <block>
-          <Goods :itemStyle="options.goodsStyle" :isReflash="isReflash" ref="mescrollItem" :params="options.goodsParams"/>
+          <Goods v-if="storeInfo" :itemStyle="options.goodsStyle" :isReflash="isReflash" ref="mescrollItem" :params="options.goodsParams"/>
       </block>
   </view>
 </template>
@@ -32,6 +33,7 @@
   import NavBar from '@/components/page/navBar'
   import Blank from '@/components/page/blank'
   import Goods from '@/components/page/goods'
+  import Empty from '@/components/empty'
   import * as settingApi from '@/api/setting'
   import * as Api from '@/api/page'
   import MescrollCompMixin from "@/components/mescroll-uni/mixins/mescroll-comp.js";
@@ -46,7 +48,8 @@
        Banner,
        NavBar,
        Blank,
-       Goods
+       Goods,
+       Empty
     },
     data() {
       return {
@@ -114,7 +117,8 @@
         banner: [],
         goods: [],
         storeInfo: null,
-        isReflash: false
+        isReflash: false,
+        isLoading: false
       }
     },
 
@@ -126,8 +130,9 @@
       if (storeId > 0) {
           uni.setStorageSync('storeId', storeId);
           uni.setStorageSync("reflashHomeData", true);
+      } else {
+          this.getPageData();
       }
-      this.getPageData();
     },
 
     /**
@@ -138,11 +143,6 @@
       showMessage();
       setCartTabBadge();
       app.onGetStoreInfo();
-      let isReflash = uni.getStorageSync("reflashHomeData");
-      app.isReflash = isReflash;
-      if (isReflash === true) {
-          app.getPageData();
-      }
       uni.getLocation({
           type: 'gcj02',
           success(res){
@@ -163,7 +163,7 @@
          * @param {Object} callback
          */
         getPageData(callback) {
-          const app = this
+          const app = this;
           Api.home()
             .then(result => {
                  app.banner = result.data.banner;
@@ -188,14 +188,20 @@
          * 获取默认店铺
          * */
          onGetStoreInfo() {
-            const app = this
+            const app = this;
             settingApi.systemConfig()
              .then(result => {
-               app.storeInfo = result.data.storeInfo;
-               if (app.storeInfo) {
-                   uni.setStorageSync("storeId", app.storeInfo.id);
-                   uni.setStorageSync("merchantNo", app.storeInfo.merchantNo);
-               }
+                 app.storeInfo = result.data.storeInfo;
+                 if (app.storeInfo) {
+                     uni.setStorageSync("storeId", app.storeInfo.id);
+                     uni.setStorageSync("merchantNo", app.storeInfo.merchantNo);
+                     // 判断是否需要更新页面
+                     let isReflash = uni.getStorageSync("reflashHomeData");
+                     app.isReflash = isReflash;
+                     if (isReflash === true) {
+                         app.getPageData();
+                     }
+                 }
              })
          }
     },
@@ -227,9 +233,3 @@
 
   }
 </script>
-
-<style lang="scss" scoped>
-  .container {
-    background: #fff;
-  }
-</style>
