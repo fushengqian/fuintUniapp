@@ -4,6 +4,7 @@
 import store from '@/store'
 import request from './request'
 import config from '@/config'
+import { isWechat } from '../app';
 
 // 后端api地址
 const baseURL = config.apiUrl;
@@ -75,6 +76,7 @@ $http.requestStart = options => {
   options.header['storeId'] = uni.getStorageSync("storeId") ? uni.getStorageSync("storeId") : 0;
   options.header['latitude'] = uni.getStorageSync("latitude") ? uni.getStorageSync("latitude") : '';
   options.header['longitude'] = uni.getStorageSync("longitude") ? uni.getStorageSync("longitude") : '';
+  options.header['isWechat'] = isWechat() ? 'Y' : 'N';
   // return false 表示请求拦截，不会继续请求
   return options
 }

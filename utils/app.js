@@ -35,7 +35,7 @@ export const getPlatform = () => {
   // #ifdef MP-360
   const platform = 'MP-360'
   // #endif
-  return platform
+  return platform;
 }
 
 /**
@@ -205,6 +205,12 @@ export const wxPayment = (option) => {
       })
   }
   
+  // H5支付
+  if (getPlatform() == 'H5' && option.mweb_url) {
+      h5Pay(option.mweb_url, option.backUrl);
+      return true;
+  }
+  
   // 微信小程序支付
   return new Promise((resolve, reject) => {
     uni.requestPayment({
@@ -331,4 +337,18 @@ export const jsApiCall = (data, callback_succ_func, callback_error_func) => {
                 break;  
         }  
     })  
+}
+
+export const h5Pay = (url, backUrl) => {
+      // 设置回跳地址，支付完成之后回跳到哪
+      let redirectUrl ='&redirect_url=' + encodeURIComponent(backUrl);
+      // 拼接上回跳地址
+      let linkUrl = url + redirectUrl
+      const system = uni.getSystemInfoSync()
+      if (system.platform == 'ios') {
+          // 如果是iOS平台，使用location.href，iOS里面限制了window.open的使用。
+          window.location.href = linkUrl;
+      } else {
+          window.open(linkUrl);
+      }
 }

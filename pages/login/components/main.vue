@@ -77,7 +77,7 @@
   import * as LoginApi from '@/api/login'
   import { throttle, debounce } from '@/utils/util'
   import * as Verify from '@/utils/verify'
-  import { checkLogin } from '@/utils/app'
+  import { checkLogin, isWechat } from '@/utils/app'
 
   // 倒计时时长(秒)
   const times = 60
@@ -409,7 +409,7 @@
        * */
       isNeedAuth(loginInfo) {
          console.log("loginInfo == ", loginInfo);
-         if (loginInfo && loginInfo.appId && loginInfo.domain && !loginInfo.openId) {
+         if (isWechat() && loginInfo && loginInfo.appId && loginInfo.domain && !loginInfo.openId) {
              console.log('to auth...')
              // #ifdef H5
              const appId = loginInfo.appId;
