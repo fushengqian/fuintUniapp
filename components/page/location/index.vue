@@ -47,7 +47,6 @@
 .main-loc {
   height: 90rpx;
   color: #ffffff;
-  background: #00acac;
   .diy-location {
     background: linear-gradient(to bottom, #00acac, #02b9b9);
     padding: 3rpx 10rpx 10rpx 10rpx;

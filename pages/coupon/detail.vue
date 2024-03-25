@@ -1,23 +1,29 @@
 <template>
   <view v-if="!isLoading" class="container b-f p-b">
     <view class="base">
-        <view class="coupon-image">
+        <view class="coupon-main">
             <image class="image" :src="detail.image"></image>
+            <view v-if="detail.code && detail.status == 'A' && detail.isGive" class="gift" @click="give()"><text>转赠好友</text></view>
         </view>
-        <view class="coupon-title">
+        <view class="item">
+          <view class="label">名称：</view>
           <view class="name">{{ detail.name ? detail.name : '' }}</view>
-          <view v-if="detail.code && detail.status == 'A' && detail.isGive" class="gift" @click="give()"><text>转赠好友</text></view>
-          <view v-if="detail.amount > 0" class="price">
-              <view class="label">
-                  面额：<span class="amount">￥{{ detail.amount }}</span>
-              </view>
-          </view>
-          <view v-if="detail.point > 0" class="point">
-              <view class="label">
-                  兑换积分：<span class="amount">{{ detail.point }}</span>
-              </view>
-          </view>
-          <view class="time">有效期：{{ detail.effectiveDate }}</view>
+        </view>
+        <view v-if="detail.amount > 0" class="item">
+          <view class="label">面额：</view>
+          <view class="amount">￥{{ detail.amount }}</view>
+        </view>
+        <view v-if="detail.point > 0" class="item">
+          <view class="label">兑换积分：</view>
+          <view class="amount">{{ detail.point }}</view>
+        </view>
+        <view class="item">
+           <view class="label">有效期：</view>
+           <view>{{ detail.effectiveDate }}</view>
+        </view>
+        <view class="item">
+          <view class="label">适用门店：</view>
+          <view>{{ detail.storeNames ? detail.storeNames : '全部'}}</view>
         </view>
     </view>
     <view class="coupon-qr" v-if="detail.code">
@@ -31,7 +37,7 @@
     </view>
     <view class="coupon-content m-top20">
         <view class="title">使用须知</view>
-        <view class="content"><jyf-parser :html="detail.description"></jyf-parser></view>
+        <view class="content"><jyf-parser :html="detail.description ? detail.description : '暂无...'"></jyf-parser></view>
     </view>
     <!-- 快捷导航 -->
     <shortcut/>
@@ -256,50 +262,31 @@
   }
   .base {
         border: dashed 5rpx #cccccc;
-        padding: 15rpx 0rpx 15rpx 15rpx;
+        padding: 30rpx;
         border-radius: 10rpx;
         margin: 20rpx;
         display: block;
-        min-height: 245rpx;
-        .coupon-image {
-            float: left;
-            margin-top: 10rpx;
+        min-height: 420rpx;
+        .coupon-main {
             .image {
                 width: 200rpx;
                 height: 158rpx;
                 border-radius: 8rpx;
             }
-            width: 30%;
+            width: 100%;
         }
-        .coupon-title {
-            float: left;
-            margin-left: 15rpx;
-            overflow: hidden;
-            width: 65%;
-            .name {
-               font-weight: bold;
-               font-size: 30rpx;
-            }
-            .price {
-               margin-top: 28rpx;
-               font-size: 25rpx;
+        .item {
+             margin-bottom: 10rpx;
+             font-size: 30rpx;
+             color: #666666;
+             .label {
+                 font-weight: bold;
+                 float: left;
+             }
              .amount {
-                 color: #f03c3c;
+                 color: red;
                  font-weight: bold;
              }
-            }
-          .point {
-             margin-top: 26rpx;
-             font-size: 25rpx;
-              .amount {
-               color: #666666;
-              }
-          }
-          .time {
-               margin-top: 26rpx;
-               font-size: 25rpx;
-               color: #666666;
-          }
         }
   }
   .coupon-qr {
@@ -307,7 +294,7 @@
       border-radius: 10rpx;
       margin: 20rpx;
       text-align: center;
-      padding-top: 80rpx;
+      padding-top: 30rpx;
       padding-bottom: 30rpx;
       .image{
           width: 360rpx;
@@ -334,13 +321,18 @@
     min-height: 400rpx;
     .title {
         margin-bottom: 15rpx;
+        font-weight: bold;
+    }
+    .content {
+        color: #666666;
+        font-size: 24rpx;
     }
   }
   .gift {
-    height: 46rpx;
+    height: 50rpx;
     width: 120rpx;
     margin-top: 20rpx;
-    line-height: 46rpx;
+    line-height: 50rpx;
     text-align: center;
     border: 1px solid #f8df00;
     border-radius: 6rpx;

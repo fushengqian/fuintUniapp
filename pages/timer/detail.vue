@@ -1,12 +1,20 @@
 <template>
   <view v-if="!isLoading" class="container b-f p-b">
     <view class="base">
-         <view class="coupon-image">
+         <view class="coupon-main">
             <image class="image" :src="detail.image"></image>
          </view>
-        <view class="coupon-title">
-          <text class="name f-32">{{ detail.name ? detail.name : '' }}</text>
-          <view class="time">有效期：{{ detail.effectiveDate ? detail.effectiveDate : '' }}</view>
+         <view class="item">
+           <view class="label">名称：</view>
+           <view class="name">{{ detail.name ? detail.name : '' }}</view>
+         </view>
+        <view class="item">
+           <view class="label">有效期：</view>
+           <view>{{ detail.effectiveDate }}</view>
+        </view>
+        <view class="item">
+          <view class="label">适用门店：</view>
+          <view>{{ detail.storeNames ? detail.storeNames : '全部'}}</view>
         </view>
     </view>
     <view v-if="detail.qrCode" class="coupon-qr">
@@ -32,7 +40,7 @@
     </view>
     <view class="coupon-content m-top20">
         <view class="title">使用须知</view>
-        <view class="content"><jyf-parser :html="detail.description"></jyf-parser></view>
+        <view class="content"><jyf-parser :html="detail.description ? detail.description : '暂无...'"></jyf-parser></view>
     </view>
     <!-- 快捷导航 -->
     <shortcut />
@@ -206,33 +214,27 @@
         border-radius: 10rpx;
         margin: 20rpx;
         height: 270rpx;
-        .coupon-image {
-            float: left;
-            margin-top: 10rpx;
+        min-height: 365rpx;
+        .coupon-main {
             .image {
                 width: 200rpx;
                 height: 158rpx;
                 border-radius: 8rpx;
             }
-            width: 30%;
+            width: 100%;
         }
-        .coupon-title {
-            float: left;
-            margin-left: 30rpx;
-            overflow: hidden;
-            width: 65%;
-            .name {
-               font-weight: bold;
-            }
-            .tips {
-               margin-top:20rpx;
-               font-size: 25rpx;
-            }
-            .time {
-               margin-top: 20rpx;
-               font-size: 25rpx;
-               color: #666666;
-            }
+        .item {
+             margin-bottom: 10rpx;
+             font-size: 30rpx;
+             color: #666666;
+             .label {
+                 font-weight: bold;
+                 float: left;
+             }
+             .amount {
+                 color: red;
+                 font-weight: bold;
+             }
         }
   }
   .coupon-timer {
@@ -285,7 +287,7 @@
       border-radius: 10rpx;
       margin: 20rpx;
       text-align: center;
-      padding-top: 80rpx;
+      padding-top: 30rpx;
       padding-bottom: 30rpx;
       .image{
           width: 360rpx;
