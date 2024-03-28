@@ -1,11 +1,11 @@
 <template>
   <view class="container">
-      <empty v-if="!storeInfo" :isLoading="isLoading" tips="亲,空空如也..."></empty>
+      <empty v-if="!storeInfo" :isLoading="isLoading" tips="数据加载中..."></empty>
       <block>
           <Location v-if="storeInfo" :storeInfo="storeInfo"/>
       </block>
       <block>
-          <Search v-if="storeInfo" tips="请输入搜索关键字" @event="$navTo('pages/search/index')"/>
+          <Search v-if="storeInfo" tips="请输入搜索关键字..." @event="$navTo('pages/search/index')"/>
       </block>
       <block>
           <Banner v-if="storeInfo" :itemStyle="options.bannerStyle" :params="options.bannerParam" :dataList="banner"/>
