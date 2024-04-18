@@ -208,6 +208,7 @@
       border-radius: 5rpx;
       width: 200rpx;
       height: 158rpx;
+      border: solid 1rpx #cccccc;
     }
   }
   

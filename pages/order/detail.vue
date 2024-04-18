@@ -43,7 +43,7 @@
           <text v-else-if="order.status == OrderStatusEnum.REFUND.value">{{OrderStatusEnum.REFUND.name}}</text>
         </view>
         <view class="verify-code" v-if="order.orderMode == 'oneself' && order.verifyCode && order.payStatus == 'B'">
-            <view>核销码：</view>
+            <view>提取码：</view>
             <view class="code">{{ order.verifyCode }}</view>
         </view>
       </view>
@@ -287,7 +287,9 @@
         // 当前设置
         setting: {},
         // 支付方式弹窗
-        showPayPopup: false
+        showPayPopup: false,
+        // 刷新页面
+        reflash: false
       }
     },
 
@@ -296,7 +298,7 @@
      */
     onLoad({ orderId }) {
       // 当前订单ID
-      this.orderId = orderId
+      this.orderId = orderId;
     },
 
     /**
@@ -304,7 +306,7 @@
      */
     onShow() {
       // 获取当前订单信息
-      this.getOrderDetail()
+      this.getOrderDetail();
     },
 
     methods: {
@@ -358,9 +360,9 @@
               OrderApi.cancel(app.orderId)
                 .then(result => {
                   // 显示成功信息
-                  app.$success(result.message)
+                  app.$success(result.message);
                   // 刷新当前订单数据
-                  app.getOrderDetail()
+                  app.getOrderDetail();
                 })
             }
           }
@@ -370,7 +372,7 @@
       // 点击去支付
       onPay() {
         // 显示支付方式弹窗
-        this.showPayPopup = true
+        this.showPayPopup = true;
       },
       
       // 确认收货
@@ -406,49 +408,47 @@
 
       // 订单提交成功后回调
       onSubmitCallback(result) {
-        const app = this
+        const app = this;
         if (!result.data) {
             if (result.message) {
-                app.$error(result.message)
+                app.$error(result.message);
             } else {
-                app.$error('支付失败')
+                app.$error('支付失败');
             }
-            return false
+            return false;
         }
         
         // 发起微信支付
         if (result.data.payType == PayTypeEnum.WECHAT.value) {
-          wxPayment(result.data.payment)
-            .then(() => {
-              app.$success('支付成功')
-              setTimeout(() => {
-                app.getOrderDetail()
-              }, 1500)
-            })
-            .catch(err => {
-              app.$error('订单未支付')
-            })
-            .finally(() => {
-              app.disabled = false
-            })
-        }
-        // 余额支付
-        if (result.data.payType == PayTypeEnum.BALANCE.value) {
+            wxPayment(result.data.payment)
+              .then(() => {
+                app.$success('支付成功');
+                setTimeout(() => {
+                   app.getOrderDetail();
+                }, 1500)
+              })
+              .catch(err => {
+                 app.$error('订单未支付');
+              })
+              .finally(() => {
+                 app.disabled = false;
+              })
+         }
+         // 余额支付
+         if (result.data.payType == PayTypeEnum.BALANCE.value) {
             if (result.data.orderInfo.payStatus == 'B') {
-                app.$success('支付成功')
-                app.disabled = false
+                app.$success('支付成功');
+                app.disabled = false;
                 setTimeout(() => {
                     // 刷新当前订单数据
-                    app.getOrderDetail()
+                    app.getOrderDetail();
                 }, 1500)
             } else {
-                app.$error('支付失败')
+                app.$error('支付失败');
             }
-        }
-      },
-
-    },
-
+         }
+      }
+    }
   }
 </script>
 

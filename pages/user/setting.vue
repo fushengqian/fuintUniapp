@@ -45,8 +45,8 @@
       <view class="info-item">
         <view class="contacts">
           <text class="name">生日</text>
-          <picker class="value" mode="date" :value="userInfo.birthday" start="1990-01-01" @change="bindDateChange">
-              <view class="picker">{{ userInfo.birthday ? userInfo.birthday : '-' }}</view>
+          <picker class="value" mode="date" :value="userInfo.birthday" start="1900-01-01" @change="bindDateChange">
+              <view class="picker">{{ userInfo.birthday ? userInfo.birthday : '选择生日' }}</view>
            </picker>
         </view>
       </view>
@@ -54,7 +54,7 @@
     <!-- 底部操作按钮 -->
     <view class="footer-fixed" v-if="userInfo.id">
       <view class="btn-wrapper">
-        <view class="btn-item btn-item-main" @click="save()">保存信息</view>
+        <view class="btn-item btn-item-main" @click="addCard()">保存信息</view>
       </view>
       <view class="btn-wrapper">
         <view class="btn-item btn-item-out" @click="logout()">退出登录</view>
@@ -195,13 +195,30 @@
             app.isLoading = false;
          })
       },
+      
       /**
        * 退出登录
        */
-       logout() {
+      logout() {
            store.dispatch('Logout')
            this.$navTo('pages/user/index')
-       }
+      },
+      
+      /**
+       * 添加卡券
+       */
+      addCard() {
+          wx.addCard({
+            cardList: [{
+              cardId: 'phThw6AYMpfk0zducvo1xm4zlbXo',
+              cardExt: '{"code": "883242342", "openid": "owOWg5cYFQr15C2QJkuAPfvMpHTQ", "timestamp": "", "signature":""}'
+            }], // 需要添加的卡券列表
+            success: function (res) {
+              var cardList = res.cardList; // 添加的卡券列表信息
+              console.log("addCard res:", res);
+            }
+          });
+      }
     }
   }
 </script>

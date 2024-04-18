@@ -6,19 +6,19 @@
             <view v-if="detail.code && detail.status == 'A' && detail.isGive" class="gift" @click="give()"><text>转赠好友</text></view>
         </view>
         <view class="item">
-          <view class="label">名称：</view>
+          <view class="label">卡券名称：</view>
           <view class="name">{{ detail.name ? detail.name : '' }}</view>
         </view>
         <view v-if="detail.amount > 0" class="item">
-          <view class="label">面额：</view>
+          <view class="label">卡券面额：</view>
           <view class="amount">￥{{ detail.amount }}</view>
         </view>
         <view v-if="detail.type == 'P'" class="item">
-          <view class="label">余额：</view>
+          <view class="label">卡券余额：</view>
           <view class="amount">￥{{ detail.balance }}</view>
         </view>
         <view class="item">
-           <view class="label">有效期：</view>
+           <view class="label">有效期至：</view>
            <view>{{ detail.effectiveDate }}</view>
         </view>
     </view>
@@ -138,12 +138,14 @@
         padding: 15rpx 0rpx 15rpx 15rpx;
         border-radius: 10rpx;
         margin: 20rpx;
+        height: auto;
         min-height: 420rpx;
         .coupon-main {
             .image {
                 width: 200rpx;
                 height: 158rpx;
                 border-radius: 8rpx;
+                border: solid 1rpx #cccccc;
             }
             width: 100%;
         }
@@ -152,11 +154,13 @@
              font-size: 30rpx;
              color: #666666;
              .label {
-                 font-weight: bold;
                  float: left;
              }
              .amount {
                  color: red;
+                 font-weight: bold;
+             }
+             .name {
                  font-weight: bold;
              }
         }
@@ -187,7 +191,7 @@
 
   .coupon-content {
     font-size: 28rpx;
-    padding: 15rpx;
+    padding: 30rpx;
     border: dashed 5rpx #cccccc;
     border-radius: 5rpx;
     margin: 20rpx;

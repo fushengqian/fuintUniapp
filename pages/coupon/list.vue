@@ -386,6 +386,7 @@
         height: 157rpx;
         margin-top: 20rpx;
         border-radius: 6rpx;
+        border: solid 1rpx #cccccc;
       }
     }
 
