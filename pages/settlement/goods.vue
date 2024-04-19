@@ -147,9 +147,9 @@
     <view class="flow-fixed-footer b-f m-top10">
       <view class="dis-flex chackout-box">
         <view class="chackout-left pl-12">
-          <view class="col-amount-do">总金额：
+          <view class="col-amount-do">支付金额：
               <text class="pay-amount">￥{{ payPrice ? payPrice.toFixed(2) : '0.00' }}</text>
-              <view v-if="deliveryFee > 0 && orderMode == false" class="delivery-fee">（ 另配送费：￥{{ deliveryFee.toFixed(2) }} ）</view>
+              <view v-if="deliveryFee > 0 && orderMode == false" class="delivery-fee">（ 配送费：￥{{ deliveryFee.toFixed(2) }} ）</view>
           </view>
         </view>
         <view class="chackout-right" @click="onSubmitOrder()">
@@ -326,7 +326,12 @@
             app.usePointAmount = 0;
         }
         return new Promise((resolve, reject) => {
-          CartApi.list(app.options.cartIds, app.options.goodsId, app.options.skuId, app.options.buyNum, app.selectCouponId, app.isUsePoints)
+          // 配送或自取
+          let orderMode = "oneself";
+          if (!app.orderMode) {
+              orderMode = "express";
+          }
+          CartApi.list(app.options.cartIds, app.options.goodsId, app.options.skuId, app.options.buyNum, app.selectCouponId, app.isUsePoints, orderMode)
             .then(result => {
               app.goodsCart = result.data.list;
               app.totalNum = result.data.totalNum;
@@ -410,6 +415,7 @@
          if (mode && !app.storeInfo) {
              app.getStoreInfo();
          }
+         app.getCartList();
       },
       
       // 获取店铺详情

@@ -12,18 +12,22 @@
     <view class="login-form" v-if="loginType === 'account'">
       <!-- 手机号 -->
       <view class="form-item">
-        <input class="form-item--input" type="text" v-model="account" maxlength="30" clearable="true" placeholder="请输入您的用户名" />
+        <text class="iconfont icon-sy-yh"></text>
+        <input class="form-item--input uni-input" type="text" v-model="account" maxlength="30" clearable="true" placeholder="请输入您的用户名" />
       </view>
       <!-- 密码 -->
       <view class="form-item">
+        <text class="iconfont icon-suo"></text>
         <input class="form-item--input" type="password" autocomplete="off" v-model="password" maxlength="30" minlength="1" value="" placeholder="请输入您的密码" />
       </view>
       <!-- 确认密码 -->
       <view class="form-item" v-if="isRegister">
+        <text class="iconfont icon-suo"></text>
         <input class="form-item--input" type="password" autocomplete="off" v-model="password1" maxlength="30" value="" placeholder="请再次输入密码" />
       </view>
       <!-- 图形验证码 -->
       <view class="form-item">
+        <text class="iconfont icon-tuxingyanzhengma"></text>
         <input class="form-item--input" type="text" v-model="captchaCode" maxlength="5" placeholder="请输入图形验证码" />
         <view class="form-item--parts">
           <view class="captcha" @click="getCaptcha()">
@@ -34,6 +38,7 @@
       <!-- 按钮 -->
       <view class="login-button" v-if="!isRegister" @click="handleSubmit"><text>立即登录</text></view>
       <view class="login-button" v-if="isRegister" @click="handleSubmit"><text>立即注册</text></view>
+      <view class="cancel-button" @click="handleCancel"><text>取消</text></view>
       <view class="register" v-if="!isRegister" @click="toRegister()">还没有账号？去注册</view>
       <view class="register" v-if="isRegister" @click="toRegister()">已有账号？立即登录</view>
     </view>
@@ -43,11 +48,13 @@
     <view class="login-form" v-if="loginType === 'sms'">
       <!-- 手机号 -->
       <view class="form-item">
+          <text class="iconfont icon-shoujihao"></text>
           <text class="pre-mobile">+86</text>
           <input class="form-item--input" style="padding-left: 12rpx;" type="number" v-model="mobile" maxlength="11" placeholder="请输入手机号码" />
       </view>
       <!-- 图形验证码 -->
       <view class="form-item">
+        <text class="iconfont icon-tuxingyanzhengma"></text>
         <input class="form-item--input" type="text" v-model="captchaCode" maxlength="5" placeholder="请输入图形验证码" />
         <view class="form-item--parts">
           <view class="captcha" @click="getCaptcha()">
@@ -57,6 +64,7 @@
       </view>
       <!-- 短信验证码 -->
       <view class="form-item">
+        <text class="iconfont icon-yanzhengma"></text>
         <input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder="请输入短信验证码" />
         <view class="form-item--parts">
           <view class="captcha-sms" @click="handelSmsCaptcha()">
@@ -349,7 +357,10 @@
         
         return true
       },
-      
+      // 取消返回
+      handleCancel() {
+          this.$navTo('pages/user/index');
+      },
       // 确认注册
       submitRegister() {
         const app = this
@@ -437,7 +448,7 @@
 
 <style lang="scss" scoped>
   .container {
-    padding: 30rpx 60rpx 100rpx 60rpx;
+    padding: 160rpx 60rpx 100rpx 60rpx;
     min-height: 100vh;
     background-color: #fff;
     .fast-icon {
@@ -450,7 +461,6 @@
   // 页面头部
   .header {
     margin-bottom: 50rpx;
-
     .title {
        color: #191919;
        font-size: 33rpx;
@@ -462,9 +472,10 @@
            height: 88rpx;
            float: left;
            text-align: center;
+           font-weight: bold;
        }
        .active {
-           border-bottom: #ff3800 8rpx solid;
+           border-bottom: #ff3800 10rpx solid;
            padding-bottom: 10rpx;
            text-align: center;
        }
@@ -478,6 +489,8 @@
     border-bottom: 2rpx solid #cccccc;
     margin-bottom: 25rpx;
     height: 110rpx;
+    align-items: center;
+    justify-content: center;
     .pre-mobile {
         line-height: 75rpx;
         color: #888888;
@@ -488,6 +501,7 @@
       letter-spacing: 1rpx;
       flex: 1;
       height: 100%;
+      padding-left: 5rpx;
     }
 
     &--parts {
@@ -528,9 +542,10 @@
 
   // 登录按钮
   .login-button {
-    width: 100%;
+    width: 90%;
     height: 86rpx;
-    margin-top: 70rpx;
+    margin: 0 auto;
+    margin-top: 40rpx;
     background: #00acac;
     text-align: center;
     line-height: 86rpx;
@@ -538,6 +553,23 @@
     border-radius: 80rpx;
     box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
     letter-spacing: 5rpx;
+    cursor: pointer;
+  }
+  
+  // 取消按钮
+  .cancel-button {
+    width: 90%;
+    height: 86rpx;
+    margin: 0 auto;
+    margin-top: 20rpx;
+    background: #dfdfdf;
+    color: #fff;
+    text-align: center;
+    line-height: 86rpx;
+    border-radius: 80rpx;
+    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+    letter-spacing: 5rpx;
+    cursor: pointer;
   }
   
   // 去注册
