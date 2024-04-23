@@ -7,8 +7,8 @@
         </view>
         <view v-if="!isSuccess" class="result">
            <image class="icon" src='/static/pay/fail.png'></image>
-           <text class="text" v-if="message" style="color:#888888;">支付失败：{{ message }}</text>
-           <text class="text" v-if="!message" style="color:#888888;">哎呀，支付失败啦~</text>
+           <text class="text" v-if="message && message != undefined" style="color:#888888;">支付失败：{{ message }}</text>
+           <text class="text" v-if="!message || message == undefined" style="color:#888888;">哎呀，支付失败啦~</text>
         </view>
         <view class="options">
             <view class="to-home" @click="toHome()"><text class="iconfont icon-home"></text>返回首页</view>

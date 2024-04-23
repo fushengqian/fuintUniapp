@@ -155,11 +155,12 @@
       onSubmitOrder() {
         const app = this
         if (app.disabled) {
-          return false
+            app.$toast('请勿重复提交订单哦');
+            return false
         }
         // 表单验证
         if (!app.onVerifyFrom()) {
-          return false
+            return false
         }
         // 按钮禁用
         app.disabled = true

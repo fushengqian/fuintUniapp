@@ -542,10 +542,10 @@
 
   // 登录按钮
   .login-button {
-    width: 90%;
+    width: 96%;
     height: 86rpx;
     margin: 0 auto;
-    margin-top: 40rpx;
+    margin-top: 60rpx;
     background: #00acac;
     text-align: center;
     line-height: 86rpx;
@@ -558,7 +558,7 @@
   
   // 取消按钮
   .cancel-button {
-    width: 90%;
+    width: 96%;
     height: 86rpx;
     margin: 0 auto;
     margin-top: 20rpx;
