@@ -54,7 +54,7 @@
     <!-- 底部操作按钮 -->
     <view class="footer-fixed" v-if="userInfo.id">
       <view class="btn-wrapper">
-        <view class="btn-item btn-item-main" @click="addCard()">保存信息</view>
+        <view class="btn-item btn-item-main" @click="save()">保存信息</view>
       </view>
       <view class="btn-wrapper">
         <view class="btn-item btn-item-out" @click="logout()">退出登录</view>
@@ -79,6 +79,7 @@
         // 正在加载
         isLoading: true,
         userInfo: { avatar: '', name: '', sex: 0, birthday: '', hasPassword: '' },
+        openCardPara: null,
         code: "",
         nickname: "",
         avatar: ""
@@ -104,6 +105,9 @@
         UserApi.info()
           .then(result => {
             app.userInfo = result.data.userInfo;
+            if (result.data.openCardPara) {
+                app.openCardPara = result.data.openCardPara; 
+            }
             app.nickname = app.userInfo.name;
             app.avatar = app.userInfo.avatar;
             app.isLoading = false;
@@ -200,24 +204,8 @@
        * 退出登录
        */
       logout() {
-           store.dispatch('Logout')
-           this.$navTo('pages/user/index')
-      },
-      
-      /**
-       * 添加卡券
-       */
-      addCard() {
-          wx.addCard({
-            cardList: [{
-              cardId: 'phThw6AYMpfk0zducvo1xm4zlbXo',
-              cardExt: '{"code": "883242342", "openid": "owOWg5cYFQr15C2QJkuAPfvMpHTQ", "timestamp": "", "signature":""}'
-            }], // 需要添加的卡券列表
-            success: function (res) {
-              var cardList = res.cardList; // 添加的卡券列表信息
-              console.log("addCard res:", res);
-            }
-          });
+         store.dispatch('Logout');
+         this.$navTo('pages/user/index');
       }
     }
   }

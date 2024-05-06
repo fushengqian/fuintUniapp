@@ -293,14 +293,19 @@
                   app.userInfo = { id: 0, name: '', avatar: '', gradeId: 0, mobile: '', balance: 0 }
               }
               
-              app.gradeInfo = result.data.gradeInfo
-              app.memberGrade = result.data.memberGrade
-              app.gradeEndTime = result.data.gradeEndTime
-              app.isMerchant = result.data.isMerchant
+              // 强制领取会员卡
+              if (result.data.openWxCard && app.userInfo) {
+                  this.$navTo('pages/user/card?userId='+app.userInfo.id);
+                  return false;
+              }
               
-              resolve(app.userInfo)
-              resolve(app.gradeInfo)
-              resolve(isMerchant)
+              app.gradeInfo = result.data.gradeInfo;
+              app.memberGrade = result.data.memberGrade;
+              app.gradeEndTime = result.data.gradeEndTime;
+              app.isMerchant = result.data.isMerchant;              
+              resolve(app.userInfo);
+              resolve(app.gradeInfo);
+              resolve(isMerchant);
             })
             .catch(err => {
               if (err.result && err.result.status == 1001) {

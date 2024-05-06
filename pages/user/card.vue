@@ -3,7 +3,7 @@
     <view class="info-list">
       <view class="info-item">
         <view class="contacts">
-            <text class="name"><text class="iconfont icon-bangzhu"></text> 向商家展示会员码</text>
+            <text class="name"><text class="iconfont icon-bangzhu"></text>长按领取会员卡</text>
         </view>
       </view>
     </view>
@@ -57,12 +57,12 @@
         UserApi.qrCode()
           .then(result => {
             app.userInfo = result.data.userInfo;
-            app.qrCode = result.data.qrCode;
+            app.qrCode = result.data.wxCardQrCode;
             app.isLoading = false;
           })
       },
       goBack() {
-          this.$navTo('pages/user/index');
+          this.$navTo('pages/index/index');
       }
     }
   }

@@ -14,7 +14,6 @@
     onLaunch() {
       // 小程序主动更新
       this.updateManager()
-      
     },
 
     methods: {
