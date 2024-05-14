@@ -43,14 +43,14 @@
 
 <style lang="scss" scoped>
   .diy-search {
-    background: #00acac;
+    background: $fuint-theme;
     padding: 20rpx 20rpx;
     font-size: 26rpx;
   }
 
   .inner {
     height: 60rpx;
-    background: #00acac;
+    background: $fuint-theme;
     overflow: hidden;
 
     &.radius {
@@ -67,7 +67,7 @@
     line-height: 60rpx;
     color: #999;
     padding: 0 20rpx;
-    background: #00acac;
+    background: $fuint-theme;
     .search-icon {
       margin-right: 8rpx;
     }

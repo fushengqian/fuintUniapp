@@ -247,7 +247,7 @@
     color:#666666;
   }
   .base {
-      background: #00acac;
+      background: $fuint-theme;
         padding: 30rpx;
         border-radius: 10rpx;
       color: #ffffff;
@@ -262,7 +262,7 @@
         }
   }
   .pay-form {
-      border: solid 3rpx #00acac;
+      border: solid 3rpx $fuint-theme;
       padding: 30rpx;
       border-radius: 10rpx;
       margin: 60rpx 20rpx 20rpx 20rpx;

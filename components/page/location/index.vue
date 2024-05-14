@@ -48,7 +48,7 @@
   height: 90rpx;
   color: #ffffff;
   .diy-location {
-    background: linear-gradient(to bottom, #00acac, #02b9b9);
+    background: linear-gradient(to bottom, $fuint-theme, $fuint-theme);
     padding: 3rpx 10rpx 10rpx 10rpx;
     /* #ifdef H5 */
     padding-top: 15rpx;

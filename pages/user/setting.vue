@@ -289,7 +289,7 @@
     .btn-item-out {
       margin-top: 20rpx;
       background: #FFFFFF;
-      border: 1px solid #00acac;
+      border: 1px solid $fuint-theme;
       color: #666666;
     }
 

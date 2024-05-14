@@ -335,8 +335,8 @@
                   color: #FFFFFF;
                   float: right;
                   margin-right: 20rpx;
-                  border: solid 1rpx #00acac;
-                  background: #00acac;
+                  border: solid 1rpx $fuint-theme;
+                  background: $fuint-theme;
                   padding: 8rpx 20rpx 8rpx 20rpx;
                   border-radius: 5rpx;
                   display: block;

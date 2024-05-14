@@ -546,7 +546,7 @@
     height: 86rpx;
     margin: 0 auto;
     margin-top: 60rpx;
-    background: #00acac;
+    background: $fuint-theme;
     text-align: center;
     line-height: 86rpx;
     color: #fff;

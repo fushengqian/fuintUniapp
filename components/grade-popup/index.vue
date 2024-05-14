@@ -387,7 +387,7 @@
               padding: 30rpx;
               font-size: 30rpx;
               background: #fff;
-              border: 1rpx solid #00acac;
+              border: 1rpx solid $fuint-theme;
               border-radius: 8rpx;
               color: #888;
               margin-bottom: 12rpx;
@@ -400,7 +400,7 @@
                   margin-right: 10rpx;
               }
               .is-use {
-                color: #00acac
+                color: $fuint-theme
               }               
               .item-left_icon {
                 margin-right: 20rpx;
@@ -411,7 +411,7 @@
                 }
                
                 &.balance {
-                  color: #00acac;
+                  color: $fuint-theme;
                 }
               }
             }

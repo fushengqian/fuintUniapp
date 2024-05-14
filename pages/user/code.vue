@@ -9,7 +9,7 @@
     </view>
     
     <view class="info-code">
-        <view class="code-text">会员号：{{ userInfo.userNo }}</view>
+        <view class="code-text">会员号：{{ userInfo.userNo ? userInfo.userNo : '--'}}</view>
         <image class="qrcode" :src="qrCode"></image>
     </view>
     

@@ -519,12 +519,12 @@
                     padding: 2rpx;
                 }
                 .select-spec {
-                    border: solid 1rpx #00acac;
+                    border: solid 1rpx $fuint-theme;
                     padding: 10rpx 20rpx 10rpx 36rpx;
                     font-size: 25rpx;
                     border-radius: 5rpx;
                     color: #ffffff;
-                    background: #00acac;
+                    background: $fuint-theme;
                 }
             }
         }
@@ -570,7 +570,7 @@
     
     // 提交按钮
     .flow-btn {
-      background: linear-gradient(to right, #00acac, #00acac);
+      background: linear-gradient(to right, $fuint-theme, $fuint-theme);
       color: #fff;
       text-align: center;
       line-height: 92rpx;

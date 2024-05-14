@@ -63,7 +63,7 @@
     padding: 2rpx;
     color: #666666;
     .nav-to {
-        border: 2rpx solid #00acac;
+        border: 2rpx solid $fuint-theme;
         margin: 0rpx 2px 0px 2px;
         padding: 38rpx 10rpx 10rpx 10rpx;
         border-radius: 8rpx;
