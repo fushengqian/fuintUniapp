@@ -55,7 +55,8 @@
                     "entitlements" : {
                         "com.apple.developer.associated-domains" : [ "applinks:static-5ada423c-7a73-43cd-a106-dea1d6af22d2.bspapp.com" ]
                     }
-                }
+                },
+                "dSYMs" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {

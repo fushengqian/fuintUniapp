@@ -371,7 +371,8 @@
             password1: app.password1,
             captchaKey: app.captcha.key,
             captchaCode: app.captchaCode,
-            uuid: app.captchaUuid
+            uuid: app.captchaUuid,
+            shareId: (uni.getStorageSync('shareId') ? uni.getStorageSync('shareId') : 0)
           })
           .then(result => {
               // 显示登录信息
@@ -399,7 +400,8 @@
             isParty: app.isParty,
             partyData: app.partyData,
             captchaCode: app.captchaCode,
-            uuid: app.captchaUuid
+            uuid: app.captchaUuid,
+            shareId: (uni.getStorageSync('shareId') ? uni.getStorageSync('shareId') : 0)
           })
           .then(result => {
             // 显示登录信息
@@ -419,18 +421,6 @@
        * 去授权认证
        * */
       isNeedAuth(loginInfo) {
-         console.log("loginInfo == ", loginInfo);
-         if (isWechat() && loginInfo && loginInfo.appId && loginInfo.domain && !loginInfo.openId) {
-             console.log('to auth...')
-             // #ifdef H5
-             const appId = loginInfo.appId;
-             const domain = loginInfo.domain;
-             const redirect_uri = encodeURIComponent(domain + "#pages/login/auth");
-             const url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri="+ redirect_uri +"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
-             window.location.href = url;
-             return true;
-             // #endif
-         }
          this.onNavigateBack(1);
       },
 

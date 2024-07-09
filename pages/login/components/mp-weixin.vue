@@ -113,7 +113,7 @@
       async onAuthSuccess(userInfo) {
         const app = this
         // 提交到后端
-        store.dispatch('MpWxLogin', { code: await app.getCode(), userInfo })
+        store.dispatch('MpWxLogin', { code: await app.getCode(), shareId: (uni.getStorageSync('shareId') ? uni.getStorageSync('shareId') : 0), userInfo })
           .then(result => {
             if (!app.needPhone || userInfo.type == "phone") {
                 // 显示登录成功

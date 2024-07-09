@@ -95,7 +95,7 @@ export const getTabBarLinks = () => {
  */
 export const getShareUrlParams = (params) => {
   return util.urlEncode({
-    refereeId: store.getters.userId, // 推荐人ID
+    spm: store.getters.userId, // 推荐人ID
     ...params
   })
 }
