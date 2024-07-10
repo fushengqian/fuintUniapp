@@ -91,6 +91,7 @@
   import * as giveApi from '@/api/give'
   import * as couponApi from '@/api/coupon'
   import * as MessageApi from '@/api/message'
+  import config from '@/config'
 
   export default {
     components: {
@@ -116,7 +117,7 @@
      */
     onLoad(options) {
       this.userCouponId = options.userCouponId ? options.userCouponId : 0;
-      this.couponId = options.couponId ?options.couponId : 0;
+      this.couponId = options.couponId ? options.couponId : 0;
       this.getCouponDetail();
     },
 
@@ -126,7 +127,10 @@
         const app = this
         myCouponApi.detail(app.couponId, app.userCouponId, "")
           .then(result => {
-            app.detail = result.data
+            app.detail = result.data;
+            if (!app.couponId || app.couponId < 1) {
+                app.couponId = app.detail.couponId;
+            }
           })
           .finally(() => app.isLoading = false)
       },
@@ -248,6 +252,30 @@
                 }
             })
         }
+      }
+    },
+    /**
+     * 分享当前页面
+     */
+    onShareAppMessage() {
+      const app = this
+      return {
+         title: config.name + "卡券分享",
+         path: "/pages/coupon/detail?couponId=" + app.couponId + "&" + app.$getShareUrlParams()
+      }
+    },
+    
+    /**
+     * 分享到朋友圈
+     * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
+     * https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share-timeline.html
+     */
+    onShareTimeline() {
+      const app = this
+      const { page } = app
+      return {
+        title: config.name + "卡券分享",
+        path: "/pages/coupon/detail?couponId=" + app.couponId + "&" + app.$getShareUrlParams()
       }
     }
   }

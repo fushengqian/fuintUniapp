@@ -94,10 +94,12 @@ export const getTabBarLinks = () => {
  * 生成转发的url参数
  */
 export const getShareUrlParams = (params) => {
-  return util.urlEncode({
+  let path = util.urlEncode({
     spm: store.getters.userId, // 推荐人ID
     ...params
   })
+  console.log('转发url : ', path);
+  return path;
 }
 
 /**

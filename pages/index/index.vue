@@ -37,6 +37,7 @@
   import * as settingApi from '@/api/setting'
   import * as Api from '@/api/page'
   import MescrollCompMixin from "@/components/mescroll-uni/mixins/mescroll-comp.js";
+  import config from '@/config'
 
   const App = getApp()
   
@@ -212,7 +213,7 @@
     onShareAppMessage() {
       const app = this
       return {
-         title: "fuint会员系统",
+         title: config.name,
          path: "/pages/index/index?" + app.$getShareUrlParams()
       }
     },
@@ -226,7 +227,7 @@
       const app = this
       const { page } = app
       return {
-        title: page.params.share_title,
+        title: config.name,
         path: "/pages/index/index?" + app.$getShareUrlParams()
       }
     }
