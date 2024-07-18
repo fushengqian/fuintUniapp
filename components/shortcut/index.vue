@@ -11,7 +11,7 @@
     </view>
     
     <!-- 个人中心 -->
-    <view class="nav-item" :class="[isShow ? 'show_20' : (transparent ? '' : 'hide_20')]" @click="onTargetPage(2)">
+    <view class="nav-item" :class="[isShow ? 'show_20' : (transparent ? '' : 'hide_20')]" @click="onTargetPage(3)">
       <text class="iconfont icon-profile"></text>
     </view>
 

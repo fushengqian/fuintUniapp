@@ -349,7 +349,7 @@
         }
 
         .sure.add-cart {
-          background: #ff9402;
+          background: $fuint-theme;
         }
       }
     }

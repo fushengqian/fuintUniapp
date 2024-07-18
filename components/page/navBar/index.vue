@@ -3,7 +3,7 @@
   <view class="diy-navBar" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
     <view class="data-list" :class="[`avg-sm-${itemStyle.rowsNum}`]">
       <view class="item-nav" v-for="(dataItem, index) in dataList" :key="index">
-        <view class="nav-to" @click="onLink(dataItem.linkUrl)">
+        <view class="nav-to" :class="'nav-' + index" @click="onLink(dataItem.linkUrl)">
           <view class="item-image">
             <image class="image" mode="widthFix" :src="dataItem.imgUrl"></image>
           </view>
@@ -57,20 +57,38 @@
 
   .item-nav {
     float: left;
-    margin: 10rpx 0px 5rpx 0px;
+    margin: 10rpx 0px 4rpx 0px;
     text-align: center;
     background: #ffffff;
     padding: 2rpx;
-    color: #666666;
+    color: #0c5566;
+    font-weight: bold;
     .nav-to {
-        border: 2rpx solid $fuint-theme;
-        margin: 0rpx 2px 0px 2px;
+        margin: 0rpx 8px 0px 8px;
         padding: 38rpx 10rpx 10rpx 10rpx;
-        border-radius: 8rpx;
-        background: #ffffff;
+        border-radius: 20rpx;
         height: 150rpx;
+        background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+        border: solid 1rpx #ccc;
     }
-
+    .nav-0 {
+        margin: 0rpx 4px 0px 8px;
+    }
+    .nav-1 {
+        margin: 0rpx 8px 0px 4px;
+    }
+    .nav-2 {
+        margin: 0rpx 4px 0px 8px;
+    }
+    .nav-3 {
+        margin: 0rpx 8px 0px 4px;
+    }
+    .nav-4 {
+        margin: 0rpx 4px 0px 8px;
+    }
+    .nav-5 {
+        margin: 0rpx 8px 0px 4px;
+    }
     .item-text {
       text-align: left;
       padding-left: 20rpx;

@@ -263,9 +263,11 @@
               box-sizing: border-box;
               background: #fff;
               line-height: 1.6;
-              border: 1rpx #F5f5f5 solid;
               &:last-child {
                 margin-bottom: 0;
+              }
+              &:first-child {
+                  margin-top: 8rpx;
               }
             }
 

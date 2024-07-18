@@ -329,7 +329,7 @@
 
         .specification-wrapper-content {
           width: 100%;
-          max-height: 900rpx;
+          max-height: 1200rpx;
           min-height: 300rpx;
 
           &::-webkit-scrollbar {
@@ -476,7 +476,7 @@
         }
 
         .sure.add-cart {
-          background: #ff9402;
+          background: $fuint-theme;
         }
       }
     }

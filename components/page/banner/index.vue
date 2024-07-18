@@ -98,7 +98,7 @@
     // swiper组件
     .swiper-box {
       height: 100%;
-      padding: 0rpx 10rpx 0rpx 10rpx;
+      padding: 0rpx 20rpx 0rpx 20rpx;
       max-width: 750rpx;
       max-height: 450rpx;
       .slide-image {
