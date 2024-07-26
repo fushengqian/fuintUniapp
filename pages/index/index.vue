@@ -83,9 +83,9 @@
                     }, {
                         "imgUrl": "/static/nav/4.png",
                         "imgName": "icon-1.png",
-                        "linkUrl": "pages\/coupon\/list?type=T",
-                        "text": "热门活动",
-                        "tip": "抽奖、次卡等",
+                        "linkUrl": "pages\/share\/index",
+                        "text": "邀请有礼",
+                        "tip": "邀请获取奖励",
                         "color": "#666666"}],
             "goodsStyle": {
                 "background": "#F6F6F6",

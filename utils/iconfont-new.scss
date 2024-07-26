@@ -1,9 +1,11 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 4514721 */
-  src: url('//at.alicdn.com/t/c/font_4514721_jhj4doibcze.woff2?t=1713490860276') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4514721_jhj4doibcze.woff?t=1713490860276') format('woff'),
-       url('//at.alicdn.com/t/c/font_4514721_jhj4doibcze.ttf?t=1713490860276') format('truetype');
+  font-family: 'iconfont';  /* Project id 4514721 */
+  src: url('//at.alicdn.com/t/c/font_4514721_jxg4jk7hk3.woff2?t=1721977916099') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4514721_jxg4jk7hk3.woff?t=1721977916099') format('woff'),
+       url('//at.alicdn.com/t/c/font_4514721_jxg4jk7hk3.ttf?t=1721977916099') format('truetype'),
+       url('//at.alicdn.com/t/c/font_4514721_jxg4jk7hk3.svg?t=1721977916099#iconfont') format('svg');
 }
+
 
 .iconfont {
   font-family: "iconfont" !important;
@@ -35,5 +37,17 @@
 
 .icon-tuxingyanzhengma:before {
   content: "\e799";
+}
+
+.icon-fenxiang-post:before {
+  content: "\e7c5";
+}
+
+.icon-download-post:before {
+  content: "\e63f";
+}
+
+.icon-gift:before {
+  content: "\e682";
 }
 
