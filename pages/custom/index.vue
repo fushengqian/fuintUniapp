@@ -92,7 +92,7 @@
       const { page } = app
       return {
         title: page.params.share_title,
-        path: "/pages/index/index?" + app.$getShareUrlParams()
+        path: "/pages/index/index/?" + app.$getShareUrlParams()
       }
     },
 
@@ -106,7 +106,7 @@
       const { page } = app
       return {
         title: page.params.share_title,
-        path: "/pages/index/index?" + app.$getShareUrlParams()
+        path: "/pages/index/index/?" + app.$getShareUrlParams()
       }
     }
 
