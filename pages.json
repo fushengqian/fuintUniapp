@@ -348,6 +348,18 @@
       "style": {
         "navigationBarTitleText": "邀请有礼"
       }
+    },
+    {
+      "path": "pages/book/index",
+      "style": {
+        "navigationBarTitleText": "预约项目"
+      }
+    },
+    {
+      "path": "pages/book/detail",
+      "style": {
+        "navigationBarTitleText": "预约详情"
+      }
     }
   ],
   "globalStyle": {
