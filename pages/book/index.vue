@@ -5,10 +5,10 @@
     <view class="tabs-wrapper">
       <scroll-view class="scroll-view" scroll-x>
         <view class="tab-item" :class="{ active: curId ==  0 }" @click="onSwitchTab(0)">
-          <view class="value"><text>全部项目</text></view>
+          <view class="value"><text>全部</text></view>
         </view>
         <!-- 分类列表 -->
-        <view class="tab-item" :class="{ active: curId ==  item.categoryId }" @click="onSwitchTab(item.id)"
+        <view class="tab-item" :class="{ active: curId ==  item.id }" @click="onSwitchTab(item.id)"
           v-for="(item, index) in categoryList" :key="index">
           <view class="value"><text>{{ item.name }}</text></view>
         </view>
@@ -19,16 +19,16 @@
     <view class="book-list">
       <view class="book-item show-type" v-for="(item, index) in list.content" :key="index" @click="onTargetDetail(item.id)">
         <block>
+          <view class="book-item-image">
+            <image class="image" :src="item.logo"></image>
+          </view>
           <view class="book-item-left flex-box">
             <view class="book-item-title twolist-hidden">
-              <text>{{ item.title }}</text>
+              <text>{{ item.name }}</text>
             </view>
             <view class="book-item-footer m-top10">
-              <text class="book-views f-24 col-8">{{ item.click }}次浏览</text>
+              <text class="book-views">{{ item.description }}</text>
             </view>
-          </view>
-          <view class="book-item-image">
-            <image class="image" :src="item.image"></image>
           </view>
         </block>
       </view>
@@ -105,7 +105,7 @@
         const app = this;
         BookApi.cateList()
           .then(result => {
-              app.categoryList = result.data.list;
+              app.categoryList = result.data.cateList;
           })
       },
 
@@ -116,7 +116,7 @@
       getBookList(pageNo = 1) {
         const app = this
         return new Promise((resolve, reject) => {
-          BookApi.list({ categoryId: app.curId, page: pageNo }, { load: false })
+          BookApi.list({ cateId: app.curId, page: pageNo }, { load: false })
             .then(result => {
               // 合并新数据
               const newList = result.data;
@@ -192,7 +192,7 @@
 
   .tab-item {
     display: inline-block;
-    padding: 0 15rpx;
+    padding: 0 10rpx;
     text-align: center;
     min-width: 20%;
     height: 87rpx;
@@ -206,6 +206,7 @@
     &.active .value {
       color: #fd4a5f;
       border-bottom: 4rpx solid #fd4a5f;
+      font-weight: bold;
     }
   }
 
@@ -217,9 +218,10 @@
   }
 
   .book-item {
-    margin-bottom: 20rpx;
-    padding: 30rpx;
+    padding: 40rpx;
     background: #fff;
+    margin: 20rpx;
+    border-radius: 15rpx;
 
     &:last-child {
       margin-bottom: 0;
@@ -228,14 +230,15 @@
     .book-item-title {
       max-height: 80rpx;
       font-size: 32rpx;
+      font-weight: bold;
       color: #333;
     }
 
     .book-item-image .image {
       display: block;
-      border-radius: 8rpx;
-      height: 140rpx;
-      width: 180rpx;
+      border-radius: 16rpx;
+      height: 160rpx;
+      width: 200rpx;
       border: 2rpx solid #cccccc;
     }
   }
@@ -243,10 +246,13 @@
   .show-type {
     display: flex;
     .book-item-left {
-      padding-right: 20rpx;
+      padding-left: 20rpx;
     }
     .book-item-title {
-      min-height: 72rpx;
+      font-size: 32rpx;
+    }
+    .book-item-footer {
+        line-height: 40rpx;
     }
   }
 </style>

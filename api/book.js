@@ -19,5 +19,5 @@ export const detail = (bookId) => {
 
 // 预约分类列表
 export const cateList = (param) => {
-  return request.post(api.cate, param)
+  return request.get(api.cate, param)
 }
