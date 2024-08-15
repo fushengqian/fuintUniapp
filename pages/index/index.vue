@@ -116,7 +116,6 @@
             }
         },
         banner: [],
-        goods: [],
         storeInfo: null,
         isReflash: false,
         isLoading: false
@@ -168,7 +167,6 @@
           Api.home()
             .then(result => {
                  app.banner = result.data.banner;
-                 app.goods = result.data.goods;
                  uni.removeStorageSync("reflashHomeData");
                  app.isReflash = false;
             })
