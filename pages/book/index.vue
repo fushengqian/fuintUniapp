@@ -253,6 +253,9 @@
     }
     .book-item-footer {
         line-height: 40rpx;
+        max-height: 120rpx;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
   }
 </style>
