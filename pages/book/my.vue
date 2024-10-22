@@ -4,12 +4,12 @@
     <!-- 分类列表tab -->
     <view class="tabs-wrapper">
       <scroll-view class="scroll-view" scroll-x>
-        <view class="tab-item" :class="{ active: curId ==  0 }" @click="onSwitchTab(0)">
+        <view class="tab-item" :class="{ active: curId == '' }" @click="onSwitchTab('')">
           <view class="value"><text>全部</text></view>
         </view>
-        <!-- 分类列表 -->
-        <view class="tab-item" :class="{ active: curId ==  item.categoryId }" @click="onSwitchTab(item.id)"
-          v-for="(item, index) in categoryList" :key="index">
+        <!-- tab列表 -->
+        <view class="tab-item" :class="{ active: curId ==  item.key }" @click="onSwitchTab(item.key)"
+          v-for="(item, index) in statusList" :key="index">
           <view class="value"><text>{{ item.name }}</text></view>
         </view>
       </scroll-view>
@@ -17,18 +17,21 @@
 
     <!-- 预约列表 -->
     <view class="book-list">
-      <view class="book-item show-type" v-for="(item, index) in list.content" :key="index" @click="onTargetDetail(item.id)">
+      <view class="book-item" v-for="(item, index) in list.content" :key="index" @click="onTargetDetail(item.id)">
         <block>
-          <view class="book-item-left flex-box">
-            <view class="book-item-title twolist-hidden">
-              <text>{{ item.title }}</text>
+          <view class="flex-box">
+            <view class="book-item-title">
+              <text>{{ item.bookName }}</text>
+            </view>
+            <view class="book-content">
+                <view class="contacts">姓名：{{ item.contact }}</view>
+                <view class="time">时间：{{ item.serviceDate }} {{ item.serviceTime }}</view>
             </view>
             <view class="book-item-footer m-top10">
-              <text class="book-views f-24 col-8">{{ item.click }}</text>
+              <text class="book-views f-24 col-8">{{ item.createTime | timeFormat('yyyy-mm-dd hh:MM') }}</text>
+              <view class="btn-cancel" @click="onCancel(item.id)">取消</view>
+              <view class="btn-view" @click="onView(item.id)">详情</view>
             </view>
-          </view>
-          <view class="book-item-image">
-            <image class="image" :src="item.image"></image>
           </view>
         </block>
       </view>
@@ -51,12 +54,12 @@
     mixins: [MescrollMixin],
     data() {
       return {
-        // 分类列表
-        categoryList: [ { id: 1, name: '待确认'}, { id: 2, name: '已确认' }],
+        // 状态列表
+        statusList: [],
         // 预约列表
         list: getEmptyPaginateObj(),
         // 当前选中的分类id (0则代表首页)
-        curId: 0,
+        curId: '',
         // 上拉加载配置
         upOption: {
           // 首次自动执行
@@ -74,8 +77,8 @@
      */
     onLoad(options) {
       const app = this;
-      if (options.categoryId) {
-          app.curId = options.categoryId;
+      if (options.status) {
+          app.curId = options.status;
       }
     },
 
@@ -103,13 +106,14 @@
        * @param {Number} pageNo 页码
        */
       getMyBookList(pageNo = 1) {
-        const app = this
+        const app = this;
         return new Promise((resolve, reject) => {
-          BookApi.list({ categoryId: app.curId, page: pageNo }, { load: false })
+          BookApi.myBookList({ status: app.curId, page: pageNo }, { load: false })
             .then(result => {
               // 合并新数据
               const newList = result.data;
               app.list.content = getMoreListData(newList, app.list, pageNo);
+              app.statusList = result.data.statusList;
               resolve(newList);
             })
             .catch(result => reject());
@@ -117,17 +121,38 @@
       },
 
       // 切换选择的分类
-      onSwitchTab(categoryId = 0) {
+      onSwitchTab(status) {
         const app = this;
-        // 切换当前的分类ID
-        app.curId = categoryId;
+        // 切换当前的状态
+        app.curId = status;
         // 刷新列表数据
         app.list = getEmptyPaginateObj();
         app.mescroll.resetUpScroll();
       },
+      
+      // 取消预约
+      onCancel(myBookId) {
+         const app = this;
+         uni.showModal({
+           title: "提示",
+           content: "您确定要取消该预约吗?",
+           success({ confirm }) {
+             confirm && app.doCancel(myBookId)
+           }
+         });
+      },
+      
+      // 确认取消预约
+      doCancel(myBookId) {
+        const app = this;
+        BookApi.cancel(myBookId)
+          .then(result => {
+            app.getPageData()
+          })
+      },
 
       // 跳转详情页
-      onTargetDetail(myBookId) {
+      onView(myBookId) {
         this.$navTo('pages/book/bookDetail', { myBookId });
       }
     }
@@ -161,7 +186,6 @@
     display: inline-block;
     padding: 0 15rpx;
     text-align: center;
-    min-width: 20%;
     height: 87rpx;
     line-height: 88rpx;
     box-sizing: border-box;
@@ -173,6 +197,7 @@
     &.active .value {
       color: #fd4a5f;
       border-bottom: 4rpx solid #fd4a5f;
+      font-weight: bold;
     }
   }
 
@@ -184,36 +209,51 @@
   }
 
   .book-item {
-    margin-bottom: 20rpx;
+    margin: 0rpx 10rpx 20rpx 10rpx;
     padding: 30rpx;
     background: #fff;
-
+    border-radius: 20rpx;
+    min-height: 280rpx;
     &:last-child {
       margin-bottom: 0;
     }
 
     .book-item-title {
-      max-height: 80rpx;
       font-size: 32rpx;
       color: #333;
+      font-weight: bold;
+      line-height: 40rpx;
+    }
+    .book-content {
+        margin: 30rpx 0rpx 30rpx 0rpx;
+        .contacts {
+            margin-bottom: 20rpx;
+        }
     }
 
-    .book-item-image .image {
-      display: block;
-      border-radius: 8rpx;
-      height: 140rpx;
-      width: 180rpx;
-      border: 2rpx solid #cccccc;
-    }
-  }
-
-  .show-type {
-    display: flex;
-    .book-item-left {
-      padding-right: 20rpx;
-    }
-    .book-item-title {
-      min-height: 72rpx;
+    .book-item-footer {
+      .btn-cancel {
+          width: 100rpx;
+          border-radius: 8rpx;
+          padding: 10rpx 14rpx;
+          font-size: 28rpx;
+          color: #fff;
+          text-align: center;
+          border: 1rpx solid #fff;
+          float: right;
+          background: #f9211c;
+      }
+      .btn-view {
+          width: 100rpx;
+          border-radius: 8rpx;
+          padding: 10rpx 14rpx;
+          font-size: 28rpx;
+          color: #fff;
+          text-align: center;
+          border: 1rpx solid #fff;
+          float: right;
+          background: $fuint-theme;
+      }
     }
   }
 </style>

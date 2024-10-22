@@ -39,11 +39,15 @@ export const bookable = (data) => {
 
 // 我的预约列表
 export const myBookList = (param) => {
-  return request.post(api.myBookList, param)
+  return request.get(api.myBookList, param)
 }
 
-
 // 我的预约详情
-export const detail = (myBookId) => {
-  return request.post(api.myBookDetail, { myBookId })
+export const myBookDetail = (bookId) => {
+  return request.post(api.myBookDetail, { bookId })
+}
+
+// 取消预约
+export function cancel(bookId, data) {
+  return request.get(api.cancel, { bookId, ...data })
 }
