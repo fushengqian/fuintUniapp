@@ -17,7 +17,7 @@
 
     <!-- 预约列表 -->
     <view class="book-list">
-      <view class="book-item" v-for="(item, index) in list.content" :key="index" @click="onTargetDetail(item.id)">
+      <view class="book-item" v-for="(item, index) in list.content" :key="index" @click="onView(item.id)">
         <block>
           <view class="flex-box">
             <view class="book-item-title">
@@ -29,7 +29,7 @@
             </view>
             <view class="book-item-footer m-top10">
               <text class="book-views f-24 col-8">{{ item.createTime | timeFormat('yyyy-mm-dd hh:MM') }}</text>
-              <view class="btn-cancel" @click="onCancel(item.id)">取消</view>
+              <view class="btn-cancel" v-if="item.status == 'A'" @click="onView(item.id)">取消</view>
               <view class="btn-view" @click="onView(item.id)">详情</view>
             </view>
           </view>
@@ -169,7 +169,6 @@
 
   .tabs-wrapper {
     position: sticky;
-    top: var(--window-top);
     display: flex;
     width: 100%;
     height: 88rpx;
