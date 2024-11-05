@@ -1,6 +1,7 @@
 <template>
   <!-- 商品列表 -->
   <view class="goods-container">
+      <view class="recommend" v-if="list.content.length > 0">为您推荐</view>
       <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback" :up="upOption" @up="upCallback">
       <view class="diy-goods" :style="{ background: itemStyle.background }">
         <view class="goods-list" :class="[`display__${itemStyle.display}`, `column__${itemStyle.column}`]">
@@ -48,10 +49,15 @@
                   <view v-if="itemStyle.show.includes('goodsName')" class="goods-name twoline-hide">
                     {{ dataItem.name }}
                   </view>
+                  <!-- 商品卖点 -->
+                  <view v-if="itemStyle.show.includes('sellingPoint')" class="desc-selling_point dis-flex">
+                    <text class="oneline-hide">{{ dataItem.salePoint ? dataItem.salePoint : '' }}</text>
+                  </view>
                   <!-- 商品价格 -->
                   <view class="detail-price oneline-hide">
                     <text v-if="itemStyle.show.includes('goodsPrice')" class="goods-price f-30 col-m">￥{{ dataItem.price }}</text>
                     <text v-if="itemStyle.show.includes('linePrice') && dataItem.linePrice > 0" class="line-price col-9 f-24">￥{{ dataItem.linePrice }}</text>
+                    <text v-if="itemStyle.show.includes('goodsSales')" class="sales">已售{{ dataItem.initSale ? dataItem.initSale : 0 }}件</text>
                   </view>
                 </view>
               </block>
@@ -151,7 +157,7 @@
        */
       getGoodsList(pageNo) {
         const app = this
-        console.log('pageNo==', pageNo);
+        console.log('pageNo=====', pageNo);
         const param = { page: pageNo, pageSize: pageSize }
         return new Promise((resolve, reject) => {
           GoodsApi.search(param)
@@ -169,22 +175,28 @@
 </script>
 <style lang="scss" scoped>
   .goods-container {
+      .recommend {
+        font-size: 30rpx;
+        font-weight: bold;
+        border-left: solid $fuint-theme 10rpx;
+        margin-left: 20rpx;
+        padding-left: 8rpx;
+      }
       .diy-goods {
         .goods-list {
-          padding: 4rpx;
+          padding: 16rpx;
           box-sizing: border-box;
           .goods-item {
             box-sizing: border-box;
-            padding: 6rpx;
-
+            padding: 16rpx;
+            background: #f5f5f5;
             .goods-image {
               position: relative;
               width: 100%;
               height: 0;
               padding-bottom: 100%;
               overflow: hidden;
-              background: #fff;
-
+              text-align: center;
               &:after {
                 content: '';
                 display: block;
@@ -199,12 +211,16 @@
                 left: 0;
                 -o-object-fit: cover;
                 object-fit: cover;
+                border-radius: 12rpx;
+                background: #fff;
               }
             }
 
             .detail {
               padding: 8rpx;
               background: #fff;
+              border-bottom-left-radius: 12rpx;
+              border-bottom-right-radius: 12rpx;
 
               .goods-name {
                 height: 64rpx;
@@ -218,6 +234,8 @@
               .detail-price {
                 .goods-price {
                   margin-right: 8rpx;
+                  font-size: 34rpx;
+                  font-weight: bold;
                 }
 
                 .line-price {
@@ -245,6 +263,18 @@
           &.column__2 {
             .goods-item {
               width: 50%;
+            }
+            .desc-selling_point {
+              width: 400rpx;
+              font-size: 24rpx;
+              color: #e49a3d;
+            }
+            
+            .sales {
+              color: #999;
+              font-size: 24rpx;
+              margin-top: 10rpx;
+              float: right;
             }
           }
 
@@ -282,7 +312,6 @@
                 width: 220rpx;
                 height: 200rpx;
                 border-radius: 10rpx;
-                border: 1rpx #cccccc solid;
               }
             }
 
