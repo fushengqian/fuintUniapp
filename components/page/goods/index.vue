@@ -1,7 +1,9 @@
 <template>
   <!-- 商品列表 -->
   <view class="goods-container">
-      <view class="recommend" v-if="list.content.length > 0">为您推荐</view>
+      <view class="recommend" v-if="list.content.length > 0">
+         <text class="txt">为您推荐</text>
+      </view>
       <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback" :up="upOption" @up="upCallback">
       <view class="diy-goods" :style="{ background: itemStyle.background }">
         <view class="goods-list" :class="[`display__${itemStyle.display}`, `column__${itemStyle.column}`]">
@@ -40,25 +42,27 @@
               </block>
               <!-- 多列商品 -->
               <block v-else>
-                <!-- 商品图片 -->
-                <view class="goods-image">
-                  <image class="image" lazy-load :lazy-load-margin="0" mode="aspectFill" :src="dataItem.logo"></image>
-                </view>
-                <view class="detail">
-                  <!-- 商品标题 -->
-                  <view v-if="itemStyle.show.includes('goodsName')" class="goods-name twoline-hide">
-                    {{ dataItem.name }}
-                  </view>
-                  <!-- 商品卖点 -->
-                  <view v-if="itemStyle.show.includes('sellingPoint')" class="desc-selling_point dis-flex">
-                    <text class="oneline-hide">{{ dataItem.salePoint ? dataItem.salePoint : '' }}</text>
-                  </view>
-                  <!-- 商品价格 -->
-                  <view class="detail-price oneline-hide">
-                    <text v-if="itemStyle.show.includes('goodsPrice')" class="goods-price f-30 col-m">￥{{ dataItem.price }}</text>
-                    <text v-if="itemStyle.show.includes('linePrice') && dataItem.linePrice > 0" class="line-price col-9 f-24">￥{{ dataItem.linePrice }}</text>
-                    <text v-if="itemStyle.show.includes('goodsSales')" class="sales">已售{{ dataItem.initSale ? dataItem.initSale : 0 }}件</text>
-                  </view>
+                <view class="goods-info">
+                    <!-- 商品图片 -->
+                    <view class="goods-image">
+                      <image class="image" lazy-load :lazy-load-margin="0" mode="aspectFill" :src="dataItem.logo"></image>
+                    </view>
+                    <view class="detail">
+                      <!-- 商品标题 -->
+                      <view v-if="itemStyle.show.includes('goodsName')" class="goods-name twoline-hide">
+                        {{ dataItem.name }}
+                      </view>
+                      <!-- 商品卖点 -->
+                      <view v-if="itemStyle.show.includes('sellingPoint')" class="desc-selling_point dis-flex">
+                        <text class="oneline-hide">{{ dataItem.salePoint ? dataItem.salePoint : '' }}</text>
+                      </view>
+                      <!-- 商品价格 -->
+                      <view class="detail-price oneline-hide">
+                        <text v-if="itemStyle.show.includes('goodsPrice')" class="goods-price f-30 col-m">￥{{ dataItem.price }}</text>
+                        <text v-if="itemStyle.show.includes('linePrice') && dataItem.linePrice > 0" class="line-price col-9 f-24">￥{{ dataItem.linePrice }}</text>
+                        <text v-if="itemStyle.show.includes('goodsSales')" class="sales">已售{{ dataItem.initSale ? dataItem.initSale : 0 }}件</text>
+                      </view>
+                    </view>
                 </view>
               </block>
             </view>
@@ -178,49 +182,59 @@
       .recommend {
         font-size: 30rpx;
         font-weight: bold;
-        border-left: solid $fuint-theme 10rpx;
         margin-left: 20rpx;
-        padding-left: 8rpx;
+        margin-right: 20rpx;
+        padding: 20rpx 8rpx 20rpx 8rpx;
+        background: #f5f5f5;
+        .txt {
+          border-left: solid $fuint-theme 10rpx;
+          padding-left: 10rpx;
+        }
       }
       .diy-goods {
         .goods-list {
-          padding: 16rpx;
+          padding: 0rpx 16rpx 16rpx 16rpx;
           box-sizing: border-box;
           .goods-item {
             box-sizing: border-box;
-            padding: 16rpx;
+            padding: 0rpx 16rpx 16rpx 16rpx;
             background: #f5f5f5;
-            .goods-image {
-              position: relative;
-              width: 100%;
-              height: 0;
-              padding-bottom: 100%;
-              overflow: hidden;
-              text-align: center;
-              &:after {
-                content: '';
-                display: block;
-                margin-top: 100%;
-              }
-
-              .image {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                -o-object-fit: cover;
-                object-fit: cover;
-                border-radius: 12rpx;
-                background: #fff;
-              }
+            .goods-info {
+                background: #ffffff;
+                border-radius: 16rpx;
+                padding: 8px;
+                .goods-image {
+                  position: relative;
+                  width: 100%;
+                  height: 0;
+                  padding-bottom: 100%;
+                  overflow: hidden;
+                  text-align: center;
+                  &:after {
+                    content: '';
+                    display: block;
+                    margin-top: 100%;
+                  }
+                  .image {
+                    position: absolute;
+                    box-sizing: border-box;
+                    padding: 10rpx;
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    -o-object-fit: cover;
+                    object-fit: cover;
+                    border-radius: 40rpx;
+                  }
+                }
             }
 
             .detail {
               padding: 8rpx;
               background: #fff;
-              border-bottom-left-radius: 12rpx;
-              border-bottom-right-radius: 12rpx;
+              border-bottom-left-radius: 16rpx;
+              border-bottom-right-radius: 16rpx;
 
               .goods-name {
                 height: 64rpx;
