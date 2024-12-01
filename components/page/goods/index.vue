@@ -193,16 +193,17 @@
       }
       .diy-goods {
         .goods-list {
-          padding: 0rpx 16rpx 16rpx 16rpx;
+          padding: 0rpx 12rpx 12rpx 12rpx;
           box-sizing: border-box;
           .goods-item {
             box-sizing: border-box;
-            padding: 0rpx 16rpx 16rpx 16rpx;
+            padding: 0rpx 12rpx 12rpx 12rpx;
             background: #f5f5f5;
             .goods-info {
                 background: #ffffff;
                 border-radius: 16rpx;
-                padding: 8px;
+                padding: 2px;
+                overflow: hidden;
                 .goods-image {
                   position: relative;
                   width: 100%;
@@ -232,10 +233,11 @@
 
             .detail {
               padding: 8rpx;
-              background: #fff;
+              background: #ffffff;
               border-bottom-left-radius: 16rpx;
               border-bottom-right-radius: 16rpx;
-
+              overflow: hidden;
+              height: 180rpx;
               .goods-name {
                 height: 64rpx;
                 line-height: 1.3;
@@ -279,9 +281,12 @@
               width: 50%;
             }
             .desc-selling_point {
-              width: 400rpx;
+              min-height: 40rpx;
+              line-height: 40rpx;
+              max-width: 400rpx;
               font-size: 24rpx;
               color: #e49a3d;
+              overflow: hidden;
             }
             
             .sales {
