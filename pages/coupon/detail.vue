@@ -300,7 +300,7 @@
         min-height: 420rpx;
         .coupon-main {
             clear: both;
-            min-height: 168rpx;
+            min-height: 164rpx;
             border: #ccc dashed 2rpx;
             border-radius: 5rpx;
             margin-bottom: 20rpx;
@@ -322,7 +322,7 @@
                     font-size: 38rpx;
                 }
                 .num {
-                    font-size: 68rpx;
+                    font-size: 58rpx;
                     color: red;
                 }
             }
