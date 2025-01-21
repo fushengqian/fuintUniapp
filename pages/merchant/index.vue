@@ -312,8 +312,9 @@
     align-items: center;
     background: $fuint-theme;
     padding: 10rpx;
-    margin: 20rpx 20rpx 15rpx 20rpx;
-    border-radius: 8rpx;
+    margin: 20rpx 20rpx 0rpx 20rpx;
+    border-top-left-radius: 8rpx;
+    border-top-right-radius: 8rpx;
 
     .user-info {
       display: block;
@@ -329,7 +330,7 @@
 
         .belong {
           font-size: 28rpx;
-          color: #cad9d8;
+          color: #fff;
           .nick-name {
             padding-left: 15rpx;
           }
@@ -362,8 +363,8 @@
     color: #fff;
     background: $fuint-theme;
     margin: 0 20rpx;
-    padding-top: 20rpx;
-    border-radius: 8rpx;
+    border-bottom-left-radius: 8rpx;
+    border-bottom-right-radius: 8rpx;
     padding-bottom: 60rpx;
     .item {
         width: 50%;
@@ -375,14 +376,14 @@
             width: 280rpx;
             clear: both;
             padding: 20rpx;
-            border: 1rpx dashed #fff;
+            border: 1rpx solid #fff;
             border-radius: 30rpx;
             text-align: center;
             margin:0 auto;
             .icon {
                 .image {
-                    height: 60rpx;
-                    width: 60rpx;
+                    height: 68rpx;
+                    width: 68rpx;
                     font-weight: bold;
                 }
             }
