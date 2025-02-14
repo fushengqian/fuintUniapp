@@ -2,13 +2,13 @@ import request from '@/utils/request'
 
 // api地址
 const api = {
-  info: 'merchantApi/user/info',
+  info: 'merchantApi/member/info',
   list: 'merchantApi/member/list'
 }
 
 // 会员详情
-export function detail(userId, param) {
-  return request.post(api.info, { userId, ...param })
+export function detail(memberId, param) {
+  return request.post(api.info, { memberId, ...param })
 }
 
 
