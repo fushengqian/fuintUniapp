@@ -34,7 +34,7 @@
     </view>
     
     <!-- 底部选项卡 -->
-    <view class="footer-fixed">
+    <view class="footer-fixed" v-if="detail.status == 'A'">
       <view class="footer-container">
         <view class="foo-item-btn">
           <view class="btn-wrapper">
@@ -83,6 +83,25 @@
             app.detail = result.data ? result.data.bookInfo : null;
           })
           .finally(() => app.isLoading = false)
+      },
+      // 取消预约
+      onCancel() {
+        const app = this
+        uni.showModal({
+          title: '友情提示',
+          content: '确认取消预约吗？',
+          success(o) {
+            if (o.confirm) {
+              BookApi.cancel(app.myBookId)
+                .then(result => {
+                  // 显示成功信息
+                  app.$success(result.message)
+                  // 刷新当前订单数据
+                  app.getBookDetail()
+                })
+            }
+          }
+        });
       }
     }
   }

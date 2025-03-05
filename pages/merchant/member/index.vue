@@ -63,14 +63,12 @@
   import MescrollMixin from '@/components/mescroll-uni/mescroll-mixins'
   import * as MemberApi from '@/api/merchant/member'
   import { getEmptyPaginateObj, getMoreListData } from '@/utils/app'
-  import Empty from '@/components/empty'
 
   const pageSize = 15
 
   export default {
     components: {
-      MescrollBody,
-      Empty
+      MescrollBody
     },
     mixins: [MescrollMixin],
     data() {
@@ -132,7 +130,8 @@
        */
       doSearch() {
         this.curId = 'all';
-        this.getMemberList(1);
+        // 刷新列表数据
+        this.mescroll.resetUpScroll();
       },
 
       /**
