@@ -23,7 +23,7 @@
               <view class="address"><text class="location-icon iconfont icon-dingwei"></text>{{ item.address }}</view>
               <view class="tel">联系电话：{{ item.phone }}</view>
           </view>
-          <view class="loc-info">
+          <view class="loc-info" v-if="showDistance">
                 <text class="dis"><text class="distance">{{ parseFloat(item.distance).toFixed(1) }}</text>公里</text>
           </view>
       </view>
@@ -45,7 +45,8 @@
       return {
         storeId: 0,
         searchValue: '',
-        storeList: []
+        storeList: [],
+        showDistance: uni.getStorageSync("latitude") ? true : false
       }
     },
 
