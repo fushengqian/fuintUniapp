@@ -74,7 +74,7 @@
             <view v-if="userCouponId && detail.status != 'D'" class="btn-item btn-item-main" @click="remove(userCouponId)">
               <text>删除卡券</text>
             </view>
-            <view v-else class="btn-item btn-item-main state">
+            <view v-if="detail.status == 'D'" class="btn-item btn-item-main state">
               <text>已删除</text>
             </view>
           </view>
@@ -239,7 +239,8 @@
                 app.receiveCode = '';
                 // 显示提示
                 if (parseInt(result.code) === 200) {
-                    app.detail.isReceive = true
+                    app.detail.isReceive = true;
+                    app.detail.status = 'A';
                     app.$success("领取成功！")
                     // #ifdef MP-WEIXIN
                     MessageApi.getSubTemplate({keys: "couponArrival,couponConfirm"}).then(result => {
@@ -345,6 +346,7 @@
                 width: 380rpx;
                 float: left;
                 overflow: hidden;
+                padding-left: 6rpx;
                 .name {
                     font-size: 38rpx;
                 }

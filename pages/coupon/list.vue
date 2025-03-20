@@ -425,18 +425,19 @@
       color: #e49a3d;
     }
     .receive {
-      height: 46rpx;
-      width: 128rpx;
-      line-height: 46rpx;
+      height: 50rpx;
+      width: 108rpx;
+      padding: 0rpx 10rpx 0rpx 10rpx;
+      line-height: 50rpx;
       text-align: center;
-      border: 1px solid #f8df00;
-      border-radius: 5rpx;
-      color: #f86d48;
-      background: #f8df98;
+      border: 1px solid #f86d48;
+      border-radius: 40rpx;
+      color: #fff;
+      background: linear-gradient(to right, #f9211c, #ff6335);
       font-size: 22rpx;
       &.state {
         border: none;
-        color: #cccccc;
+        color: #888888;
         background: #F5F5F5;
       }
     }
