@@ -584,7 +584,7 @@
     margin: 10rpx 20rpx 10rpx 20rpx;
     padding: 40rpx 0;
     border: 2rpx #f5f5f5 solid;
-
+    border-radius: 10rpx;
     .asset-right {
       width: 200rpx;
       border-left: 1rpx solid #eee;
@@ -617,7 +617,7 @@
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
     font-size: 30rpx;
-    border-radius: 5rpx;
+    border-radius: 10rpx;
     background: #fff;
     border: 2rpx #f5f5f5 solid;
     &-item {
@@ -663,7 +663,7 @@
     padding: 10rpx 0rpx;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    border-radius: 5rpx;
+    border-radius: 10rpx;
     display: block;
 
     .service-title {
@@ -706,7 +706,7 @@
   .member-update {
       margin: 22rpx auto 0rpx auto;
       padding: 20rpx 0;
-      border-radius: 5rpx;
+      border-radius: 10rpx;
       box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
       background: #fff;
       width: 94%;

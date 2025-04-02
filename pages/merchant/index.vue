@@ -402,7 +402,7 @@
     display: flex;
     padding: 40rpx 0;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    border-radius: 5rpx;
+    border-radius: 10rpx;
     margin: 25rpx 20rpx 5rpx 20rpx;
     background: #ffffff;
     .asset-right {
@@ -458,7 +458,7 @@
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
     font-size: 30rpx;
-    border-radius: 5rpx;
+    border-radius: 10rpx;
     background: #fff;
 
     &-item {
@@ -503,7 +503,7 @@
     padding: 20rpx 0;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    border-radius: 5rpx;
+    border-radius: 10rpx;
     background: #fff;
 
     .service-title {
