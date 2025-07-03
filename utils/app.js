@@ -98,7 +98,6 @@ export const getShareUrlParams = (params) => {
     spm: store.getters.userId, // 推荐人ID
     ...params
   })
-  console.log('转发url : ', path);
   return path;
 }
 
