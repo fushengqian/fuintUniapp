@@ -426,6 +426,18 @@
       "style": {
         "navigationBarTitleText": "核销订单"
       }
+    },
+    {
+      "path": "pages/merchant/staff/index",
+      "style": {
+        "navigationBarTitleText": "员工管理"
+      }
+    },
+    {
+      "path": "pages/merchant/staff/add",
+      "style": {
+        "navigationBarTitleText": "新增员工"
+      }
     }
   ],
   "globalStyle": {

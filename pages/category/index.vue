@@ -32,8 +32,13 @@
           <view class="cate-right-cont">
             <view class="cate-two-box">
               <view v-if="list[curIndex].goodsList.length" class="cate-cont-box">
-                <!-- 为每个分类添加锚点 -->
-                <view v-for="(category, catIndex) in list" :key="catIndex" :id="`category-${catIndex}`">
+                <!-- 为每个分类添加锚点和统一class -->
+                <view 
+                  v-for="(category, catIndex) in list" 
+                  :key="catIndex" 
+                  :id="`category-${catIndex}`" 
+                  class="category-item"
+                >
                   <view class="category-title">{{category.name}}</view>
                   <view class="flex-five item" v-for="(item, idx) in category.goodsList" :key="idx">
                     <view class="cate-img">
@@ -176,7 +181,10 @@
             
             // 数据加载完成后，计算分类位置
             this.$nextTick(() => {
-              this.calculateCategoryPositions();
+              // 延迟计算以确保DOM渲染完成
+              setTimeout(() => {
+                this.calculateCategoryPositions();
+              }, 300);
             });
           })
           .finally(() => {
@@ -200,31 +208,38 @@
           })
       },
       
-      // 计算每个分类的位置信息
+      // 计算每个分类的位置信息（累积高度）
       calculateCategoryPositions() {
         const query = uni.createSelectorQuery().in(this);
         this.categoryPositions = [];
         
-        this.list.forEach((item, index) => {
-          query.select(`#category-${index}`).boundingClientRect();
-        });
+        query.selectAll('.category-item').boundingClientRect();
         
         query.exec(res => {
-          res.forEach((rect, index) => {
-            if (rect) {
-              this.categoryPositions.push({
-                index,
-                top: rect.top,
-                height: rect.height
-              });
-            }
-          });
+          if (res && res[0]) {
+            const rects = res[0];
+            let cumulativeHeight = 0;
+            
+            rects.forEach((rect, index) => {
+              if (rect) {
+                // 保存每个分类的起始位置（累积高度）
+                this.categoryPositions.push({
+                  index,
+                  top: cumulativeHeight,
+                  height: rect.height
+                });
+                // 累加高度
+                cumulativeHeight += rect.height;
+              }
+            });
+          }
         });
       },
       
       // 滚动事件处理
       handleScroll(e) {
         if (this.isManualSelect) {
+          // 手动选择后重置标志
           this.isManualSelect = false;
           return;
         }
@@ -241,24 +256,24 @@
       updateActiveCategory(scrollTop) {
         if (!this.categoryPositions.length) return;
         
-        // 增加一个偏移量，提前切换分类
-        const offset = 100;
+        // 增加一个偏移量，使切换更平滑
+        const offset = 200;
         const adjustedScrollTop = scrollTop + offset;
         
         // 找到当前应该激活的分类
         let activeIndex = 0;
         for (let i = 0; i < this.categoryPositions.length; i++) {
-          const position = this.categoryPositions[i];
-          if (adjustedScrollTop >= position.top) {
-            activeIndex = position.index;
-          } else {
-            break;
-          }
+             const position = this.categoryPositions[i];
+             if (adjustedScrollTop >= position.top) {
+                 activeIndex = position.index;
+             } else {
+                 break;
+             }
         }
         
         // 更新当前激活的分类
         if (this.curIndex !== activeIndex) {
-          this.curIndex = activeIndex;
+            this.curIndex = activeIndex;
         }
       },
       
@@ -287,10 +302,25 @@
       handleSelectNav(index) {
         this.isManualSelect = true;
         this.curIndex = index;
-        this.scrollIntoView = `category-${index}`;
-        setTimeout(() => {
-          this.scrollIntoView = '';
-        }, 500);
+        
+        // 找到对应分类的位置
+        const position = this.categoryPositions[index];
+        console.log("categoryPositions === ", this.categoryPositions);
+        if (position) {
+          // 使用scrollTop实现精准滚动
+          this.scrollTop = position.top;
+          
+          // 同时使用scroll-into-view作为备用方案
+          this.scrollIntoView = `category-${index}`;
+          
+          // 短暂延迟后重置scrollIntoView
+          setTimeout(() => {
+            this.scrollIntoView = '';
+          }, 500);
+        }
+        
+        // 防止快速点击导致的滚动问题
+        clearTimeout(this.scrollTimer);
       },
       
       onSaveCart(goodsId, action) {
