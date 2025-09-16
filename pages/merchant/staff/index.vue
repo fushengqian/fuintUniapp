@@ -37,6 +37,19 @@
         </block>
       </view>
     </view>
+    
+    <view class="footer-fixed">
+      <view class="footer-container">
+        <view class="foo-item-btn">
+          <view class="btn-wrapper">
+            <view class="btn-item btn-item-main" @click="onAddStaff()">
+              <text>新增员工</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
   </mescroll-body>
 </template>
 
@@ -102,7 +115,7 @@
       },
 
       /**
-       * 获取会员列表
+       * 获取员工列表
        * @param {Number} pageNo 页码
        */
       getStaffList(pageNo = 1) {
@@ -126,10 +139,15 @@
         // 刷新列表数据
         app.mescroll.resetUpScroll();
       },
+      
+      // 跳转新增
+      onAddStaff() {
+        this.$navTo('pages/merchant/staff/add')
+      },
 
-      // 跳转会员详情页
+      // 跳转编辑
       onTargetDetail(staffId) {
-        this.$navTo('pages/merchant/staff/add', { staffId })
+        this.$navTo('pages/merchant/staff/edit', { staffId })
       },
       
       // 刷新列表
@@ -213,7 +231,6 @@
   
       .right {
         flex: 1;
-  
         input {
           font-size: 28rpx;
           height: 80rpx;
@@ -222,7 +239,6 @@
             color: #aba9a9;
           }
         }
-  
       }
     }
   }
@@ -240,7 +256,6 @@
       background: $fuint-theme;
     }
   }
-  
 
   /* 员工列表 */
   .staff-list {
@@ -294,5 +309,48 @@
         }
     }
   }
+    
+    /* 底部操作栏 */
+    .footer-fixed {
+      position: fixed;
+      bottom: var(--window-bottom);
+      left: 0;
+      right: 0;
+      display: flex;
+      height: 180rpx;
+      z-index: 11;
+      box-shadow: 0 -4rpx 40rpx 0 rgba(144, 52, 52, 0.1);
+      background: #fff;
+    }
+    
+    .footer-container {
+      width: 100%;
+      display: flex;
+      margin-bottom: 40rpx;
+    }
+    
+    // 操作按钮
+    .foo-item-btn {
+      flex: 1;
+      .btn-wrapper {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .btn-item {
+        flex: 1;
+        font-size: 28rpx;
+        height: 80rpx;
+        line-height: 80rpx;
+        margin-right: 16rpx;
+        margin-left: 16rpx;
+        text-align: center;
+        color: #fff;
+        border-radius: 40rpx;
+      }
+      .btn-item-main {
+        background: linear-gradient(to right, #f9211c, #ff6335);
+      }
+    }
 
 </style>

@@ -28,7 +28,7 @@
     <!-- 底部操作按钮 -->
     <view class="footer-fixed">
       <view class="btn-wrapper">
-        <view class="btn-item btn-item-main" @click="save()">新增员工</view>
+        <view class="btn-item btn-item-main" @click="save()">保存信息</view>
       </view>
     </view>
   </view>
@@ -36,16 +36,14 @@
 
 <script>
   import * as StaffApi from '@/api/merchant/staff'
-  import * as UploadApi from '@/api/upload'
   import store from '@/store'
   export default {
     data() {
       return {
-        //当前页面参数
-        options: {},
+        staffId: '',
         // 正在加载
         isLoading: true,
-        staffInfo: { realName: '', mobile: '', auditedStatus: '' },
+        staffInfo: { id: 0, realName: '', mobile: '', auditedStatus: 'A' }
       }
     },
 
@@ -54,10 +52,34 @@
      */
     onLoad(options) {
       // 当前页面参数
-      this.options = options;
+      this.staffId = options.staffId;
+      this.getStaffInfo();
     },
 
     methods: {
+      // 获取当前员工信息
+      getStaffInfo() {
+        const app = this;
+        app.showPopup = false;
+        return new Promise((resolve, reject) => {
+            StaffApi.info(app.staffId)
+            .then(result => {
+              if (result.data.staffInfo) {
+                  app.staffInfo = result.data.staffInfo;
+              } else {
+                  app.staffInfo = { id: 0, name: '', mobile: '', auditedStatus: '' }
+              }
+              resolve(app.staffInfo);
+            })
+            .catch(err => {
+              if (err.result && err.result.status == 1001) {
+                resolve(null)
+              } else {
+                reject(err)
+              }
+            })
+        })
+      },
       statusChange(e) {
           this.staffInfo.auditedStatus = e.detail.value;
       },
@@ -67,7 +89,7 @@
       save() {
           const app = this
           if (!app.staffInfo.realName) {
-              app.$error('姓名不能为空！');
+              app.$error('员工姓名不能为空！');
               return false;
           }
           if (!app.staffInfo.mobile) {
@@ -76,7 +98,7 @@
           }
           
           app.isLoading = true
-          StaffApi.save({ "realName": app.staffInfo.realName, mobile: app.staffInfo.mobile, "auditedStatus": app.staffInfo.auditedStatus })
+          StaffApi.save({ "id": app.staffId, "realName": app.staffInfo.realName, mobile: app.staffInfo.mobile, "auditedStatus": app.staffInfo.auditedStatus })
             .then(result => {
               app.staffInfo = result.data;
               app.isLoading = false

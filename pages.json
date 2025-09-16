@@ -314,6 +314,12 @@
       }
     },
     {
+      "path": "pages/merchant/setting",
+      "style": {
+        "navigationBarTitleText": "商家设置"
+      }
+    },
+    {
       "path": "pages/pay/cashier",
       "style": {
         "navigationBarTitleText": "扫码收款"
@@ -356,9 +362,21 @@
       }
     },
     {
+      "path": "pages/merchant/coupon/list",
+      "style": {
+        "navigationBarTitleText": "卡券管理"
+      }
+    },
+    {
       "path": "pages/merchant/coupon/receive",
       "style": {
         "navigationBarTitleText": "卡券发放"
+      }
+    },
+    {
+      "path": "pages/merchant/coupon/edit",
+      "style": {
+        "navigationBarTitleText": "卡券编辑"
       }
     },
     {
@@ -437,6 +455,12 @@
       "path": "pages/merchant/staff/add",
       "style": {
         "navigationBarTitleText": "新增员工"
+      }
+    },
+    {
+      "path": "pages/merchant/staff/edit",
+      "style": {
+        "navigationBarTitleText": "编辑员工"
       }
     }
   ],

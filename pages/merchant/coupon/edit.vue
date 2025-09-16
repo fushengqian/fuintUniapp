@@ -2,24 +2,25 @@
   <view class="container">
     <view class="info-list">
       <view class="info-item">
+          <view class="contacts">
+            <text class="name">卡券名称：</text>
+            <input class="value" type="text" v-model="couponInfo.name" placeholder="请输入卡券名称"/>
+          </view>
+      </view>
+      <view class="info-item">
         <view class="contacts">
-          <text class="name">姓名</text>
-          <input class="weui-input value" type="text" v-model="staffInfo.realName" placeholder="请输入员工姓名"/>
+          <text class="name">发行数量：</text>
+          <input class="weui-input value" type="text" v-model="couponInfo.total" placeholder="请输入发行数量"/>
         </view>
       </view>
       <view class="info-item">
         <view class="contacts">
-          <text class="name">手机</text>
-          <input class="weui-input value" type="text" v-model="staffInfo.mobile" placeholder="请输入员工手机号"/>
-        </view>
-      </view>
-      <view class="info-item">
-        <view class="contacts">
-          <text class="name">状态</text>
+          <text class="name">启用状态：</text>
           <view class="value">
              <radio-group @change="statusChange">
-                <label class="radio"><radio value="A" color="#00acac" :checked="staffInfo.auditedStatus == 'A' ? true : false"/>启用</label>
-                <label class="radio second"><radio value="N" color="#00acac" :checked="staffInfo.auditedStatus == 'N' ? true: false"/>禁用</label>
+                <label class="radio"><radio value="A" color="#00acac" :checked="couponInfo.status == 'A' ? true : false"/>启用</label>
+                <label class="radio"><radio value="C" color="#00acac" :checked="couponInfo.status == 'C' ? true : false"/>过期</label>
+                <label class="radio second"><radio value="N" color="#00acac" :checked="couponInfo.status == 'N' ? true: false"/>禁用</label>
              </radio-group>
           </view>
         </view>
@@ -28,24 +29,21 @@
     <!-- 底部操作按钮 -->
     <view class="footer-fixed">
       <view class="btn-wrapper">
-        <view class="btn-item btn-item-main" @click="save()">新增员工</view>
+        <view class="btn-item btn-item-main" @click="save()">保存信息</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-  import * as StaffApi from '@/api/merchant/staff'
-  import * as UploadApi from '@/api/upload'
-  import store from '@/store'
+  import * as CouponApi from '@/api/merchant/coupon'
   export default {
     data() {
       return {
-        //当前页面参数
-        options: {},
+        couponId: '',
         // 正在加载
         isLoading: true,
-        staffInfo: { realName: '', mobile: '', auditedStatus: '' },
+        couponInfo: {  name: '', total: '', status: '' },
       }
     },
 
@@ -54,31 +52,38 @@
      */
     onLoad(options) {
       // 当前页面参数
-      this.options = options;
+      this.couponId = options.couponId;
+      this.getCouponInfo();
     },
 
     methods: {
+      /**
+       * 获取卡券信息
+       * */
+      getCouponInfo() {
+        const app = this
+        app.isLoading = true
+        CouponApi.info(app.couponId)
+          .then(result => {
+            app.couponInfo = result.data;
+            app.isLoading = false;
+          })
+      },
       statusChange(e) {
-          this.staffInfo.auditedStatus = e.detail.value;
+        this.couponInfo.status = e.detail.value;
       },
       /**
-       * 保存员工信息
+       * 保存卡券信息
        */
       save() {
           const app = this
-          if (!app.staffInfo.realName) {
-              app.$error('姓名不能为空！');
-              return false;
-          }
-          if (!app.staffInfo.mobile) {
-              app.$error('手机号不能为空！');
-              return false;
-          }
-          
           app.isLoading = true
-          StaffApi.save({ "realName": app.staffInfo.realName, mobile: app.staffInfo.mobile, "auditedStatus": app.staffInfo.auditedStatus })
+          CouponApi.saveCoupon({"name": app.couponInfo.name,
+                                "id": app.couponId,
+                                "total": app.couponInfo.total,
+                                "status": app.couponInfo.status })
             .then(result => {
-              app.staffInfo = result.data;
+              app.couponInfo = result.data
               app.isLoading = false
               app.$success('保存成功！')
          }).catch(err => {
@@ -110,6 +115,7 @@
 
   .contacts {
     font-size: 30rpx;
+    height: 50rpx;
     .name {
       margin-left:0px;
     }
@@ -118,20 +124,8 @@
         color:#999999;
         text-align: right;
         .second {
-            margin-left: .6rem;
+          margin-left: 5rpx;
         }
-    }
-    .password {
-        text-align: right;
-        float: left;
-        padding-right: 5rpx;
-    }
-    .avatar {
-        width: 120rpx;
-        height: 120rpx;
-        border-radius: 120rpx;
-        border: solid 1px #cccccc;
-        float: right;
     }
   }
   .item-option {
