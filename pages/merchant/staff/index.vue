@@ -29,6 +29,7 @@
             <view class="base">
               <text class="name">{{ item.realName }}</text>
               <text class="mobile">{{ item.mobile ? item.mobile : '' }}</text>
+              <view class="store">{{ item.storeInfo ? item.storeInfo.name : '全部店铺' }}</view>
             </view>
             <view class="footer">
               <text class="staff-views f-24 col-8">创建时间：{{ item.createTime | timeFormat('yyyy-mm-dd hh:MM') }}</text>
@@ -269,7 +270,7 @@
     padding: 30rpx;
     background: #fff;
     border: #f5f5f5 solid 1rpx;
-    height: 188rpx;
+    height: 240rpx;
 
     &:last-child {
       margin-bottom: 0;
@@ -297,8 +298,12 @@
               color: #333;
             }
             .mobile {
-                margin-left: 20rpx;
-                float: right;
+              margin-left: 20rpx;
+              float: right;
+            }
+            .store {
+              padding-top: 20rpx;
+              color: #aba9a9;
             }
         }
         .footer {
