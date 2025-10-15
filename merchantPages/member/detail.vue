@@ -23,10 +23,7 @@
           </view>
           <!-- 会员无等级时显示手机号 -->
           <view v-else class="mobile">{{ userInfo.mobile }}</view>
-          <view class="active-time" v-if="gradeEndTime">{{ gradeEndTime }}</view>
-        </view>
-        <view class="pay-qr" @click="toMemberCode(userInfo.id ? userInfo.id : 0)">
-            <view class="qrcode iconfont icon-qr-extract"></view>
+          <view class="active-time" v-if="userInfo.endTime">{{ userInfo.endTime }}</view>
         </view>
         <view class="amount-info" @click="toMemberWallet(userInfo.id ? userInfo.id : 0)">
             <view class="amount-tip">余额（元）</view>
@@ -37,49 +34,11 @@
       </view>
       <view class="user-no">
         <view class="no" v-if="userInfo.userNo">会员号：{{ userInfo.userNo ? userInfo.userNo : '-'}}</view>
-        <view class="recharge" @click="toRecharge(userInfo.id ? userInfo.id : 0)">储值有礼</view>
-      </view>
-    </view>
-    
-    <!--会员升级 start-->
-    <view class="member-update" v-if="memberGrade.length > 0">
-        <view class="update-title">
-            <text>会员升级</text>
-        </view>
-        <scroll-view scroll-x>
-            <view class="recharge">
-                <view class="recharge-item" :class="current == index ? 'recharge-item-active': ''" v-for="(item, index) in memberGrade" :key="index" :style="{marginLeft: !index ? '30rpx': ''}" @click="onShowPopup(index)">
-                    <view class="recharge-tag">
-                        <text class="recharge-tag-text" v-if="parseInt(item.validDay) > 0">{{ item.validDay }}天有效期</text>
-                        <text class="recharge-tag-text" v-else>永久有效期</text>
-                    </view>
-                    <text class="recharge-item-duration">{{ item.name }}</text>
-                    <view class="recharge-item-price">
-                        <text class="rmb">￥</text>
-                        <text class="recharge-item-price-text">{{ item.catchValue }}</text>
-                    </view>
-                    <text class="recharge-item-des" v-if="item.discount > 0">买单{{ item.discount }}折</text>
-                    <text class="recharge-item-des" v-if="item.speedPoint > 0">积分翻{{ item.speedPoint }}倍</text>
-                </view>
-            </view>
-        </scroll-view>
-    </view>
-    <!-- 弹窗 -->
-    <Popup v-if="!isLoading" v-model="showPopup" @onPaySuccess="getPageData" :memberGrade="curGrade"/>
-    <!--会员升级 end-->
-    
-    <!-- 订单操作 -->
-    <view class="order-navbar">
-      <view class="order-navbar-item" v-for="(item, index) in orderNavbar" :key="index" @click="onTargetOrder(item)">
-        <view class="item-icon">
-          <text class="iconfont" :class="[`icon-${item.icon}`]"></text>
-        </view>
-        <view class="item-name">{{ item.name }}</view>
-        <text class="order-badge" v-if="item.count && item.count > 0">{{ item.count }}</text>
+        <view class="time">{{ userInfo.createTime | timeFormat('yyyy-mm-dd hh:MM') }}</view>
       </view>
     </view>
 
-    <!-- 我的资产 -->
+    <!-- 会员资产 -->
     <view class="my-asset">
       <view class="asset-left flex-box dis-flex flex-x-center">
         <view class="asset-left-item" @click="onTargetMyCoupon('C')">
@@ -109,9 +68,8 @@
       </view>
     </view>
 
-    <!-- 我的服务 -->
-    <view class="my-service">
-      <view class="service-title">我的服务</view>
+    <!-- 会员服务 -->
+    <view class="user-service">
       <view class="service-content clearfix">
         <block v-for="(item, index) in service" :key="index">
           <view v-if="item.type == 'link'" class="service-item" @click="handleService(item)">
@@ -129,65 +87,34 @@
             </button>
           </view>
         </block>
-        <block>
-          <view v-if="isMerchant == true" class="service-item" @click="handleService({'url': 'merchantPages/index'})">
-            <view class="item-icon">
-              <text class="iconfont icon-dianpu"></text>
-            </view>
-            <view class="item-name">商户管理</view>
-          </view>
-          <view v-else class="service-item disabled" @click="handleBeMerchant()">
-            <view class="item-icon">
-              <text class="iconfont icon-dianpu"></text>
-            </view>
-            <view class="item-name">商户管理</view>
-          </view>
-        </block>
       </view>
     </view>
-    
-    <view class="my-recommend"></view>
   </view>
 </template>
 
 <script>
   import SettingKeyEnum from '@/common/enum/setting/Key'
   import SettingModel from '@/common/model/Setting'
+  import * as MemberApi from '@/api/merchant/member'
   import * as UserApi from '@/api/user'
   import * as OrderApi from '@/api/order'
   import * as MessageApi from '@/api/message'
   import { checkLogin, showMessage } from '@/utils/app'
-  import Popup from './components/Popup'
-
-  // 订单操作
-  const orderNavbar = [
-    { id: 'all', name: '全部订单', icon: 'qpdingdan' },
-    { id: 'toPay', name: '待支付', icon: 'daifukuan', count: 0 },
-    { id: 'paid', name: '已支付', icon: 'daishouhuo', count: 0 }
-  ]
 
   /**
-   * 我的服务
+   * 会员服务
    * id: 标识; name: 标题名称; icon: 图标; type 类型(link和button); url: 跳转的链接
    */
   const service = [
-    { id: 'myCoupon', name: '卡券兑换', icon: 'youhuiquan', type: 'link', url: 'subPages/coupon/receive' },
-    { id: 'coupon', name: '转赠记录', icon: 'lingquan', type: 'link', url: 'pages/give/index' },
-    { id: 'points', name: '我的积分', icon: 'jifen', type: 'link', url: 'pages/points/detail' },
-    { id: 'book', name: '我的预约', icon: 'tuxingyanzhengma', type: 'link', url: 'subPages/book/my' },
-    { id: 'help', name: '我的帮助', icon: 'bangzhu', type: 'link', url: 'pages/help/index' },
-    { id: 'contact', name: '在线客服', icon: 'kefu', type: 'button', openType: 'contact' },
-    { id: 'address', name: '收货地址', icon: 'shouhuodizhi', type: 'link', url: 'pages/address/index' },
-    { id: 'refund', name: '售后服务', icon: 'shouhou', type: 'link', url: 'pages/refund/index' },
-    { id: 'setting', name: '个人信息', icon: 'shezhi1', type: 'link', url: 'pages/user/setting' },
-    { id: 'book', name: '立即预约', icon: 'naozhong', type: 'link', url: 'subPages/book/index' },
-    { id: 'share', name: '邀请有礼', icon: 'fenxiang-post', type: 'link', url: 'pages/share/index' },
+    { id: 'order', name: '会员订单', icon: 'dingdan', type: 'link', url: 'merchantPages/order/index' },
+    { id: 'rechange', name: '会员充值', icon: 'qiandai', type: 'link', url: 'merchantPages/balance/recharge' },
+    { id: 'payment', name: '余额扣减', icon: 'shouhou', type: 'link', url: 'pages/pay/cashier' },
+    { id: 'myCoupon', name: '卡券发放', icon: 'youhuiquan', type: 'link', url: 'merchantPages/coupon/receive' },
+    { id: 'points', name: '会员积分', icon: 'jifen', type: 'link', url: 'merchantPages/points/detail' },
+    { id: 'setting', name: '会员信息', icon: 'shezhi1', type: 'link', url: 'merchantPages/member/setting' },
   ]
 
   export default {
-    components: {
-      Popup
-    },
     data() {
       return {
         // 枚举类
@@ -203,36 +130,26 @@
         // 当前用户信息
         userInfo: { id: 0, name: '', avatar: '', gradeId: 0, mobile: '', balance: 0 },
         gradeInfo: {},
-        isMerchant: false,
         gradeEndTime: '',
         // 账户资产
         assets: { prestore: '0', timer: '0', coupon: '0' },
-        // 我的服务
+        // 会员服务
         service,
-        // 订单操作
-        orderNavbar,
-        // 当前用户待处理的订单数量
-        todoCounts: { payment: 0 },
-        current: 0,
-        // 显示、隐藏弹窗
-        showPopup: false,
-        memberGrade: [],
-        curGrade: {}
+        // 会员ID
+        memberId: 0,
+        // 会员编码
+        userCode: ''
       }
     },
 
     /**
-     * 生命周期函数--监听页面显示
+     * 生命周期函数--监听页面加载
      */
-    onShow(options) {
+    onLoad(options) {
+      // 会员ID
+      this.memberId = options.memberId ? options.memberId : 0;
       // 获取页面数据
-      this.getPageData()
-      
-      // 判断是否已登录
-      this.isLogin = checkLogin()
-      
-      // 消息显示
-      showMessage();
+      this.getPageData();
     },
 
     methods: {
@@ -240,7 +157,7 @@
       getPageData(callback) {
         const app = this
         app.isLoading = true
-        Promise.all([app.getSetting(), app.getUserInfo(), app.getUserAssets(), app.getTodoCounts()])
+        Promise.all([app.getSetting(), app.getUserInfo(), app.getUserAssets()])
           .then(result => {
             app.isLoading = false
             // 初始化我的服务数据
@@ -260,61 +177,34 @@
         const app = this
         const newService = []
         service.forEach(item => {
-          if (item.id === 'points') {
-            item.name = '我的积分'
-          }
           newService.push(item)
         })
         app.service = newService
       },
 
-      // 初始化订单操作数据
-      initOrderTabbar() {
-        const app = this
-        const newOrderNavbar = []
-        orderNavbar.forEach(item => {
-          if (item.hasOwnProperty('count')) {
-              item.count = app.isLogin ? app.todoCounts[item.id] : 0
-          }
-          newOrderNavbar.push(item)
-        })
-        app.orderNavbar = newOrderNavbar
-      },
-
       // 获取设置
       getSetting() {
-        const app = this
-        app.setting = {}
+        this.setting = {}
       },
 
       // 获取当前用户信息
       getUserInfo() {
-        const app = this
+        const app = this;
         app.showPopup = false;
         return new Promise((resolve, reject) => {
-            UserApi.info()
+            MemberApi.detail(app.memberId)
             .then(result => {
               if (result.data.userInfo) {
                   app.userInfo = result.data.userInfo
+                  app.userCode = app.userInfo.userNo
                   app.isLogin = true
               } else {
                   app.isLogin = false
                   app.userInfo = { id: 0, name: '', avatar: '', gradeId: 0, mobile: '', balance: 0 }
               }
-              
-              // 强制领取会员卡
-              if (result.data.openWxCard && app.userInfo) {
-                  this.$navTo('pages/user/card?userId='+app.userInfo.id);
-                  return false;
-              }
-              
               app.gradeInfo = result.data.gradeInfo;
-              app.memberGrade = result.data.memberGrade;
-              app.gradeEndTime = result.data.gradeEndTime;
-              app.isMerchant = result.data.isMerchant;              
               resolve(app.userInfo);
               resolve(app.gradeInfo);
-              resolve(isMerchant);
             })
             .catch(err => {
               if (err.result && err.result.status == 1001) {
@@ -331,7 +221,7 @@
       getUserAssets() {
         const app = this
         return new Promise((resolve, reject) => {
-            UserApi.assets()
+            UserApi.assets({ userId: app.memberId })
             .then(result => {
               app.assets = result.data.asset
               resolve(app.assets)
@@ -346,97 +236,37 @@
             })
         })
       },
-
-      // 获取当前用户待处理的事项数量
-      getTodoCounts() {
-        const app = this
-        return new Promise((resolve, reject) => {
-          !app.isLogin ? resolve(null) : OrderApi.todoCounts()
-            .then(result => {
-              app.todoCounts = result.data
-              resolve(app.todoCounts)
-            })
-        })
-      },
-      
-      // 会员等级
-      onShowPopup(index) {
-        this.showPopup = !this.showPopup
-        this.current = index
-        this.curGrade = this.memberGrade[index]
-      },
-      
-      // 跳转到会员码
-      toMemberCode(userId) {
-          !this.isLogin && this.$navTo('pages/login/index')
-          this.$navTo('pages/user/code', { userId: userId})
-      },
       
       // 跳转我的余额
       toMemberWallet(userId) {
-          !this.isLogin && this.$navTo('pages/login/index')
-          this.$navTo('pages/wallet/index', { userId: userId})
+          return false;
       },
       
       // 跳转充值
       toRecharge(userId) {
-          !this.isLogin && this.$navTo('pages/login/index')
-          this.$navTo('pages/wallet/recharge/index', { userId: userId})
-      },
-
-      // 跳转到订单页
-      onTargetOrder(item) {
-          !this.isLogin && this.$navTo('pages/login/index')
-          this.$navTo('pages/order/index', { dataType: item.id })
+          return false;
       },
 
       // 跳转到我的积分页面
       onTargetPoints() {
-         !this.isLogin && this.$navTo('pages/login/index')
-         this.$navTo('pages/points/detail')
+         return false;
       },
 
       // 跳转到我的卡券列表页
       onTargetMyCoupon(type) {
-          const app = this
-          if (app.isLogin) {
-              // #ifdef MP-WEIXIN
-              MessageApi.getSubTemplate({keys: "couponExpire,couponArrival"}).then(result => {
-                  const templateIds = result.data
-                  wx.requestSubscribeMessage({tmplIds: templateIds, 
-                  success(res) {
-                      console.log("调用成功！")
-                  }, fail(res) {
-                      console.log("调用失败:", res)
-                  }, complete() {
-                      app.$navTo('pages/my-coupon/index?type='+type)
-                  }})
-              })
-              // #endif
-              // #ifndef MP-WEIXIN
-                 app.$navTo('pages/my-coupon/index?type='+type)
-              // #endif
-          } else {
-              app.$navTo('pages/login/index')
-          }
+         this.$navTo('pages/my-coupon/index?type='+type+'&memberId='+this.memberId)
       },
       
       // 跳转会员设置页面
       onUserInfo() {
-          if (!this.isLogin) {
-              this.$navTo('pages/login/index')
-          } else {
-              this.$navTo('pages/user/setting')
-          }
+          return false;
       },
 
       // 跳转到服务页面
       handleService({ url }) {
-          this.$navTo(url)
-      },
-      // 成为商家
-      handleBeMerchant() {
-          this.$error('请联系管理员添加您的员工身份信息！');
+          const app = this;
+          console.log(app.userCode)
+          app.$navTo(url + '?memberId=' + app.memberId + '&code=' + app.userCode);
       }
     },
 
@@ -455,7 +285,7 @@
 <style lang="scss" scoped>
   // 页面头部
   .main-header {
-    background: url('~@/static/background/user-header.png') no-repeat;
+    background: $fuint-theme;
     height: 380rpx;
     background-size: cover;
     overflow: hidden;
@@ -559,30 +389,20 @@
               width: 100px;
           }
       }
-      .pay-qr {
-          color:#ffffff;
-          margin-top: 10rpx;
-          margin-left: 50rpx;
-          text-align: center;
-          width: 50rpx;
-          float: right;
-          .qrcode {
-              display: block;
-              font-size: 40rpx;
-          }
-      }
     }
     .user-no {
         display: block;
-        font-size: 25rpx;
+        font-size: 28rpx;
         margin: 110rpx 0rpx 0rpx 20rpx;
         color: #ffffff;
         .no {
             float: left;
+            margin-bottom: 8rpx;
         }
-        .recharge {
-            float: right;
+        .time {
             margin-right: 20rpx;
+            color: #f5f5f5;
+            float: right;
         }
     }
   }
@@ -594,7 +414,7 @@
     margin: 10rpx 20rpx 10rpx 20rpx;
     padding: 40rpx 0;
     border: 2rpx #f5f5f5 solid;
-    border-radius: 10rpx;
+
     .asset-right {
       width: 200rpx;
       border-left: 1rpx solid #eee;
@@ -619,70 +439,19 @@
 
   }
 
-  // 订单操作
-  .order-navbar {
-    display: flex;
-    margin: 12rpx auto 10rpx auto;
-    padding: 20rpx 0;
-    width: 94%;
-    box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    font-size: 30rpx;
-    border-radius: 10rpx;
-    background: #fff;
-    border: 2rpx #f5f5f5 solid;
-    &-item {
-      position: relative;
-      width: 33%;
-      .item-icon {
-        text-align: center;
-        margin: 0 auto;
-        padding: 10rpx 0;
-        color: #545454;
-        font-size: 48rpx;
-        font-weight: bold;
-      }
-
-      .item-name {
-        font-size: 24rpx;
-        color: #545454;
-        text-align: center;
-        margin-right: 10rpx;
-      }
-
-      .order-badge {
-        position: absolute;
-        top: 0;
-        right: 58rpx;
-        font-size: 20rpx;
-        background: #fa5151;
-        text-align: center;
-        line-height: 30rpx;
-        color: #fff;
-        border-radius: 50%;
-        min-width: 36rpx;
-        padding: 6rpx 13rpx 6rpx 13rpx;
-      }
-    }
-  }
-
-  // 我的服务
-  .my-service {
+  // 会员服务
+  .user-service {
     margin: 0rpx auto 20rpx auto;
     border: 2rpx #f5f5f5 solid;
     background: #FFF;
-    padding: 10rpx 0rpx;
+    padding: 30rpx 0rpx;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
-    border-radius: 10rpx;
+    border-radius: 5rpx;
     display: block;
 
-    .service-title {
-      padding-left: 20rpx;
-      margin-bottom: 30rpx;
-      font-size: 28rpx;
-    }
-
     .service-content {
+       margin-top: 20rpx;
       .service-item {
         width: 25%;
         float: left;
@@ -702,14 +471,7 @@
           text-align: center;
           margin-right: 10rpx;
         }
-      }
-      .disabled {
-         .item-icon {
-             color: #cccccc;
-         }
-         .item-name {
-             color: #cccccc;
-         }
+
       }
     }
   }
@@ -723,7 +485,7 @@
   .member-update {
       margin: 22rpx auto 0rpx auto;
       padding: 20rpx 0;
-      border-radius: 10rpx;
+      border-radius: 5rpx;
       box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
       background: #fff;
       width: 94%;

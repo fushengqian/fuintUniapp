@@ -3,13 +3,13 @@
   <view class="diy-navBar" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
     <view class="data-list" :class="[`avg-sm-${itemStyle.rowsNum}`]">
       <view class="item-nav" v-for="(dataItem, index) in dataList" :key="index">
-        <view class="nav-to" :class="'nav-' + index" @click="onLink(dataItem.linkUrl)">
+        <view class="nav-to" :class="'nav-' + index" @click="onLink(dataItem.url)">
           <view class="item-image">
-            <image class="image" mode="widthFix" :src="dataItem.imgUrl"></image>
+            <image class="image" mode="widthFix" :src="dataItem.iconUrl"></image>
           </view>
           <view class="item-text onelist-hidden">
-             <view class="text">{{ dataItem.text }}</view>
-             <view class="tip">{{ dataItem.tip }}</view>
+             <view class="text">{{ dataItem.name }}</view>
+             <view class="tip">{{ dataItem.tips ? dataItem.tips : '' }}</view>
           </view>
         </view>
       </view>

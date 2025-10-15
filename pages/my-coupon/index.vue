@@ -31,7 +31,11 @@
                                 <text>{{ item.effectiveDate }}</text>
                               </view>
                               <view class="desc_footer">
-                                <text v-if="item.type == 'C' || item.type == 'P'" class="price_x">¥{{ item.amount }}</text>
+                                 <view v-if="item.type == 'C'"> 
+                                    <text v-if="item.content == '1'" class="price_x">¥{{ item.amount }}</text>
+                                    <text v-if="item.content == '2'" class="price_x">{{ (item.amount / 10).toFixed(2) }} 折</text>
+                                 </view>
+                                <text v-if="item.type == 'P'" class="price_x">¥{{ item.amount }}</text>
                                 <text v-if="item.type == 'T'" class="price_x">{{ item.amount }}次卡</text>
                               </view>
                           </view>
@@ -114,7 +118,7 @@
        this.type = type;
        this.memberId = options.memberId ? options.memberId : '';
        uni.setNavigationBarTitle({
-           title: "我的" + CouponTypeEnum[type].name
+           title: "会员" + CouponTypeEnum[type].name
        })
     },
     
@@ -145,11 +149,11 @@
               return false;
           }
           if (type === 'C') {
-              app.$navTo(`pages/coupon/detail`, { userCouponId });
+              app.$navTo(`subPages/coupon/detail`, { userCouponId });
           } else if(type === 'T') {
-              app.$navTo(`pages/timer/detail`, { userCouponId });
+              app.$navTo(`subPages/timer/detail`, { userCouponId });
           } else if(type === 'P') {
-              app.$navTo(`pages/prestore/detail`, { userCouponId });
+              app.$navTo(`subPages/prestore/detail`, { userCouponId });
           }
       },
       

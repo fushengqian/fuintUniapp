@@ -14,7 +14,7 @@
           <Blank v-if="storeInfo" :itemStyle="options.blankStyle"/>
       </block>
       <block>
-          <NavBar v-if="storeInfo" :itemStyle="options.navStyle" :params="{}" :dataList="options.navBar"/>
+          <NavBar v-if="storeInfo" :itemStyle="options.navStyle" :params="{}" :dataList="navigation"/>
       </block>
       <block>
           <Blank v-if="storeInfo" :itemStyle="options.blankStyle"/>
@@ -59,34 +59,6 @@
                 "height": "5",
                 "background": "#ffffff",
             },
-            "navBar": [{
-                        "imgUrl": "/static/nav/1.png",
-                        "imgName": "icon-1.png",
-                        "linkUrl": "pages\/pay\/index",
-                        "text": "买单支付",
-                        "tip": "支付攒积分",
-                        "color": "#666666"
-                    }, {
-                        "imgUrl": "/static/nav/3.png",
-                        "imgName": "icon-1.png",
-                        "linkUrl": "pages\/coupon\/list?type=C",
-                        "text": "领券中心",
-                        "tip": "积分换好礼",
-                        "color": "#666666"
-                    }, {
-                        "imgUrl": "/static/nav/2.png",
-                        "imgName": "icon-1.png",
-                        "linkUrl": "pages\/coupon\/list?type=P",
-                        "text": "预存充值",
-                        "tip": "充值有优惠",
-                        "color": "#666666",
-                    }, {
-                        "imgUrl": "/static/nav/4.png",
-                        "imgName": "icon-1.png",
-                        "linkUrl": "pages\/share\/index",
-                        "text": "邀请有礼",
-                        "tip": "邀请获取奖励",
-                        "color": "#666666"}],
             "goodsStyle": {
                 "background": "#F6F6F6",
                 "display": "list",
@@ -116,6 +88,7 @@
             }
         },
         banner: [],
+        navigation: [],
         storeInfo: null,
         isReflash: false,
         isLoading: false
@@ -167,6 +140,7 @@
           Api.home()
             .then(result => {
                  app.banner = result.data.banner;
+                 app.navigation = result.data.navigation;
                  uni.removeStorageSync("reflashHomeData");
                  app.isReflash = false;
             })
