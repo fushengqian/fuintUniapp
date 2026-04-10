@@ -118,8 +118,8 @@
   // 待办操作
   const orderNavbar = [
     { id: 'confirm', name: '核销订单', icon: 'dingdan', count: 1, url:'merchantPages/order/index?dataType=todo' },
-    { id: 'refund', name: '售后审核', icon: 'daifukuan', count: 1, url:'merchantPages/refund/index?dataType=todo' },
-    { id: 'book', name: '预约管理', icon: 'daishouhuo', count: 3, url:'merchantPages/book/index??dataType=todo' },
+    { id: 'refund', name: '售后审核', icon: 'daifukuan', count: 1, url:'merchantPages/refund/index?status=1' },
+    { id: 'book', name: '预约管理', icon: 'daishouhuo', count: 3, url:'merchantPages/book/index?dataType=todo' },
   ]
 
   /**
