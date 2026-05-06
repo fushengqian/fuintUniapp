@@ -87,7 +87,7 @@
         <view class="goods-main" v-if="goods.num > 0">
           <!-- 商品图片 -->
           <view class="goods-image" @click="handleTargetGoods(goods.goodsId, goods.type)">
-            <image class="image" :src="goods.image" mode="widthFix"></image>
+            <image class="image" :src="goods.image" mode="aspectFill"></image>
           </view>
           <!-- 商品信息 -->
           <view class="goods-content" @click="handleTargetGoods(goods.goodsId, goods.type)">
@@ -653,7 +653,8 @@
     // 商品项
     .goods-item {
       margin-bottom: 40rpx;
-
+      border-bottom: #f5f5f5 solid 5rpx;
+      padding-bottom: 20rpx;
       &:last-child {
         margin-bottom: 0;
       }
@@ -666,13 +667,15 @@
       // 商品图片
       .goods-image {
         width: 180rpx;
-        height: 180rpx;
+        height: 160rpx;
+        position: relative; 
 
         .image {
           display: block;
           width: 100%;
           height: 100%;
           border-radius: 8rpx;
+          object-fit: cover; 
         }
       }
 

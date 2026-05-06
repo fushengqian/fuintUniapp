@@ -19,7 +19,7 @@
       "pagePath": "pages/user/index",
       "iconPath": "static/tabbar/user.png",
       "selectedIconPath": "static/tabbar/user-active.png",
-      "text": "我的" 
+      "text": "我的"
     }]
   },
   "pages": [
@@ -484,6 +484,12 @@
                "path": "staff/edit",
                "style": {
                  "navigationBarTitleText": "编辑员工"
+               }
+             },
+             {
+               "path": "data/index",
+               "style": {
+                 "navigationBarTitleText": "数据统计"
                }
              }
       ]
