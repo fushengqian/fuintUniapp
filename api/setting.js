@@ -6,6 +6,7 @@ const api = {
   system: 'clientApi/system/config',
   storeList: 'clientApi/store/list',
   storeDetail: 'clientApi/store/detail',
+  staffApply: 'clientApi/staff/apply',
 }
 
 // 充值配置
@@ -26,4 +27,9 @@ export const storeList = (keyword) => {
 // 店铺详情
 export function storeDetail() {
   return request.get(api.storeDetail)
+}
+
+// 申请成为员工
+export const staffApply = (data) => {
+  return request.post(api.staffApply, data)
 }

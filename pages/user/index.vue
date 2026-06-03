@@ -136,17 +136,45 @@
             </view>
             <view class="item-name">商户管理</view>
           </view>
-          <view v-else class="service-item disabled" @click="handleBeMerchant()">
+          <view v-else class="service-item" @click="handleBeMerchant()">
             <view class="item-icon">
               <text class="iconfont icon-dianpu"></text>
             </view>
-            <view class="item-name">商户管理</view>
+            <view class="item-name">我是员工</view>
           </view>
         </block>
       </view>
     </view>
     
     <view class="my-recommend"></view>
+
+    <!-- 申请成为店员弹窗 -->
+    <u-popup v-model="showApplyPopup" mode="bottom" border-radius="20" :closeable="true">
+      <view class="apply-popup">
+        <view class="popup-title">申请店铺管理员权限</view>
+        <view class="popup-content">
+          <u-form :model="applyForm" ref="applyFormRef" label-width="140rpx">
+            <u-form-item label="选择店铺" :border-bottom="false">
+              <picker mode="selector" :value="storeIndex" :range="storeList" range-key="name" @change="onStoreChange">
+                <view class="picker-wrapper">
+                  <text>{{ storeList[storeIndex] ? storeList[storeIndex].name : '请选择店铺' }}</text>
+                  <text class="iconfont icon-arrow-right"></text>
+                </view>
+              </picker>
+            </u-form-item>
+            <u-form-item label="手机号码" prop="mobile" :border-bottom="false">
+              <u-input v-model="applyForm.mobile" placeholder="请输入手机号码" />
+            </u-form-item>
+            <u-form-item label="真实姓名" prop="realName" :border-bottom="false">
+              <u-input v-model="applyForm.realName" placeholder="请输入您的姓名" />
+            </u-form-item>
+          </u-form>
+        </view>
+        <view class="popup-footer">
+          <view class="btn-submit" @click="onSubmitApply">提交申请</view>
+        </view>
+      </view>
+    </u-popup>
   </view>
 </template>
 
@@ -158,6 +186,8 @@
   import * as MessageApi from '@/api/message'
   import { checkLogin, showMessage } from '@/utils/app'
   import Popup from './components/Popup'
+  import * as SettingApi from '@/api/setting'
+  import { isMobile } from '@/utils/verify'
 
   // 订单操作
   const orderNavbar = [
@@ -217,7 +247,28 @@
         // 显示、隐藏弹窗
         showPopup: false,
         memberGrade: [],
-        curGrade: {}
+        curGrade: {},
+        // 申请成为店员弹窗
+        showApplyPopup: false,
+        storeList: [],
+        storeIndex: 0,
+        applyForm: {
+          storeId: 0,
+          mobile: '',
+          realName: ''
+        },
+        applyRules: {
+          storeId: [
+            { required: true, message: '请选择店铺', trigger: 'change' },
+            { validator: (rule, value, callback) => value >= 0, message: '请选择具体店铺', trigger: 'change' }
+          ],
+          mobile: [
+            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            { validator: (rule, value, callback) => isMobile(value), message: '手机号码格式不正确', trigger: 'blur' }
+          ],
+          realName: [{ required: true, message: '请输入姓名', trigger: 'blur' }]
+        },
+        applyLoading: false
       }
     },
 
@@ -307,6 +358,22 @@
                   this.$navTo('pages/user/card?userId='+app.userInfo.id);
                   return false;
               }
+			  
+             // 强制更新头像或昵称
+             if (result.data.needUpdateAvatar || result.data.needUpdateNickname) {
+                 let tips = [];
+                 if (result.data.needUpdateAvatar) tips.push('头像');
+                 if (result.data.needUpdateNickname) tips.push('昵称');
+                 uni.showModal({
+                    title: '提示',
+                    content: '请先完善您的' + tips.join('和'),
+                    showCancel: false,
+                    confirmText: '去完善',
+                    success: () => {
+                       app.$navTo('pages/user/setting')
+                    }
+                 });
+             }
               
               app.gradeInfo = result.data.gradeInfo;
               app.memberGrade = result.data.memberGrade;
@@ -359,6 +426,65 @@
         })
       },
       
+      // 成为商家
+      handleBeMerchant() {
+        if (!this.isLogin) {
+          this.$navTo('pages/login/index')
+          return
+        }
+        this.showApplyPopup = true
+        this.applyForm = { storeId: 0, mobile: '', realName: '' }
+        this.storeIndex = 0
+        this.getStoreList()
+      },
+
+      // 获取店铺列表
+      getStoreList() {
+        const app = this
+        SettingApi.storeList()
+          .then(result => {
+            const list = result.data.data || []
+            app.storeList = [{ id: 0, name: '全部店铺' }, ...list]
+          })
+          .catch(err => {
+            console.log('获取店铺列表失败', err)
+          })
+      },
+
+      // 店铺选择
+      onStoreChange(e) {
+        const index = e.detail.value
+        this.storeIndex = index
+        this.applyForm.storeId = this.storeList[index].id
+      },
+
+      // 提交申请
+      onSubmitApply() {
+        const app = this
+        if (app.applyLoading) return
+        app.$refs.applyFormRef.validate(valid => {
+          if (valid) {
+            app.applyLoading = true
+            SettingApi.staffApply({
+              storeId: app.applyForm.storeId,
+              mobile: app.applyForm.mobile,
+              realName: app.applyForm.realName
+            })
+              .then(result => {
+                app.$toast(result.message || '申请提交成功')
+                app.showApplyPopup = false
+                app.applyForm = { storeId: '', mobile: '', realName: '' }
+              })
+              .catch(err => {
+                app.$toast(err.message || '提交失败')
+              })
+              .finally(() => {
+                app.applyLoading = false
+              })
+          }
+        })
+      },
+
       // 会员等级
       onShowPopup(index) {
         this.showPopup = !this.showPopup
@@ -433,11 +559,12 @@
       // 跳转到服务页面
       handleService({ url }) {
           this.$navTo(url)
-      },
-      // 成为商家
-      handleBeMerchant() {
-          this.$error('请联系管理员添加您的员工身份信息！');
       }
+    },
+
+    // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
+    onReady() {
+      this.$refs.applyFormRef && this.$refs.applyFormRef.setRules(this.applyRules)
     },
 
     /**
@@ -703,20 +830,52 @@
           margin-right: 10rpx;
         }
       }
-      .disabled {
-         .item-icon {
-             color: #cccccc;
-         }
-         .item-name {
-             color: #cccccc;
-         }
-      }
     }
   }
   
   // 推荐信息
   .my-recommend {
       height: 20rpx;
+  }
+
+  // 申请成为店员弹窗
+  .apply-popup {
+    padding: 30rpx;
+    .popup-title {
+      font-size: 32rpx;
+      font-weight: bold;
+      text-align: center;
+      padding-bottom: 30rpx;
+      border-bottom: 1rpx solid #f5f5f5;
+    }
+    .popup-content {
+      padding: 20rpx 0;
+      .picker-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .placeholder {
+          color: #c0c4cc;
+        }
+        .icon-arrow-right {
+          color: #c0c4cc;
+          font-size: 24rpx;
+        }
+      }
+    }
+    .popup-footer {
+      padding-top: 20rpx;
+      .btn-submit {
+        width: 100%;
+        height: 80rpx;
+        line-height: 80rpx;
+        text-align: center;
+        color: #fff;
+        background: linear-gradient(to right, #ff6034, #ee0a24);
+        border-radius: 40rpx;
+        font-size: 28rpx;
+      }
+    }
   }
   
   // 会员升级
