@@ -332,7 +332,8 @@
                 resolve(result);
             })
             .catch(err => {
-                console.log(err);
+                // 错误提示已由全局拦截器处理
+                reject(err);
             })
         })
       },
