@@ -34,6 +34,7 @@
           <!-- 商品图片 -->
           <view class="goods-item_left">
             <image class="image" :src="item.logo"></image>
+            <view class="member-tag" v-if="item.gradeIds">会员专属</view>
           </view>
           <view class="goods-item_right">
             <!-- 商品名称 -->
@@ -346,6 +347,7 @@
     }
 
     .goods-item_left {
+      position: relative;
       display: flex;
       width: 300rpx;
       background: #fff;
@@ -356,6 +358,17 @@
         width: 220rpx;
         height: 200rpx;
         border-radius: 10rpx;
+      }
+      .member-tag {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: linear-gradient(135deg, #ff6b35, #d4380d);
+        color: #fff;
+        font-size: 20rpx;
+        padding: 4rpx 12rpx;
+        border-radius: 0 10rpx 0 16rpx;
+        z-index: 2;
       }
     }
 

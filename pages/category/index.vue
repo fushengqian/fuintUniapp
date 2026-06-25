@@ -43,10 +43,12 @@
                   <view class="flex-five item" v-for="(item, idx) in category.goodsList" :key="idx">
                     <view class="cate-img">
                       <image v-if="item.logo" lazy-load :lazy-load-margin="0" :src="item.logo" @click="onTargetGoods(item.id)"></image>
+                      <view class="member-tag" v-if="item.gradeIds">会员专属</view>
                     </view>
                     <view class="cate-info">
                       <view class="base">
                         <text class="name text">{{ item.name }}</text>
+                        <text class="sale-point text" v-if="item.salePoint">{{ item.salePoint }}</text>
                         <text class="stock text">库存:{{ item.stock ? item.stock : 0 }} 已售:{{ item.initSale ? item.initSale : 0 }}</text>
                       </view>
                       <view class="action">
@@ -523,8 +525,20 @@
   }
 
   .cate-cont-box .cate-img {
+    position: relative;
     padding: 13rpx 10rpx 4rpx 10rpx;
     display: block;
+    .member-tag {
+      position: absolute;
+      top: 13rpx;
+      left: 10rpx;
+      background: linear-gradient(135deg, #ff6b35, #d4380d);
+      color: #fff;
+      font-size: 18rpx;
+      padding: 2rpx 10rpx;
+      border-radius: 0 6rpx 0 10rpx;
+      z-index: 2;
+    }
   }
 
   .cate-cont-box .cate-img image {
@@ -561,6 +575,14 @@
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
+        }
+        .sale-point {
+            margin-top: 4rpx;
+            font-size: 22rpx;
+            color: #e49a3d;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
         .stock {
             margin-top: 10rpx;

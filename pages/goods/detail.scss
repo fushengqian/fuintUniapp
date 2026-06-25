@@ -230,3 +230,20 @@
     background: linear-gradient(to right, $fuint-theme, $fuint-theme);
   }
 }
+
+/* 图片轮播容器 */
+.images-wrapper {
+  position: relative;
+  .member-tag {
+    position: absolute;
+    top: 20rpx;
+    right: 20rpx;
+    background: linear-gradient(135deg, #ff6b35, #d4380d);
+    color: #fff;
+    font-size: 24rpx;
+    padding: 6rpx 18rpx;
+    border-radius: 8rpx 0 8rpx 0;
+    z-index: 10;
+    letter-spacing: 2rpx;
+  }
+}
