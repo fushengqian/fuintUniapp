@@ -509,6 +509,24 @@
                "style": {
                  "navigationBarTitleText": "数据统计"
                }
+             },
+             {
+               "path": "goods/list",
+               "style": {
+                 "navigationBarTitleText": "商品管理"
+               }
+             },
+             {
+               "path": "goods/add",
+               "style": {
+                 "navigationBarTitleText": "商品编辑"
+               }
+             },
+             {
+               "path": "cate/list",
+               "style": {
+                 "navigationBarTitleText": "商品分类"
+               }
              }
       ]
   }],

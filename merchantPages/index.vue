@@ -130,6 +130,8 @@
     { id: 'addMember', name: '会员登记', icon: 'add', type: 'link', url: 'merchantPages/member/add' },
     { id: 'memberSearch', name: '会员查找', icon: 'tuandui', type: 'link', url: 'merchantPages/member/index' },
     { id: 'coupon', name: '卡券管理', icon: 'youhuiquan', type: 'link', url: 'merchantPages/coupon/list' },
+    { id: 'goods', name: '商品管理', icon: 'shangcheng', type: 'link', url: 'merchantPages/goods/list' },
+    { id: 'cate', name: '商品分类', icon: 'fenlei', type: 'link', url: 'merchantPages/cate/list' },
     { id: 'order', name: '订单管理', icon: 'dingdan', type: 'link', url: 'merchantPages/order/index' },
     { id: 'report', name: '报表数据', icon: 'zhibozhong', type: 'link', url: 'merchantPages/data/index' },
     { id: 'refund', name: '售后订单', icon: 'shouhou', type: 'link', url: 'merchantPages/refund/index' },
