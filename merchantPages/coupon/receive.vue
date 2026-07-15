@@ -16,7 +16,7 @@
     </view>
     <view class="number-wrapper">
         <view class="title">发放数量</view>
-        <u-number-box :min="1" :value="num"/>
+        <u-number-box :min="1" v-model="num"/>
     </view>
     <view class="main-form">
       <view class="footer">
@@ -61,7 +61,7 @@
               app.$error("请输入卡券名称或ID");
               return false;
           }
-          couponApi.search({ 'keyword': this.keyword })
+          couponApi.search({ 'keyword': this.keyword, 'sendWay': '' })
             .then(result => {
                 app.disabled = false;
                 if (result.data.coupon.content && result.data.coupon.content.length == 1) {

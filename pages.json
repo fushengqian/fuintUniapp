@@ -417,7 +417,8 @@
              {
                "path": "member/detail",
                "style": {
-                 "navigationBarTitleText": "会员详情"
+                 "navigationBarTitleText": "会员详情",
+                 "enablePullDownRefresh": true
                }
              },
              {

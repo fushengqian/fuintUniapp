@@ -1,4 +1,4 @@
-<template>
+袁浩<template>
   <view v-if="!isLoading" class="container">
     <!-- 页面头部 -->
     <view class="main-header">
@@ -28,19 +28,44 @@
         <view class="pay-qr" @click="toMemberCode(userInfo.id ? userInfo.id : 0)">
             <view class="qrcode iconfont icon-qr-extract"></view>
         </view>
-        <view class="amount-info" @click="toMemberWallet(userInfo.id ? userInfo.id : 0)">
-            <view class="amount-tip">余额（元）</view>
-            <view class="amount-num" v-if="isLogin">{{ userInfo.balance.toFixed(2) }}</view>
-            <view class="amount-num" v-if="!isLogin">0.00</view>
-            <view class="point-amount" @click="onTargetPoints">积分 {{ userInfo.point ? userInfo.point : 0 }}</view>
-        </view>
       </view>
       <view class="user-no">
         <view class="no" v-if="userInfo.userNo">会员号：{{ userInfo.userNo ? userInfo.userNo : '-'}}</view>
         <view class="recharge" @click="toRecharge(userInfo.id ? userInfo.id : 0)">储值有礼</view>
       </view>
     </view>
-    
+
+    <!-- 钱包余额 & 积分卡片 -->
+    <view class="asset-card">
+      <view class="asset-card-item" @click="toMemberWallet(userInfo.id ? userInfo.id : 0)">
+        <view class="asset-card-icon asset-card-icon--balance">
+          <text class="iconfont icon-qianbao"></text>
+        </view>
+        <view class="asset-card-info">
+          <view class="asset-card-label">
+            <text class="asset-card-label-dot asset-card-label-dot--balance"></text>
+            余额（元）
+          </view>
+          <view class="asset-card-value">{{ isLogin ? userInfo.balance.toFixed(2) : '0.00' }}</view>
+        </view>
+        <view class="asset-card-arrow iconfont icon-xiangyoujiantou"></view>
+      </view>
+      <view class="asset-card-divider"></view>
+      <view class="asset-card-item" @click="onTargetPoints">
+        <view class="asset-card-icon asset-card-icon--points">
+          <text class="iconfont icon-jifen"></text>
+        </view>
+        <view class="asset-card-info">
+          <view class="asset-card-label">
+            <text class="asset-card-label-dot asset-card-label-dot--points"></text>
+            我的积分
+          </view>
+          <view class="asset-card-value">{{ userInfo.point ? userInfo.point : 0 }}</view>
+        </view>
+        <view class="asset-card-arrow iconfont icon-xiangyoujiantou"></view>
+      </view>
+    </view>
+
     <!--会员升级 start-->
     <view class="member-update" v-if="memberGrade.length > 0">
         <view class="update-title">
@@ -67,7 +92,7 @@
     <!-- 弹窗 -->
     <Popup v-if="!isLoading" v-model="showPopup" @onPaySuccess="getPageData" :memberGrade="curGrade"/>
     <!--会员升级 end-->
-    
+
     <!-- 订单操作 -->
     <view class="order-navbar">
       <view class="order-navbar-item" v-for="(item, index) in orderNavbar" :key="index" @click="onTargetOrder(item)">
@@ -145,7 +170,7 @@
         </block>
       </view>
     </view>
-    
+
     <view class="my-recommend"></view>
   </view>
 </template>
@@ -230,10 +255,10 @@
     onShow(options) {
       // 获取页面数据
       this.getPageData()
-      
+
       // 判断是否已登录
       this.isLogin = checkLogin()
-      
+
       // 消息显示
       showMessage();
     },
@@ -304,13 +329,13 @@
                   app.isLogin = false
                   app.userInfo = { id: 0, name: '', avatar: '', gradeId: 0, mobile: '', balance: 0 }
               }
-              
+
               // 强制领取会员卡
               if (result.data.openWxCard && app.userInfo) {
                   this.$navTo('pages/user/card?userId='+app.userInfo.id);
                   return false;
               }
-			  
+
              // 强制更新头像或昵称
              if (result.data.needUpdateAvatar || result.data.needUpdateNickname) {
                  let tips = [];
@@ -326,11 +351,11 @@
                     }
                  });
              }
-              
+
               app.gradeInfo = result.data.gradeInfo;
               app.memberGrade = result.data.memberGrade;
               app.gradeEndTime = result.data.gradeEndTime;
-              app.isMerchant = result.data.isMerchant;              
+              app.isMerchant = result.data.isMerchant;
               resolve(app.userInfo);
               resolve(app.gradeInfo);
               resolve(isMerchant);
@@ -377,7 +402,7 @@
             })
         })
       },
-      
+
       // 成为商家
       handleBeMerchant() {
         if (!this.isLogin) {
@@ -406,19 +431,19 @@
         this.current = index
         this.curGrade = this.memberGrade[index]
       },
-      
+
       // 跳转到会员码
       toMemberCode(userId) {
           !this.isLogin && this.$navTo('pages/login/index')
           this.$navTo('pages/user/code', { userId: userId})
       },
-      
+
       // 跳转我的余额
       toMemberWallet(userId) {
           !this.isLogin && this.$navTo('pages/login/index')
           this.$navTo('pages/wallet/index', { userId: userId})
       },
-      
+
       // 跳转充值
       toRecharge(userId) {
           !this.isLogin && this.$navTo('pages/login/index')
@@ -444,7 +469,7 @@
               // #ifdef MP-WEIXIN
               MessageApi.getSubTemplate({keys: "couponExpire,couponArrival"}).then(result => {
                   const templateIds = result.data
-                  wx.requestSubscribeMessage({tmplIds: templateIds, 
+                  wx.requestSubscribeMessage({tmplIds: templateIds,
                   success(res) {
                       console.log("调用成功！")
                   }, fail(res) {
@@ -461,7 +486,7 @@
               app.$navTo('pages/login/index')
           }
       },
-      
+
       // 跳转会员设置页面
       onUserInfo() {
           if (!this.isLogin) {
@@ -493,14 +518,14 @@
   // 页面头部
   .main-header {
     background: url('~@/static/background/user-header.png') no-repeat;
-    height: 380rpx;
+    height: 350rpx;
     background-size: cover;
     overflow: hidden;
     display: block;
     align-items: center;
     margin: 10rpx 25rpx 10rpx 25rpx;
     border-radius: 10rpx;
-    
+
     .user-info {
       display: block;
       height: 200rpx;
@@ -518,7 +543,7 @@
               border-radius: 999rpx;
           }
       }
-      
+
       .user-content {
         display: block;
         justify-content: center;
@@ -575,27 +600,6 @@
           font-size: 25rpx;
         }
       }
-      .amount-info {
-          margin-top: 80rpx;
-          margin-left: 70rpx;
-          color: #fff;
-          display: block;
-          float: left;
-          max-width: 120rpx;
-          .amount-tip {
-              font-size: 24rpx;
-          }
-          .amount-num {
-              margin-top: 10rpx;
-              font-weight: bold;
-              font-size: 48rpx;
-          }
-          .point-amount {
-              display: block;
-              margin-top: 2px;
-              width: 100px;
-          }
-      }
       .pay-qr {
           color:#ffffff;
           margin-top: 10rpx;
@@ -612,7 +616,7 @@
     .user-no {
         display: block;
         font-size: 25rpx;
-        margin: 110rpx 0rpx 0rpx 20rpx;
+        margin: 60rpx 0rpx 0rpx 20rpx;
         color: #ffffff;
         .no {
             float: left;
@@ -621,6 +625,102 @@
             float: right;
             margin-right: 20rpx;
         }
+    }
+  }
+
+  // 余额和积分卡片
+  .asset-card {
+    display: flex;
+    align-items: center;
+    margin: 10rpx 25rpx 10rpx 25rpx;
+    background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+    border-radius: 16rpx;
+    border: 1rpx solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04), 0 0 0 1rpx rgba(0, 172, 172, 0.06);
+    padding: 36rpx 0;
+    position: relative;
+    z-index: 2;
+
+    .asset-card-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20rpx;
+
+      .asset-card-icon {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20rpx;
+        flex-shrink: 0;
+
+        .iconfont {
+          font-size: 38rpx;
+          color: #fff;
+          line-height: 1;
+        }
+      }
+
+      .asset-card-icon--balance {
+        background: linear-gradient(135deg, #00acac, #00c9c9);
+      }
+
+      .asset-card-icon--points {
+        background: linear-gradient(135deg, #ff9500, #ffb340);
+      }
+
+      .asset-card-info {
+        display: flex;
+        flex-direction: column;
+
+        .asset-card-label {
+          font-size: 22rpx;
+          color: #999;
+          margin-bottom: 8rpx;
+          display: flex;
+          align-items: center;
+
+          .asset-card-label-dot {
+            display: inline-block;
+            width: 8rpx;
+            height: 8rpx;
+            border-radius: 50%;
+            margin-right: 8rpx;
+          }
+
+          .asset-card-label-dot--balance {
+            background: #00acac;
+          }
+
+          .asset-card-label-dot--points {
+            background: #ff9500;
+          }
+        }
+
+        .asset-card-value {
+          font-size: 42rpx;
+          font-weight: bold;
+          color: #333;
+          line-height: 1.2;
+        }
+      }
+
+      .asset-card-arrow {
+        font-size: 24rpx;
+        color: #ccc;
+        margin-left: 8rpx;
+        flex-shrink: 0;
+      }
+    }
+
+    .asset-card-divider {
+      width: 2rpx;
+      height: 60rpx;
+      background: #f0f0f0;
     }
   }
 
@@ -647,7 +747,7 @@
         color: #f03c3c;
         font-weight: bold;
       }
-      
+
       .item-name {
         font-size: 25rpx;
         margin-top: 6rpx;
@@ -742,12 +842,12 @@
       }
     }
   }
-  
+
   // 推荐信息
   .my-recommend {
       height: 20rpx;
   }
-  
+
   // 会员升级
   .member-update {
       margin: 22rpx auto 0rpx auto;
@@ -769,7 +869,7 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            
+
             &-tag {
                 position: absolute;
                 top: -2rpx;
@@ -788,7 +888,7 @@
                     text-align: center;
                 }
             }
-            
+
             &-item {
                 position: relative;
                 padding: 40rpx 0;
@@ -801,30 +901,30 @@
                 align-items: center;
                 border: solid 1rpx #CBCCCE;
                 border-radius: 12rpx;
-                
+
                 &-active {
                     border: solid 2rpx #EDD2A9;
                     background-color: #FBF1E5;
                 }
-                
+
                 &-duration {
                     margin-bottom: 30rpx;
                     font-size: 26rpx;
                     color: #1C1C1C;
                 }
-                
+
                 &-price {
                     margin-bottom: 20rpx;
                     display: flex;
                     flex-direction: row;
                     align-items: baseline;
-                    
+
                     &-text {
                         font-size: 48rpx;
                         color: #E3BE83;
                     }
                 }
-                
+
                 &-des {
                     font-size: 22rpx;
                     color: #A5A3A2;
