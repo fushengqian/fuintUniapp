@@ -15,6 +15,11 @@
       "iconPath": "static/tabbar/shop.png",
       "selectedIconPath": "static/tabbar/shop-active.png",
       "text": "微店"
+    }, {
+      "pagePath": "pages/order/index",
+      "iconPath": "static/tabbar/cate.png",
+      "selectedIconPath": "static/tabbar/cate-active.png",
+      "text": "我的订单"
     },{
       "pagePath": "pages/user/index",
       "iconPath": "static/tabbar/user.png",
@@ -527,6 +532,24 @@
                "path": "cate/list",
                "style": {
                  "navigationBarTitleText": "商品分类"
+               }
+             },
+             {
+               "path": "stock/index",
+               "style": {
+                 "navigationBarTitleText": "库存盘点"
+               }
+             },
+             {
+               "path": "stock/add",
+               "style": {
+                 "navigationBarTitleText": "发起盘点"
+               }
+             },
+             {
+               "path": "stock/detail",
+               "style": {
+                 "navigationBarTitleText": "盘点详情"
                }
              }
       ]
