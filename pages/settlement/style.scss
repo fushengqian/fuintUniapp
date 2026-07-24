@@ -152,18 +152,27 @@
   width: 750rpx;
   background: #fff;
   box-sizing: border-box;
-  padding: 30rpx;
+  padding: 30rpx 30rpx 60rpx 30rpx;
   
-  .coupon__do_not {
-    .control {
-      width: 90%;
-      height: 82rpx;
-      margin-top: 30rpx;
-      margin-bottom: 1rpx;
-      color: #fff;
-      background: $fuint-theme;
-      border: 1rpx solid $fuint-theme;
+  .coupon__actions {
+    margin-top: 26rpx;
+    
+    .action-btn {
+      width: 48%;
+      height: 80rpx;
       border-radius: 8rpx;
+      color: #fff;
+    }
+    
+    .cancel-btn {
+      background: #fff;
+      border: 2rpx solid #ff5b57;
+      color: #ff5b57;
+    }
+    
+    .confirm-btn {
+      background: #ff5b57;
+      border: 1rpx solid #ff5b57;
     }
   }
   
@@ -185,6 +194,8 @@
     border-radius: 8rpx;
     color: #fff;
     height: 180rpx;
+    padding-left: 70rpx;
+    box-sizing: border-box;
   
     .coupon-type {
       position: absolute;
@@ -251,11 +262,13 @@
   
       .money {
         font-weight: bold;
-        font-size: 52rpx;
+        font-size: 38rpx;
+        text-align: left;
       }
   
       .pay-line {
         font-size: 22rpx;
+        text-align: left;
       }
     }
   

@@ -43,9 +43,9 @@
           <text v-else-if="order.status == OrderStatusEnum.REFUND.value">{{OrderStatusEnum.REFUND.name}}</text>
           <text v-else-if="order.status == OrderStatusEnum.COMPLETE.value">{{OrderStatusEnum.COMPLETE.name}}</text>
         </view>
-        <view class="verify-code" v-if="order.orderMode == 'oneself' && order.type == 'goods' && order.verifyCode && order.payStatus == 'B' && ( !['C', 'H', 'G'].includes(order.status))" @click="handleShowVerifyPopup">
-            <view>核销码：</view>
-            <view class="code">{{ order.verifyCode }}</view>
+        <view class="verify-btn" v-if="order.orderMode == 'oneself' && order.type == 'goods' && order.verifyCode && order.payStatus == 'B' && ( !['C', 'H', 'G'].includes(order.status))" @click="handleShowVerifyPopup">
+          <u-icon name="scan" size="28" color="#333"></u-icon>
+          <text>核销码</text>
         </view>
       </view>
     </view>
@@ -177,6 +177,18 @@
         <view class="item-lable">积分抵扣</view>
         <view class="item-content">
           <text>-￥{{ order.pointAmount.toFixed(2) }}</text>
+        </view>
+      </view>
+      <!-- 使用卡券信息 -->
+      <view v-if="order.couponInfoList && order.couponInfoList.length > 0" class="info-item coupon-used">
+        <view class="item-lable">使用卡券</view>
+        <view class="item-content">
+          <view class="coupon-used-list">
+            <view class="coupon-used-item" v-for="(coupon, idx) in order.couponInfoList" :key="idx">
+              <text class="coupon-name">{{ coupon.name }}</text>
+              <text class="coupon-amount">-￥{{ coupon.amount ? coupon.amount.toFixed(2) : '0.00' }}</text>
+            </view>
+          </view>
         </view>
       </view>
       <view class="info-item">
@@ -353,6 +365,12 @@
             app.order = result.data
             app.setting = result.data
             app.isLoading = false
+            // 待核销订单自动弹出核销二维码
+            if (app.order.orderMode == 'oneself' && app.order.type == 'goods'
+                && app.order.verifyCode && app.order.payStatus == 'B'
+                && !['C', 'H', 'G'].includes(app.order.status)) {
+              app.getVerifyQrCode()
+            }
           })
       },
 
@@ -543,6 +561,7 @@
     padding: 56rpx 30rpx 0 30rpx;
 
     .order-status {
+      flex: 1;
       display: flex;
       align-items: center;
       height: 128rpx;
@@ -561,15 +580,17 @@
         font-size: 38rpx;
         font-weight: bold;
       }
-      .verify-code {
-          color: #ffffff;
-          margin-left: 60rpx;
-          font-size: 30rpx;
-          .code {
-              font-size: 50rpx;
-              color: #ffd700;
-              font-weight: bold;
-          }
+      .verify-btn {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        padding: 8rpx 24rpx;
+        font-size: 24rpx;
+        color: #333;
+        background: #fff;
+        border-radius: 28rpx;
+        font-weight: bold;
+        gap: 6rpx;
       }
     }
 
@@ -861,6 +882,39 @@
         font-size: 26rpx;
         color: #333;
         text-align: right;
+      }
+    }
+    
+    .coupon-used {
+      .item-lable {
+        align-self: flex-start;
+      }
+      .item-content {
+        text-align: left;
+      }
+      .coupon-used-list {
+        width: 100%;
+        .coupon-used-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 8rpx 0;
+          border-bottom: 1rpx dashed #eee;
+          &:first-child {
+            padding-top: 0;
+          }
+          &:last-child {
+            border-bottom: none;
+          }
+          .coupon-name {
+            color: #666;
+            font-size: 24rpx;
+          }
+          .coupon-amount {
+            color: #ff5b57;
+            font-size: 24rpx;
+            font-weight: bold;
+          }
+        }
       }
     }
 
