@@ -5,6 +5,28 @@ page {
   background: #fafafa;
 }
 
+/* 自定义底部导航占位(微信小程序启用 custom tabBar 时生效) */
+.tabbar-safe-area {
+  height: 0;
+  /* #ifdef MP-WEIXIN */
+  height: 100rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  /* #endif */
+  /* #ifdef H5 */
+  height: 50px;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  /* #endif */
+}
+
+/* #ifdef H5 */
+/* 隐藏 H5 端原生 tabbar，改由自定义组件渲染后端配置 */
+uni-tabbar {
+  display: none !important;
+}
+/* #endif */
+
 uni-modal {
   z-index: 99999999999999 !important;
 }

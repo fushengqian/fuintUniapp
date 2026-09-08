@@ -1,5 +1,5 @@
 <template>
-  <view v-if="!isLoading" class="container">
+  <view v-if="!isLoading" class="container" :style="themeVars">
     <!-- 页面头部 -->
     <view class="main-header">
       <!-- 用户信息 -->
@@ -491,7 +491,7 @@
   
   // 会员升级
   .member-update {
-      margin: 22rpx auto 0rpx auto;
+      margin: 12rpx auto 0rpx auto;
       padding: 20rpx 0;
       border-radius: 5rpx;
       box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);

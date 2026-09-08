@@ -166,13 +166,13 @@
     
     .cancel-btn {
       background: #fff;
-      border: 2rpx solid #ff5b57;
-      color: #ff5b57;
+      border: 2rpx solid var(--theme-primary);
+      color: var(--theme-primary);
     }
     
     .confirm-btn {
-      background: #ff5b57;
-      border: 1rpx solid #ff5b57;
+      background: var(--theme-primary);
+      border: 1rpx solid var(--theme-primary);
     }
   }
   
@@ -204,7 +204,7 @@
       z-index: 10;
       width: 128rpx;
       padding: 6rpx 0;
-      background: #fa2209;
+      background: var(--theme-primary);
       font-size: 20rpx;
       text-align: center;
       color: #ffffff;
@@ -213,7 +213,7 @@
     }
   
     &.color-default {
-      background: linear-gradient(-128deg, #6bf6f6, #008a8a);
+      background: linear-gradient(-128deg, var(--theme-secondary), var(--theme-primary));
     }
     
     &.color-gray {
@@ -425,7 +425,7 @@
   
   // 提交按钮
   .flow-btn {
-    background: linear-gradient(to right, $fuint-theme, $fuint-theme);
+    background: linear-gradient(to right, var(--theme-primary), var(--theme-primary));
     color: #fff;
     text-align: center;
     height: 92rpx;

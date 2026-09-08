@@ -1,5 +1,5 @@
 <template>
-  <view class="container">      
+  <view class="container" :style="themeVars">
     <!-- 页面头部 -->
     <view class="header">
       <view class="title">
@@ -86,6 +86,7 @@
   import { throttle, debounce } from '@/utils/util'
   import * as Verify from '@/utils/verify'
   import { checkLogin, isWechat } from '@/utils/app'
+  import { loadTheme, buildThemeVars } from '@/utils/theme'
 
   // 倒计时时长(秒)
   const times = 60
@@ -150,6 +151,11 @@
     created() {
       // 获取图形验证码
       this.getCaptcha();
+
+      // 同步主题色
+      loadTheme().then(theme => {
+        this.themeVars = buildThemeVars(theme)
+      })
     },
 
     methods: {
@@ -465,7 +471,7 @@
            font-weight: bold;
        }
        .active {
-           border-bottom: #ff3800 10rpx solid;
+           border-bottom: var(--theme-primary) 10rpx solid;
            padding-bottom: 10rpx;
            text-align: center;
        }
@@ -517,8 +523,8 @@
       padding-right: 20rpx;
 
       .activate {
-        color: #cea26a;
-        border: #ccc solid 1px;
+        color: var(--theme-primary);
+        border: var(--theme-primary) solid 1px;
         padding: 18rpx;
         border-radius: 8rpx;
       }
@@ -536,7 +542,7 @@
     height: 86rpx;
     margin: 0 auto;
     margin-top: 60rpx;
-    background: $fuint-theme;
+    background: var(--theme-primary);
     text-align: center;
     line-height: 86rpx;
     color: #fff;

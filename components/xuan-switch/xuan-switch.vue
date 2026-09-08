@@ -1,5 +1,5 @@
 <template>
-  <view class="switch-container" :style="[{ background: bj_color}]">
+  <view class="switch-container" :style="[{ background: bj_color, borderColor: checked_bj_color }]">
     <view class="switch_view">
       <view 
         class="switch-item" 
@@ -137,7 +137,7 @@ export default {
     width: 398upx;
     height: 76upx;
     border-radius: 80upx;
-    border: 3upx solid $fuint-theme;
+    border: 3upx solid var(--theme-primary);
     font-weight: bold;
     position: relative;
     .switch_view{

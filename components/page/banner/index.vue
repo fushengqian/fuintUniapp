@@ -91,10 +91,6 @@
   .diy-banner {
     position: relative;
     max-height: 400rpx;
-    margin-top: 100rpx;
-    /* #ifdef H5 */
-    margin-top: 120rpx;
-    /* #endif */
     // swiper组件
     .swiper-box {
       height: 100%;
@@ -134,7 +130,7 @@
         }
 
         &.active {
-          background-color: #313131 !important;
+          background-color: var(--theme-primary) !important;
         }
       }
 

@@ -1,11 +1,8 @@
 <template>
-  <view v-if="!isLoading" class="container p-bottom">
+  <view v-if="!isLoading" class="container p-bottom" :style="themeVars">
 
     <!-- 顶部状态栏 -->
     <view class="detail-header dis-flex flex-y-center">
-      <view class="header-backdrop">
-        <image class="image" src="/static/order/refund-bg.png"></image>
-      </view>
       <view class="header-state">
         <text class="f-32 col-f" v-if="detail.status == RefundStatusEnum.A.key">{{RefundStatusEnum.A.name}}</text>
         <text class="f-32 col-f" v-if="detail.status == RefundStatusEnum.B.key">{{RefundStatusEnum.B.name}}</text>
@@ -265,19 +262,7 @@
     position: relative;
     width: 100%;
     height: 140rpx;
-
-    .header-backdrop {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-
-      .image {
-        display: block;
-        width: 750rpx;
-        height: 140rpx;
-      }
-    }
+    background: $fuint-theme;
   }
 
   .header-state {

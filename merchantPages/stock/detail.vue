@@ -1,5 +1,5 @@
 <template>
-  <view class="container" v-if="!loading">
+  <view class="container" v-if="!loading" :style="themeVars">
     <!-- 盘点基本信息 -->
     <view class="info-list">
       <view class="info-item">
@@ -407,7 +407,7 @@
         }
 
         &.diff-minus {
-          color: #00acac;
+          color: var(--theme-primary);
         }
       }
 

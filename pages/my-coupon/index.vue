@@ -48,9 +48,9 @@
     </mescroll-body>
     <!-- 领取入口 -->
     <view class="footer-bar" @click="toReceiveMore">
-      <u-icon v-if="type == 'C'" name="coupon" size="28" color="#00acac"></u-icon>
-      <u-icon v-if="type == 'T'" name="clock" size="28" color="#00acac"></u-icon>
-      <u-icon v-if="type == 'P'" name="rmb-circle" size="28" color="#00acac"></u-icon>
+      <u-icon v-if="type == 'C'" name="coupon" size="28" :color="themeColor"></u-icon>
+      <u-icon v-if="type == 'T'" name="clock" size="28" :color="themeColor"></u-icon>
+      <u-icon v-if="type == 'P'" name="rmb-circle" size="28" :color="themeColor"></u-icon>
       <text>{{ type == 'C' ? '领券中心' : type == 'T' ? '领取计次卡' : '购买储值卡' }}</text>
     </view>
   </view>

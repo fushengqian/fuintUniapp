@@ -18,9 +18,9 @@
           <text class="name">启用状态：</text>
           <view class="value">
              <radio-group @change="statusChange">
-                <label class="radio"><radio value="A" color="#00acac" :checked="couponInfo.status == 'A' ? true : false"/>启用</label>
-                <label class="radio"><radio value="C" color="#00acac" :checked="couponInfo.status == 'C' ? true : false"/>过期</label>
-                <label class="radio second"><radio value="N" color="#00acac" :checked="couponInfo.status == 'N' ? true: false"/>禁用</label>
+                <label class="radio"><radio value="A" :color="themeColor" :checked="couponInfo.status == 'A' ? true : false"/>启用</label>
+                <label class="radio"><radio value="C" :color="themeColor" :checked="couponInfo.status == 'C' ? true : false"/>过期</label>
+                <label class="radio second"><radio value="N" :color="themeColor" :checked="couponInfo.status == 'N' ? true: false"/>禁用</label>
              </radio-group>
           </view>
         </view>

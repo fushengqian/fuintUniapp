@@ -1,5 +1,5 @@
 <template>
-  <view v-if="!isLoading" class="container">
+  <view v-if="!isLoading" class="container" :style="themeVars">
     <!-- 页面头部 -->
     <view class="main-header">
       <!-- 商户信息 -->
@@ -29,7 +29,7 @@
           </view>
           <view class="q-text">
             <text class="q-title">核销卡券</text>
-            <text class="q-desc">扫码核销优惠券/计次卡</text>
+            <text class="q-desc">扫码卡券二维码核销</text>
           </view>
         </view>
         <view class="quick-item" @click="scanCodeCashier">
@@ -38,7 +38,7 @@
           </view>
           <view class="q-text">
             <text class="q-title">扫码收款</text>
-            <text class="q-desc">扫码向会员收取款项</text>
+            <text class="q-desc">扫会员二维码收款</text>
           </view>
         </view>
       </view>
@@ -378,18 +378,16 @@
         .q-icon-img {
           width: 52rpx;
           height: 52rpx;
-          filter: invert(52%) sepia(86%) saturate(1539%) hue-rotate(144deg) brightness(94%) contrast(101%);
+          filter: brightness(0) invert(1);
         }
       }
 
       .q-confirm {
-        background: #ffffff;
-        border: 2rpx solid #00acac;
+        background: var(--theme-primary);
       }
 
       .q-cashier {
-        background: #ffffff;
-        border: 2rpx solid #00acac;
+        background: var(--theme-primary);
       }
 
       .q-text {
@@ -517,7 +515,7 @@
 
   // 我的服务
   .my-service {
-    margin: 22rpx auto 22rpx auto;
+    margin: 10rpx auto 10rpx auto;
     padding: 20rpx 0;
     width: 94%;
     box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);

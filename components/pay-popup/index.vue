@@ -1,5 +1,6 @@
 <template>
   <view class="pay-popup popup" catchtouchmove="true" :class="(value && complete) ? 'show' : 'none'"
+    :style="popupStyle"
     @touchmove.stop.prevent="moveHandle">
     <!-- 页面内容开始 -->
     <view class="mask" @click="close('mask')"></view>
@@ -103,7 +104,7 @@
           <view class="pay-item dis-flex flex-x-between" @click="payNow(PayTypeEnum.BALANCE.value)">
             <view class="item-left dis-flex flex-y-center">
               <view class="item-left_icon balance">
-                <text class="iconfont icon-qiandai"></text>
+                <text class="iconfont icon-qianbao"></text>
               </view>
               <view class="item-left_text">
                 <text>{{ PayTypeEnum.BALANCE.name }}</text>
@@ -121,6 +122,7 @@
   import * as SettlementApi from '@/api/settlement'
   import PayTypeEnum from '@/common/enum/order/PayType'
   import { wxPayment } from '@/utils/app'
+  import { loadTheme, buildThemeVars } from '@/utils/theme'
   
   var that; // 当前页面对象
   var vk; // 自定义函数集
@@ -160,11 +162,15 @@
         complete: false, // 组件是否加载完成
         usePoint: '',
         showPayPopup: false,
-        PayTypeEnum
+        PayTypeEnum,
+        popupStyle: ''
       };
     },
     mounted() {
       that = this;
+      loadTheme().then(theme => {
+        that.popupStyle = buildThemeVars(theme)
+      })
     },
     methods: {
       // 初始化

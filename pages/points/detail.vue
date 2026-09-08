@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <view class="my-point">
         <view class="my-tip"><text class="iconfont icon-jifen"></text>我的积分余额</view>
         <view class="my-account">{{ userInfo.point ? userInfo.point : 0 }}</view>
@@ -151,7 +151,8 @@
 
 <style lang="scss" scoped>
   .container {
-     background: #FFFFFF;
+     min-height: 100vh;
+     padding-bottom: 30rpx;
   }
   .my-point {
       height: 320rpx;
@@ -188,17 +189,19 @@
             margin-right: 40rpx;
             margin-left: 40rpx;
             border-radius: 6rpx;
-            color: #f86d48;
-            background: #f8df98;
+            color: $fuint-theme;
+            background: #fff;
             font-size: 22rpx;
           }
       }
   }
 
   .log-list {
-    padding: 0 30rpx;
+    margin: 20rpx 25rpx 0 25rpx;
+    padding: 0;
     background: #FFFFFF;
     border-radius: 20rpx;
+    overflow: hidden;
   }
 
   .log-item {

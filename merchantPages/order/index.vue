@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback"
       :up="upOption" @up="upCallback">
 
@@ -19,7 +19,7 @@
           </view>
         </view>
         <view class="search-button">
-          <button class="button" @click="doSearchOrder" type="warn"> 搜索 </button>
+          <button class="button" @click="doSearchOrder"> 搜索 </button>
         </view>
       </view>
 
@@ -350,6 +350,7 @@
       line-height: 78rpx;
       height: 78rpx;
       font-size: 28rpx;
+      color: #fff;
       border-radius: 0 20px 20px 0;
       background: $fuint-theme;
     }

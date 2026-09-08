@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <view class="wechatapp">
       <view class="header">
         <open-data class="avatar" type="userAvatarUrl"></open-data>
@@ -37,6 +37,7 @@
   import WxPrivacy from './wx-privacy'
   import ProtocolEnum from '@/common/enum/protocol/Protocol'
   import SettingKeyEnum from '@/common/enum/setting/Key'
+  import { loadTheme, buildThemeVars } from '@/utils/theme'
   export default {
     components: {
       WxPrivacy
@@ -63,6 +64,11 @@
       
       // 获取配置
       this.getUserSetting()
+
+      // 同步主题色
+      loadTheme().then(theme => {
+        this.themeVars = buildThemeVars(theme)
+      })
     },
 
     methods: {
@@ -249,7 +255,7 @@
     .button {
       height: 88rpx;
       line-height: 88rpx;
-      background: $fuint-theme;
+      background: var(--theme-primary);
       color: #fff;
       font-size: 30rpx;
       border-radius: 12rpx;
@@ -258,7 +264,7 @@
     .button-mobile {
         height: 88rpx;
         line-height: 88rpx;
-        background: $fuint-theme;
+        background: var(--theme-primary);
         color: #fff;
         font-size: 30rpx;
         border-radius: 12rpx;
@@ -288,10 +294,10 @@
       font-size: 24rpx;
       text-align: center;
       .member-ptl {
-          color: $fuint-theme;
+          color: var(--theme-primary);
       }
       .privacy-ptl {
-          color: $fuint-theme;
+          color: var(--theme-primary);
       }
   }
 </style>

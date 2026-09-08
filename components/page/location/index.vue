@@ -45,24 +45,13 @@
 
 <style lang="scss" scoped>
 .main-loc {
-  height: 90rpx;
-  /* #ifdef H5 */
-  height: 100rpx;
-  /* #endif */
   color: #ffffff;
   .diy-location {
     background: linear-gradient(to bottom, $fuint-theme, $fuint-theme);
-    padding: 3rpx 10rpx 10rpx 10rpx;
-    /* #ifdef H5 */
-    padding-top: 15rpx;
-    /* #endif */
-    position: fixed;
-    z-index: 99999;
-    width: 100%;
+    padding: 3rpx 20rpx 16rpx 20rpx;
   }
 
   .inner {
-    height: 82rpx;
     overflow: hidden;
     &.radius {
       border-radius: 10rpx;
@@ -89,7 +78,7 @@
           color: #ffffff;
       }
       .address {
-          clear: bold;
+          clear: both;
           display: block;
           margin-top: 2rpx;
           font-size: 23rpx;

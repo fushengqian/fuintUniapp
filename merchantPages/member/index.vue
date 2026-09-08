@@ -1,6 +1,6 @@
 <template>
   <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback"
-    :up="upOption" @up="upCallback">
+    :up="upOption" @up="upCallback" :style="themeVars">
 
     <!-- 分类列表tab -->
     <view class="tabs-wrapper">
@@ -28,7 +28,7 @@
         </view>
       </view>
       <view class="search-button">
-        <button class="button" @click="doSearch" type="warn"> 搜索 </button>
+        <button class="button" @click="doSearch"> 搜索 </button>
       </view>
     </view>
 
@@ -271,6 +271,7 @@
       line-height: 78rpx;
       height: 78rpx;
       font-size: 28rpx;
+      color: #fff;
       border-radius: 0 20px 20px 0;
       background: $fuint-theme;
     }

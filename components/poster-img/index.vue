@@ -1,5 +1,5 @@
 <template>
-  <view class="poster-popup" v-if="visible">
+  <view class="poster-popup" v-if="visible" :style="themeVars">
     <view class="poster-mask" @click="closePoster"></view>
     <view class="poster-container">
       <!-- 海报标题 -->
@@ -43,6 +43,7 @@
   import store from '@/store'
   import config from '@/config'
   import { getShareQrCode } from '@/api/share'
+  import { getTheme, buildThemeVars, getThemePrimary } from '@/utils/theme'
 
   export default {
     name: 'PosterImg',
@@ -72,7 +73,9 @@
         // 系统信息
         systemInfo: null,
         // 设备像素比（H5 端用于高清绘制）
-        pixelRatio: 1
+        pixelRatio: 1,
+        // 主题 CSS 变量(组件内部样式使用, 与宿主页面是否注入无关)
+        themeVars: buildThemeVars(getTheme())
       }
     },
     watch: {
@@ -178,37 +181,29 @@
             width: 430,
             platform: 'mp'
           }).then(res => {
-            let qrCodeUrl = res && res.data && res.data.qrCode ? res.data.qrCode : ''
-            if (!qrCodeUrl) {
-              reject(new Error('未获取到二维码地址'))
+            let qrCodeData = res && res.data && res.data.qrCode ? res.data.qrCode : ''
+            if (!qrCodeData) {
+              reject(new Error('未获取到小程序码'))
               return
             }
-            // 如果是相对路径，拼接 apiUrl 作为兜底
-            if (!qrCodeUrl.startsWith('http')) {
-              const baseUrl = config.apiUrl || ''
-              if (baseUrl) {
-                qrCodeUrl = baseUrl.replace(/\/+$/, '') + (qrCodeUrl.startsWith('/') ? '' : '/') + qrCodeUrl
-              }
+            // 后端返回 base64 data URL，写入临时文件供 Canvas 使用
+            let base64Data = qrCodeData
+            if (base64Data.startsWith('data:image/png;base64,')) {
+              base64Data = base64Data.replace('data:image/png;base64,', '')
             }
-            console.log('qrCodeUrl:', qrCodeUrl)
-            // 下载二维码图片到本地临时文件
-            uni.downloadFile({
-              url: qrCodeUrl,
-              success(downloadRes) {
-                if (downloadRes.statusCode === 200) {
-                  app.qrCodePath = downloadRes.tempFilePath
-                  resolve()
-                } else {
-                  reject(new Error('下载二维码失败'))
-                }
-              },
-              fail(err) {
-                console.error('下载二维码失败:', err)
-                reject(err)
-              }
-            })
+            const fs = wx.getFileSystemManager()
+            const tempFilePath = `${wx.env.USER_DATA_PATH}/temp_qrcode_${Date.now()}.png`
+            try {
+              fs.writeFileSync(tempFilePath, base64Data, 'base64')
+              app.qrCodePath = tempFilePath
+              console.log('小程序码临时文件:', tempFilePath)
+              resolve()
+            } catch (e) {
+              console.error('写入小程序码临时文件失败:', e)
+              reject(e)
+            }
           }).catch(err => {
-            console.error('获取二维码失败:', err)
+            console.error('获取小程序码失败:', err)
             reject(err)
           })
           // #endif
@@ -219,33 +214,15 @@
             width: 430,
             platform: 'h5'
           }).then(res => {
-            let qrCodeUrl = res && res.data && res.data.qrCode ? res.data.qrCode : ''
-            if (!qrCodeUrl) {
-              reject(new Error('未获取到二维码地址'))
+            let qrCodeData = res && res.data && res.data.qrCode ? res.data.qrCode : ''
+            if (!qrCodeData) {
+              reject(new Error('未获取到二维码'))
               return
             }
-            if (!qrCodeUrl.startsWith('http')) {
-              const baseUrl = config.apiUrl || ''
-              if (baseUrl) {
-                qrCodeUrl = baseUrl.replace(/\/+$/, '') + (qrCodeUrl.startsWith('/') ? '' : '/') + qrCodeUrl
-              }
-            }
-            console.log('h5 qrCodeUrl:', qrCodeUrl)
-            uni.downloadFile({
-              url: qrCodeUrl,
-              success(downloadRes) {
-                if (downloadRes.statusCode === 200) {
-                  app.qrCodePath = downloadRes.tempFilePath
-                  resolve()
-                } else {
-                  reject(new Error('下载二维码失败'))
-                }
-              },
-              fail(err) {
-                console.error('下载二维码失败:', err)
-                reject(err)
-              }
-            })
+            // 后端直接返回 base64 data URL，无需 downloadFile，彻底避免跨域问题
+            console.log('h5 qrCode data received, length:', qrCodeData.length)
+            app.qrCodePath = qrCodeData
+            resolve()
           }).catch(err => {
             console.error('获取 H5 二维码失败:', err)
             reject(err)
@@ -260,6 +237,8 @@
       drawPoster(scale, pr) {
         const app = this
         const ctx = uni.createCanvasContext('sharePosterCanvas', this)
+        // 当前主题主色, 绘制时使用
+        const primaryColor = getThemePrimary()
 
         // H5 端按设备像素比缩放绘制上下文，实现高清输出
         pr = pr || 1
@@ -270,7 +249,7 @@
         const ch = app.canvasHeight / pr
 
         // 背景色
-        ctx.setFillStyle('#00acac')
+        ctx.setFillStyle(primaryColor)
         ctx.fillRect(0, 0, cw, ch)
 
         // 顶部白色装饰圆
@@ -300,7 +279,7 @@
         ctx.fillRect(cardX, cardY, cardW, cardH)
 
         // 卡片顶部装饰条
-        ctx.setFillStyle('#00acac')
+        ctx.setFillStyle(primaryColor)
         ctx.fillRect(cardX, cardY, cardW, 6 * scale)
 
         // 应用名称
@@ -311,7 +290,7 @@
         ctx.fillText(appName, cw / 2, cardY + 45 * scale)
 
         // subtitle
-        ctx.setFillStyle('#00acac')
+        ctx.setFillStyle(primaryColor)
         ctx.setFontSize(16 * scale)
         ctx.fillText('邀请你一起加入', cw / 2, cardY + 75 * scale)
 
@@ -382,7 +361,7 @@
 
           // 底部提示（在二维码下方）
           const bottomTextY = qrY + qrSize + 25 * scale
-          ctx.setFillStyle('#00acac')
+          ctx.setFillStyle(primaryColor)
           ctx.setFontSize(14 * scale)
           // #ifdef H5
           ctx.fillText('长按/扫码识别 立即加入', cw / 2, bottomTextY)
@@ -400,7 +379,7 @@
         } else {
           // 无二维码时，保留原有文字底部
           const bottomY = cardY + cardH - 40 * scale
-          ctx.setFillStyle('#00acac')
+          ctx.setFillStyle(primaryColor)
           ctx.setFontSize(14 * scale)
           // #ifdef H5
           ctx.fillText('长按/扫码识别 立即加入', cw / 2, bottomY)
@@ -575,7 +554,7 @@
 
   .save-btn {
     flex: 1;
-    background: linear-gradient(135deg, #00acac, #008a8a);
+    background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary));
     color: #fff;
     max-width: 280rpx;
   }

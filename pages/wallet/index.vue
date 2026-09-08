@@ -1,5 +1,5 @@
 <template>
-  <view class="container" v-if="!isLoading">
+  <view class="container" v-if="!isLoading" :style="themeVars">
     <view class="space-upper">
       <view class="wallet-account">
         <view class="wallet-account_balance">
@@ -114,7 +114,7 @@
   .space-upper {
     padding: 100rpx 0;
     text-align: center;
-    background: $fuint-theme;
+    background: var(--theme-primary);
     margin: 50rpx 30rpx 10rpx 30rpx;
     border-radius: 8rpx;
   }

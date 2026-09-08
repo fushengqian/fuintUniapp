@@ -1,7 +1,7 @@
 <template>
-  <view class="container p-bottom">
+  <view class="container p-bottom" :style="themeVars">
     <view class="flow-mode">
-        <selectSwitch :switchList="orderModeList" checked_bj_color="#00acac" @change="switchMode"/> 
+        <selectSwitch :switchList="orderModeList" :checked_bj_color="themePrimary" @change="switchMode"/> 
     </view>
     <!-- 快递配送：配送地址 -->
     <view @click="onSelectAddress" v-if="orderMode == false" class="flow-delivery">
@@ -112,7 +112,7 @@
         </view>
         <view class="flex-five dis-flex flex-x-end flex-y-center">
           <text class="points-money col-m">-￥{{ usePointAmount }}</text>
-          <u-switch v-model="isUsePoints" size="48" active-color="#00acac" @change="getCartList()"></u-switch>
+          <u-switch v-model="isUsePoints" size="48" :active-color="themePrimary" @change="getCartList()"></u-switch>
         </view>
       </view>
       <!-- 会员折扣 -->
@@ -292,6 +292,7 @@
   import selectSwitch from "@/components/xuan-switch/xuan-switch.vue";
   import * as AddressApi from '@/api/address'
   import * as settingApi from '@/api/setting'
+  import { getThemePrimary } from '@/utils/theme'
 
   export default {
     components: {
@@ -355,6 +356,10 @@
           return '确认选择 (已选1张优惠券)';
         }
         return '确认选择';
+      },
+      themePrimary() {
+        const m = String(this.themeVars).match(/--theme-primary:\s*([^;]+)/)
+        return m ? m[1].trim() : getThemePrimary()
       }
     },
 
@@ -670,7 +675,7 @@
   @import "./style.scss";
   
   .popup__coupon .coupon-item .item-wrapper.selected {
-    border: 2px solid #ff5b57;
+    border: 2px solid var(--theme-primary);
   }
   
   /* 选择指示器 */

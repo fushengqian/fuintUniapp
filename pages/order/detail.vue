@@ -1,5 +1,5 @@
 <template>
-  <view v-if="!isLoading" class="container">
+  <view v-if="!isLoading" class="container" :style="themeVars">
 
     <view class="header">
       <!-- 订单状态 -->
@@ -556,7 +556,7 @@
   .header {
     display: flex;
     justify-content: space-between;
-    background-color: $fuint-theme;
+    background-color: var(--theme-primary);
     height: 280rpx;
     padding: 56rpx 30rpx 0 30rpx;
 
@@ -801,7 +801,7 @@
           &.active {
             color: #fff;
             border: none;
-            background: $fuint-theme;
+            background: var(--theme-primary);
           }
         }
       }
@@ -973,13 +973,13 @@
       &.common {
           color: #fff;
           border: none;
-          background: linear-gradient(to right, $fuint-theme, $fuint-theme);
+          background: linear-gradient(to right, var(--theme-primary), var(--theme-primary));
       }
 
       &.active {
         color: #fff;
         border: none;
-        background: linear-gradient(to right, #f9211c, #ff6335);
+        background: linear-gradient(to right, var(--theme-primary), var(--theme-primary));
       }
     }
   }
@@ -1002,7 +1002,7 @@
         padding: 30rpx;
         font-size: 30rpx;
         background: #fff;
-        border: 1rpx solid $fuint-theme;
+        border: 1rpx solid var(--theme-primary);
         border-radius: 8rpx;
         color: #888;
         margin-bottom: 12rpx;
@@ -1017,7 +1017,7 @@
           }
 
           &.balance {
-            color: $fuint-theme;
+            color: var(--theme-primary);
           }
         }
       }
@@ -1068,7 +1068,7 @@
       }
       
       .code {
-        color: $fuint-theme;
+        color: var(--theme-primary);
         font-weight: bold;
         font-size: 36rpx;
       }
@@ -1076,7 +1076,7 @@
     
     .popup-close-btn {
       padding: 16rpx 60rpx;
-      background: $fuint-theme;
+      background: var(--theme-primary);
       color: #fff;
       border-radius: 40rpx;
       font-size: 28rpx;

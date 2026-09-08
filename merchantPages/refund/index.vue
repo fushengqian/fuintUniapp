@@ -1,10 +1,10 @@
 <template>
   <view class="container">
     <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback"
-      :up="upOption" @up="upCallback">
+      :up="upOption" @up="upCallback" :style="themeVars">
 
       <!-- tab栏 -->
-      <u-tabs :list="tabs" :is-scroll="false" :current="curTab" active-color="#FA2209" :duration="0.2" @change="onChangeTab" />
+      <u-tabs :list="tabs" :is-scroll="false" :current="curTab" :active-color="themeColor" :duration="0.2" @change="onChangeTab" />
 
       <!-- 搜索框 -->
       <view class="search-wrapper">
@@ -19,7 +19,7 @@
           </view>
         </view>
         <view class="search-button">
-          <button class="button" @click="doSearchOrder" type="warn"> 搜索 </button>
+          <button class="button" @click="doSearchOrder"> 搜索 </button>
         </view>
       </view>
 
@@ -272,6 +272,7 @@
       line-height: 78rpx;
       height: 78rpx;
       font-size: 28rpx;
+      color: #fff;
       border-radius: 0 20px 20px 0;
       background: $fuint-theme;
     }

@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="pageStyle">
       <view class="success">
         <view class="result">
            <image class="icon" src="/static/pay/success.png"></image>
@@ -17,11 +17,13 @@
 
 <script>
   import * as MessageApi from '@/api/message'
+  import { loadTheme, buildThemeVars } from '@/utils/theme'
   export default {
     data() {
       return {
         amount: 0,
         point: 0,
+        pageStyle: ''
       }
     },
 
@@ -32,6 +34,10 @@
       // 当前页面参数
       this.amount = options.amount ? options.amount : 0
       this.point = options.point ? options.point : 0
+      // 加载并应用主题色
+      loadTheme().then(theme => {
+        this.pageStyle = buildThemeVars(theme)
+      })
     },
 
     methods: {

@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <view class="wechatapp">
       <view class="header"></view>
     </view>
@@ -144,7 +144,7 @@
     .button {
       height: 88rpx;
       line-height: 88rpx;
-      background: $fuint-theme;
+      background: var(--theme-primary);
       color: #fff;
       font-size: 30rpx;
       border-radius: 12rpx;

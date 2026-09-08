@@ -1,5 +1,5 @@
 <template>
-  <view class="container" v-if="userInfo.id">
+  <view class="container" v-if="userInfo.id" :style="themeVars">
     <view class="account-panel dis-flex flex-y-center">
       <view class="panel-lable">
         <text>账户余额</text>
@@ -190,7 +190,7 @@
     box-sizing: border-box;
     border-radius: 8rpx;
     color: #fff;
-    background: $fuint-theme;
+    background: var(--theme-primary);
     box-shadow: 0 5px 22px 0 rgba(0, 0, 0, 0.26);
   }
 

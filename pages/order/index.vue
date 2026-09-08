@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback"
       :up="upOption" @up="upCallback">
 
@@ -68,6 +68,11 @@
         </view>
       </view>
     </mescroll-body>
+    <!-- 自定义 tabBar 占位 -->
+    <view class="tabbar-safe-area"></view>
+    <!-- #ifdef H5 -->
+    <h5-tabbar ref="h5Tabbar"></h5-tabbar>
+    <!-- #endif -->
   </view>
 
 </template>
@@ -86,6 +91,10 @@
   import { getEmptyPaginateObj, getMoreListData } from '@/utils/app'
   import * as OrderApi from '@/api/order'
   import { wxPayment } from '@/utils/app'
+  import { loadAndApplyTabbar } from '@/utils/tabbar'
+  // #ifdef H5
+  import H5Tabbar from '@/components/tabbar/index.vue'
+  // #endif
 
   // 每页记录数量
   const pageSize = 15
@@ -107,7 +116,10 @@
 
   export default {
     components: {
-      MescrollBody
+      MescrollBody,
+      // #ifdef H5
+      H5Tabbar
+      // #endif
     },
     mixins: [MescrollMixin],
     data() {
@@ -161,6 +173,27 @@
      * 生命周期函数--监听页面显示
      */
     onShow() {
+      const app = this
+      // 读取“我的-订单入口”预选 Tab (switchTab 无法传参, 通过缓存传递并消费)
+      const initTab = uni.getStorageSync('userOrderInitTab')
+      if (initTab) {
+        uni.removeStorageSync('userOrderInitTab')
+        const index = app.tabs.findIndex(item => item.value === initTab)
+        if (index > -1) {
+          app.curTab = index
+        }
+      }
+      // 拉取 tabBar 配置（缓存优先），自定义 tabBar 实例可能尚未就绪会自动重试
+      loadAndApplyTabbar(this)
+      // #ifdef H5
+      this.$refs.h5Tabbar && this.$refs.h5Tabbar.refresh()
+      // #endif
+      // #ifdef MP-WEIXIN
+      // 微信注入的 getTabBar 挂在原生页面实例上，uni-app 需经 $scope 访问
+      const host = this.$scope || this
+      const tb = typeof host.getTabBar === 'function' && host.getTabBar()
+      tb && tb.syncSelected && tb.syncSelected()
+      // #endif
       this.onRefreshList();
     },
 

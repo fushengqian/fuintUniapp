@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <view class="search-wrapper">
       <view class="search-input">
         <view class="search-input-wrapper">
@@ -12,7 +12,7 @@
         </view>
       </view>
       <view class="search-button">
-        <button class="button" @click="onSearch" type="warn"> 搜索 </button>
+        <button class="button" @click="onSearch"> 搜索 </button>
       </view>
     </view>
     <view class="history" v-if="historySearch.length">
@@ -172,6 +172,7 @@
       line-height: 78rpx;
       height: 78rpx;
       font-size: 28rpx;
+      color: #fff;
       border-radius: 0 20px 20px 0;
       background: $fuint-theme;
     }

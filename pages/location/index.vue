@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeVars">
     <view class="search-wrapper">
       <view class="search-input">
         <view class="search-input-wrapper">
@@ -164,7 +164,7 @@
       height: 78rpx;
       font-size: 28rpx;
       border-radius: 0 20px 20px 0;
-      background: $fuint-theme;
+      background: var(--theme-primary);
     }
   }
 
