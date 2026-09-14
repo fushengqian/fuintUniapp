@@ -79,7 +79,7 @@
     <!-- 商品SKU弹窗 -->
     <SkuPopup v-if="!isLoading" v-model="showSkuPopup" :skuMode="skuMode" :goods="goods" @addCart="onAddCart"/>
 
-    <view class="flow-fixed-footer b-f m-top10">
+    <view class="flow-fixed-footer b-f m-top10" :style="footerStyle">
       <view class="dis-flex chackout-box">
         <view class="chackout-left pl-12">
           <view class="col-amount-do">总金额：<text class="amount">￥{{ totalPrice.toFixed(2) }}</text></view>
@@ -93,8 +93,6 @@
 
     <empty v-if="!list.length" :isLoading="isLoading" />
 
-    <!-- 自定义 tabBar 占位 -->
-    <view class="tabbar-safe-area"></view>
     <!-- #ifdef H5 -->
     <h5-tabbar ref="h5Tabbar"></h5-tabbar>
     <!-- #endif -->
@@ -110,7 +108,7 @@
   import Empty from '@/components/empty'
   import SkuPopup from './components/SkuPopup'
   import Location from '@/components/page/location'
-  import { loadAndApplyTabbar } from '@/utils/tabbar'
+  import { loadAndApplyTabbar, loadTabbar } from '@/utils/tabbar'
   // #ifdef H5
   import H5Tabbar from '@/components/tabbar/index.vue'
   // #endif
@@ -132,8 +130,12 @@
         goodsCart: [],
         totalNum: 0,
         totalPrice: 0.00,
-        // 列表高度
-        scrollHeight: 500,
+        // 窗口高度(px)
+        windowHeight: 0,
+        // 结算栏高度(px)，用于计算列表可视区域
+        footerHeight: 60,
+        // 底部安全区高度(px)
+        safeAreaBottom: 0,
         // 一级分类：指针
         curIndex: 0,
         // 内容区竖向滚动条位置
@@ -153,7 +155,26 @@
         // 防抖计时器
         scrollTimer: null,
         // 是否正在手动切换分类
-        isManualSelect: false
+        isManualSelect: false,
+        // 底部自定义 tabbar 实际高度(px)，用于结算栏定位
+        tabbarHeight: 50
+      }
+    },
+
+    computed: {
+      // 注意：小程序端 :style 绑定对象会被序列化为 [object Object]，统一返回 style 字符串
+      footerStyle() {
+        if (this.tabbarHeight <= 0) {
+          return 'bottom: 0;'
+        }
+        // tabbar 底部有安全区 padding，结算栏需同步抬升
+        return `bottom: calc(${this.tabbarHeight}px + env(safe-area-inset-bottom));`
+      },
+      // 商品列表可视区域高度：窗口高度 - 顶部吸顶区 - 结算栏 - tabbar - 安全区
+      scrollHeight() {
+        const headerHeight = 120 // 顶部吸顶区（门店+搜索）近似高度
+        const h = this.windowHeight - headerHeight - this.footerHeight - this.tabbarHeight - this.safeAreaBottom
+        return Math.max(200, h)
       }
     },
 
@@ -166,6 +187,17 @@
       const app = this;
       // 拉取 tabBar 配置（缓存优先），自定义 tabBar 实例可能尚未就绪会自动重试
       loadAndApplyTabbar(this)
+      // 读取 tabBar 实际高度，让底部结算栏与 tabbar 无缝衔接，避免配置高度变化时出现间隙
+      loadTabbar().then(config => {
+        const valid = config && config.enabled !== false && config.items && config.items.length
+        if (valid) {
+          const h = Number((config.style && config.style.height) || 50)
+          app.tabbarHeight = Math.max(40, Math.min(h, 80))
+        } else {
+          // 后台无 tabbar 配置时整条 tabbar 隐藏，结算栏直接贴底
+          app.tabbarHeight = 0
+        }
+      })
       // #ifdef H5
       this.$refs.h5Tabbar && this.$refs.h5Tabbar.refresh()
       // #endif
@@ -319,7 +351,8 @@
         const app = this
         uni.getSystemInfo({
           success(res) {
-            app.scrollHeight = res.windowHeight - 120
+            app.windowHeight = res.windowHeight
+            app.safeAreaBottom = (res.safeAreaInsets && res.safeAreaInsets.bottom) || 0
           }
         })
       },
@@ -459,7 +492,6 @@
     color: #444;
     height: 100%;
     background: #f8f8f8;
-    margin-bottom: 120rpx;
     overflow: hidden;
     &::-webkit-scrollbar {
         display: none !important;
@@ -488,7 +520,6 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    margin-bottom: 80rpx;
   }
 
   .cate-right-cont {

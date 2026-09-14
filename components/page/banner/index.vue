@@ -124,6 +124,7 @@
         height: 16rpx;
         margin-right: 8rpx;
         background-color: #fff;
+        border-radius: 50%; // 默认圆形，兼容 round / circle 配置
 
         &:last-child {
           margin-right: 0;
@@ -134,23 +135,26 @@
         }
       }
 
-      // 圆形
-      &.round .dots-item {
+      // 圆形（round / circle）
+      &.round .dots-item,
+      &.circle .dots-item {
         width: 16rpx;
         height: 16rpx;
-        border-radius: 20rpx;
+        border-radius: 50%;
       }
 
       // 正方形
       &.square .dots-item {
         width: 16rpx;
         height: 16rpx;
+        border-radius: 0;
       }
 
       // 长方形
       &.rectangle .dots-item {
         width: 22rpx;
         height: 14rpx;
+        border-radius: 0;
       }
 
     }

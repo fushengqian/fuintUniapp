@@ -1,4 +1,4 @@
-iq<template>
+<template>
   <!-- 商品列表 -->
   <view class="goods-container">
       <view class="recommend" v-if="showTitle">

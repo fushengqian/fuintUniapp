@@ -1,4 +1,4 @@
-daohang<template>
+<template>
   <!-- 导航宫格 -->
   <view class="diy-navBar" :style="navBarStyle">
     <view class="data-list" :class="listClass">

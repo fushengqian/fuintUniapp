@@ -1,5 +1,5 @@
 <template>
-  <view class="container b-f p-b">
+  <view class="container b-f p-b" :style="themeVars">
     <view class="base">
         <view class="merchant-name">
           <view class="name">{{ storeInfo ? storeInfo.name : systemName }}</view>
