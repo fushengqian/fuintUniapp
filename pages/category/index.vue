@@ -70,6 +70,8 @@
                 </view>
               </view>
               <empty v-if="!list[curIndex].goodsList.length" :isLoading="isLoading" tips="暂无商品~"></empty>
+              <!-- 底部占位：抵消固定结算栏+tabbar+安全区占用的可视高度，避免列表最后一项被遮挡 -->
+              <view :style="{ height: `${bottomSafeHeight}px` }"></view>
             </view>
           </view>
         </view>
@@ -79,7 +81,7 @@
     <!-- 商品SKU弹窗 -->
     <SkuPopup v-if="!isLoading" v-model="showSkuPopup" :skuMode="skuMode" :goods="goods" @addCart="onAddCart"/>
 
-    <view class="flow-fixed-footer b-f m-top10" :style="footerStyle">
+    <view class="flow-fixed-footer b-f" :style="footerStyle">
       <view class="dis-flex chackout-box">
         <view class="chackout-left pl-12">
           <view class="col-amount-do">总金额：<text class="amount">￥{{ totalPrice.toFixed(2) }}</text></view>
@@ -132,8 +134,10 @@
         totalPrice: 0.00,
         // 窗口高度(px)
         windowHeight: 0,
+        // 吸顶头部实际高度(px)
+        headerHeight: 120,
         // 结算栏高度(px)，用于计算列表可视区域
-        footerHeight: 60,
+        footerHeight: 50,
         // 底部安全区高度(px)
         safeAreaBottom: 0,
         // 一级分类：指针
@@ -170,11 +174,15 @@
         // tabbar 底部有安全区 padding，结算栏需同步抬升
         return `bottom: calc(${this.tabbarHeight}px + env(safe-area-inset-bottom));`
       },
-      // 商品列表可视区域高度：窗口高度 - 顶部吸顶区 - 结算栏 - tabbar - 安全区
+      // 商品列表可视区域高度：只扣顶部吸顶区，列表延伸到视口底部，
+      // 结算栏/tabbar 均为 fixed 覆盖在列表之上，列表底部不会再露出页面背景形成白条
       scrollHeight() {
-        const headerHeight = 120 // 顶部吸顶区（门店+搜索）近似高度
-        const h = this.windowHeight - headerHeight - this.footerHeight - this.tabbarHeight - this.safeAreaBottom
+        const h = this.windowHeight - this.headerHeight
         return Math.max(200, h)
+      },
+      // 列表底部占位高度：让滚动到底时最后一项正好停在结算栏上方
+      bottomSafeHeight() {
+        return this.footerHeight + this.tabbarHeight + this.safeAreaBottom
       }
     },
 
@@ -220,6 +228,11 @@
             // empty
           }
       })
+    },
+
+    onReady() {
+      // 页面首次渲染完成后再次精确测量各区域高度
+      this.setListHeight()
     },
 
     methods: {
@@ -353,6 +366,24 @@
           success(res) {
             app.windowHeight = res.windowHeight
             app.safeAreaBottom = (res.safeAreaInsets && res.safeAreaInsets.bottom) || 0
+            // 精确测量吸顶头部和结算条的实际高度，避免硬编码造成列表底部留白或被遮挡
+            app.$nextTick(() => {
+              setTimeout(() => {
+                const query = uni.createSelectorQuery().in(app)
+                query.select('.category-sticky-header').boundingClientRect()
+                query.select('.flow-fixed-footer').boundingClientRect()
+                query.exec((rects) => {
+                  const headerRect = rects && rects[0]
+                  const footerRect = rects && rects[1]
+                  if (headerRect && headerRect.height > 0) {
+                    app.headerHeight = headerRect.height
+                  }
+                  if (footerRect && footerRect.height > 0) {
+                    app.footerHeight = footerRect.height
+                  }
+                })
+              }, 50)
+            })
           }
         })
       },
@@ -565,7 +596,6 @@
   }
 
   .cate-cont-box {
-    margin-bottom: 10rpx;
     padding-bottom: 10rpx;
     overflow: hidden;
     height: auto;
@@ -574,8 +604,10 @@
         height: 220rpx;
         display: block;
         padding-top: 5rpx;
+        padding-bottom: 5rpx;
         border-radius: 3rpx;
         margin-bottom: 5rpx;
+        background: #fff;
     }
 
     .category-title {
@@ -746,7 +778,6 @@
     background: #fff;
     border-top: 1px solid #eee;
     z-index: 11;
-    padding-top: 8rpx;
     .chackout-left {
       font-size: 28rpx;
       height: 98rpx;

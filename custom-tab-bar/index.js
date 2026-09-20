@@ -53,7 +53,6 @@ Component({
       }
       // 优先使用页面缓存的最新配置(图标地址已在 utils/tabbar.js 中补全)
       const config = wx.getStorageSync('tabbar') || null
-      console.log('[custom-tabbar] attached, cache config:', config)
       if (config && config.items && config.items.length) {
         this.applyConfig(config)
         this.syncSelected()
@@ -65,14 +64,12 @@ Component({
     applyConfig(config) {
       console.log('[custom-tabbar] applyConfig start, config:', config)
       if (!config || !config.items || !config.items.length) {
-        console.log('[custom-tabbar] applyConfig hide: no items')
         this.setData({ visible: false, list: [] })
         return
       }
       // 兼容 enabled 未设置的场景：有导航项即视为开启
       const enabled = config.enabled !== false
       if (!enabled) {
-        console.log('[custom-tabbar] applyConfig hide: enabled=false')
         this.setData({ visible: false, list: [] })
         return
       }
@@ -87,7 +84,6 @@ Component({
       }).filter(item => item.pagePath && item.text)
 
       if (!list.length) {
-        console.log('[custom-tabbar] applyConfig hide: all items invalid')
         this.setData({ visible: false, list: [] })
         return
       }
@@ -124,28 +120,23 @@ Component({
       // 直接 return，attached/applyConfig 就绪后会重新同步
       const list = (this.data && Array.isArray(this.data.list)) ? this.data.list : []
       if (!list.length) {
-        console.log('[custom-tabbar] setSelectedByPath: list not ready, skip')
         return
       }
       const pages = getCurrentPages()
       const current = pages[pages.length - 1]
       if (!current) {
-        console.log('[custom-tabbar] setSelectedByPath: no current page')
         return
       }
       // 去掉前导斜杠和 query string（如 pages/category/index?storeId=1）
       const route = (current.route || '').replace(/^\/+/, '').split('?')[0]
-      console.log('[custom-tabbar] setSelectedByPath route:', route, 'list:', list)
       const index = list.findIndex(item => {
         const p = (item.pagePath || '').replace(/^\/+/, '')
         return p === route
       })
-      console.log('[custom-tabbar] setSelectedByPath matched index:', index, 'current selected:', this.data.selected)
       if (index >= 0 && index !== this.data.selected) {
         this.setData({ selected: index })
       } else if (index < 0 && this.data.visible && this.data.selected >= 0) {
         // 当前页面不在底部导航列表中时取消高亮，避免停留在上一个页面的选中态造成“选中与页面不匹配”
-        console.log('[custom-tabbar] setSelectedByPath no match, clear selected')
         this.setData({ selected: -1 })
       }
     },
