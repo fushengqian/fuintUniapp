@@ -4,7 +4,7 @@
     <view class="data-list" :class="listClass">
       <view class="item-nav" v-for="(dataItem, index) in renderList" :key="index" :style="itemWidth">
         <view class="nav-to" :class="itemClass" :style="itemBoxStyle" @click="onLink(dataItem.url)">
-          <view class="item-image">
+          <view class="item-image" :style="iconBoxStyle">
             <image class="image" mode="aspectFill" :src="dataItem.iconUrl"></image>
           </view>
           <view class="item-text">
@@ -37,7 +37,19 @@
       // 注意：小程序端 :style 绑定对象会被序列化成 [object Object] 导致样式失效，统一返回 style 字符串
       navBarStyle() {
         const style = this.itemStyle || {}
-        return `background: ${style.background || '#ffffff'}; color: ${style.textColor || '#333333'};`
+        const parts = []
+        parts.push(`background: ${style.background || '#ffffff'}`)
+        parts.push(`color: ${style.textColor || '#333333'}`)
+        // 组件边框：未配置边框色时沿用样式表中的默认边框
+        const borderWidth = parseInt(style.borderWidth, 10)
+        if (!isNaN(borderWidth) && style.borderColor) {
+          parts.push(`border: ${borderWidth * rpxRatio}rpx ${style.borderStyle || 'solid'} ${style.borderColor}`)
+        }
+        const radius = parseInt(style.borderRadius, 10)
+        if (!isNaN(radius)) parts.push(`border-radius: ${radius * rpxRatio}rpx`)
+        const padding = parseInt(style.padding, 10)
+        if (!isNaN(padding)) parts.push(`padding: ${padding * rpxRatio}rpx`)
+        return parts.join('; ') + ';'
       },
       layout() {
         return (this.itemStyle && this.itemStyle.layout) || 'grid'
@@ -80,6 +92,30 @@
         if (style.itemHeight !== undefined && style.itemHeight !== '') {
           parts.push(`min-height: ${parseInt(style.itemHeight, 10) * rpxRatio}rpx`)
         }
+        return parts.join('; ') + (parts.length ? ';' : '')
+      },
+      iconBoxStyle() {
+        const style = this.itemStyle || {}
+        const parts = []
+        // 图标大小（后台 px，按 750rpx 设计稿换算）
+        const size = parseInt(style.iconSize, 10)
+        if (size > 0) {
+          parts.push(`width: ${size * rpxRatio}rpx`)
+          parts.push(`height: ${size * rpxRatio}rpx`)
+        }
+        if (style.iconBg) parts.push(`background: ${style.iconBg}`)
+        if (style.iconBorder) {
+          const width = parseInt(style.iconBorderWidth, 10)
+          parts.push(`border: ${width > 0 ? width * rpxRatio : 1}rpx solid ${style.iconBorder}`)
+        }
+        const radius = parseInt(style.iconRadius, 10)
+        if (!isNaN(radius)) parts.push(`border-radius: ${radius * rpxRatio}rpx`)
+        const padding = parseInt(style.iconPadding, 10)
+        if (!isNaN(padding)) parts.push(`padding: ${padding * rpxRatio}rpx`)
+        // 未配置外边距时不输出，保留样式表中的默认间距（左图布局需要右侧间距）
+        const margin = parseInt(style.iconMargin, 10)
+        if (!isNaN(margin)) parts.push(`margin: ${margin * rpxRatio}rpx`)
+        if (parts.length) parts.push('box-sizing: border-box')
         return parts.join('; ') + (parts.length ? ';' : '')
       },
       textStyle() {
