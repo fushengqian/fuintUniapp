@@ -52,7 +52,13 @@
                         <text class="stock text">库存:{{ item.stock ? item.stock : 0 }} 已售:{{ item.initSale ? item.initSale : 0 }}</text>
                       </view>
                       <view class="action">
-                          <text class="price">￥{{ item.price ? item.price : 0 }}</text>
+                          <!-- 会员价：登录会员且商品设置了会员价时展示 -->
+                          <view v-if="isMember && item.memberPrice > 0" class="member-price">
+                              <text class="member-price-tag">会员价</text>
+                              <text class="price">￥{{ item.memberPrice }}</text>
+                              <text class="price-origin">￥{{ item.price }}</text>
+                          </view>
+                          <text v-else class="price">￥{{ item.price ? item.price : 0 }}</text>
                           <view class="cart">
                               <view v-if="item.isSingleSpec === 'Y'" class="singleSpec">
                                   <view class="ii do-minus" v-if="item.buyNum" @click="onSaveCart(item.id, '-')"></view>
@@ -102,7 +108,7 @@
 </template>
 
 <script>
-  import { setCartTabBadge, setCartTotalNum } from '@/utils/app'
+  import { setCartTabBadge, setCartTotalNum, checkLogin } from '@/utils/app'
   import * as CartApi from '@/api/cart'
   import * as GoodsApi from '@/api/goods'
   import * as settingApi from '@/api/setting'
@@ -166,6 +172,10 @@
     },
 
     computed: {
+      // 是否已登录会员（所有注册用户均为会员）
+      isMember() {
+        return checkLogin()
+      },
       // 注意：小程序端 :style 绑定对象会被序列化为 [object Object]，统一返回 style 字符串
       footerStyle() {
         if (this.tabbarHeight <= 0) {
@@ -689,10 +699,35 @@
         height: 50rpx;
         .price {
             margin-top: 20rpx;
-            color: #f03c3c;
+            color: #fa5151;
             float: left;
             font-size: 32rpx;
             font-weight: bold;
+        }
+        /* 会员价 */
+        .member-price {
+            margin-top: 20rpx;
+            float: left;
+            .member-price-tag {
+                display: inline-block;
+                font-size: 18rpx;
+                line-height: 1;
+                color: #fff;
+                background: #fa5151;
+                border-radius: 4rpx;
+                padding: 4rpx 6rpx;
+                margin-right: 6rpx;
+            }
+            .price {
+                margin-top: 0;
+                font-size: 30rpx;
+            }
+            .price-origin {
+                margin-left: 8rpx;
+                color: #999;
+                font-size: 22rpx;
+                text-decoration: line-through;
+            }
         }
         .cart {
             margin-top: 20rpx;
@@ -791,7 +826,7 @@
           margin-top: 5rpx;
           margin-bottom:5rpx;
           .amount {
-              color: #f03c3c;
+              color: #fa5151;
               font-weight: bold;
           }
         }
