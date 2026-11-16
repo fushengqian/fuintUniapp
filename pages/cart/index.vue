@@ -35,8 +35,10 @@
           </view>
           <view class="item-foot">
             <view class="goods-price">
+              <text v-if="item.goodsInfo.memberPrice > 0" class="member-price-tag">会员价</text>
               <text class="unit">￥</text>
               <text class="value">{{ item.goodsInfo.price }}</text>
+              <text v-if="item.goodsInfo.memberPrice > 0 && item.goodsInfo.linePrice > 0" class="price-origin">￥{{ item.goodsInfo.linePrice }}</text>
             </view>
             <view class="stepper">
               <u-number-box :min="1" :value="item.num" @change="onChangeStepper($event, item)" />
@@ -386,13 +388,31 @@
           vertical-align: bottom;
           color: $uni-text-color-active;
 
+          .member-price-tag {
+            display: inline-block;
+            font-size: 18rpx;
+            line-height: 1;
+            color: #fff;
+            background: #fa5151;
+            border-radius: 4rpx;
+            padding: 4rpx 6rpx;
+            margin-right: 6rpx;
+          }
+
+          .price-origin {
+            margin-left: 8rpx;
+            color: #999;
+            font-size: 22rpx;
+            text-decoration: line-through;
+          }
+
           .unit {
             font-size: 24rpx;
           }
 
           .value {
             font-size: 32rpx;
-            color: #f03c3c;
+            color: #fa5151;
             font-weight: bold;
           }
         }
@@ -455,7 +475,7 @@
 
         .value {
           font-size: 36rpx;
-          color: #f03c3c;
+          color: #fa5151;
           font-weight: bold;
         }
       }

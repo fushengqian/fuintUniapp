@@ -78,7 +78,11 @@
             <view class="flow-list-cont dis-flex flex-x-between flex-y-center">
               <text class="small"> x {{ item.num }} </text>
               <text class="flow-cont" v-if="isPointExchange">{{ item.goodsInfo.pointPrice }} 积分</text>
-              <text class="flow-cont" v-else>￥{{ item.goodsInfo.price }} </text>
+              <text class="flow-cont" v-else>
+                <text v-if="item.goodsInfo.memberPrice > 0" class="member-price-tag">会员价</text>
+                ￥{{ item.goodsInfo.price }}
+                <text v-if="item.goodsInfo.memberPrice > 0 && item.goodsInfo.linePrice > 0" class="price-origin">￥{{ item.goodsInfo.linePrice }}</text>
+              </text>
             </view>
           </view>
         </view>
@@ -763,5 +767,23 @@
         font-size: 22rpx;
       }
     }
+  }
+
+  /* 会员价标签 */
+  .member-price-tag {
+    display: inline-block;
+    font-size: 18rpx;
+    line-height: 1;
+    color: #fff;
+    background: #fa5151;
+    border-radius: 4rpx;
+    padding: 4rpx 6rpx;
+    margin-right: 4rpx;
+  }
+
+  .price-origin {
+    color: #999;
+    font-size: 22rpx;
+    text-decoration: line-through;
   }
 </style>
