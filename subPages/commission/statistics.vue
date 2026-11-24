@@ -32,16 +32,16 @@
     <!-- 推荐奖励区块 -->
     <view class="reward-section" v-if="showReward">
       <view class="reward-header">
-        <view class="reward-title">
-          <text class="reward-title-text">推荐奖励</text>
-          <text class="reward-title-tag">新</text>
+        <view class="reward-head-left">
+          <view class="reward-title">
+            <text class="reward-title-text">推荐奖励</text>
+            <text class="reward-title-tag">新</text>
+          </view>
+          <view class="reward-sub">邀请好友，得券和积分</view>
         </view>
-        <view class="reward-sub">邀请好友，得券和积分</view>
-      </view>
-      <view class="reward-rules" v-if="showRules">
-        <view class="rule-item" v-for="(item, index) in reward.rules" :key="index">
-          <text class="rule-dot"></text>
-          <text class="rule-text">{{ item.text }}</text>
+        <view class="reward-rule-link" @click="goRuleDesc()">
+          <text>奖励说明</text>
+          <text class="iconfont icon-xiangyoujiantou"></text>
         </view>
       </view>
       <view class="reward-stats">
@@ -303,6 +303,14 @@
        */
       goSharePage() {
         this.$navTo('pages/share/index')
+      },
+
+      /**
+       * 跳转奖励说明
+       * @param {string} tab 默认选中的tab（commission/recommend）
+       */
+      goRuleDesc(tab) {
+        this.$navTo('subPages/commission/rules', tab ? { tab } : {})
       }
     }
   }
@@ -381,7 +389,24 @@
   }
 
   .reward-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 24rpx;
+  }
+
+  .reward-rule-link {
+    display: flex;
+    align-items: center;
+    font-size: 22rpx;
+    color: #b98c58;
+    flex-shrink: 0;
+    padding: 8rpx 0 8rpx 16rpx;
+
+    .iconfont {
+      font-size: 20rpx;
+      margin-left: 4rpx;
+    }
   }
 
   .reward-title {
@@ -408,37 +433,6 @@
     font-size: 22rpx;
     color: #b98c58;
     margin-top: 6rpx;
-  }
-
-  .reward-rules {
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 12rpx;
-    padding: 20rpx 24rpx;
-    margin-bottom: 24rpx;
-  }
-
-  .rule-item {
-    display: flex;
-    align-items: flex-start;
-
-    &:not(:last-child) {
-      margin-bottom: 14rpx;
-    }
-  }
-
-  .rule-dot {
-    width: 10rpx;
-    height: 10rpx;
-    border-radius: 50%;
-    background: #ff9800;
-    margin: 14rpx 14rpx 0 0;
-    flex-shrink: 0;
-  }
-
-  .rule-text {
-    font-size: 24rpx;
-    color: #7a4a12;
-    line-height: 38rpx;
   }
 
   .reward-stats {
