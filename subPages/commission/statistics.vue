@@ -27,6 +27,7 @@
           <view class="stat-label">分佣订单</view>
         </view>
       </view>
+      <view class="withdraw-btn" v-if="canWithdraw" @click="openWithdraw">申请提现</view>
     </view>
 
     <!-- 推荐奖励区块 -->
@@ -119,6 +120,26 @@
       <view class="load-status" v-if="logLoading">加载中...</view>
       <view class="load-status" v-else-if="!hasMore">没有更多了</view>
     </view>
+
+    <!-- 申请提现弹窗 -->
+    <view class="withdraw-mask" v-if="showWithdraw" @click="closeWithdraw">
+      <view class="withdraw-dialog" @click.stop>
+        <view class="withdraw-title">申请提现</view>
+        <view class="withdraw-amount-row">
+          <text class="withdraw-symbol">￥</text>
+          <input class="withdraw-input" type="digit" v-model="withdrawAmount" disabled placeholder="提现金额为全部可提现金额" />
+        </view>
+        <view class="withdraw-tip">提现金额为全部可提现金额 ￥{{ overview.amount || '0.00' }}，提交后由管理员审核打款</view>
+        <view class="reward-rule-link" @click="goRuleDesc('withdraw')">
+          <text>查看提现规则说明</text>
+          <text class="iconfont icon-xiangyoujiantou"></text>
+        </view>
+        <view class="withdraw-actions">
+          <view class="withdraw-cancel" @click="closeWithdraw">取消</view>
+          <view class="withdraw-confirm" :class="{ 'withdraw-confirm-disabled': submitting }" @click="submitWithdraw">提交申请</view>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -149,10 +170,18 @@
         logList: [],
         page: 1,
         hasMore: true,
-        logLoading: false
+        logLoading: false,
+        // 申请提现
+        showWithdraw: false,
+        withdrawAmount: '',
+        submitting: false
       }
     },
     computed: {
+      // 有可提现金额时显示申请提现按钮
+      canWithdraw() {
+        return parseFloat(this.overview.amount || '0') > 0
+      },
       // 有启用中的推荐奖励方案时才展示活动规则与邀请入口
       showRules() {
         const reward = this.reward || {}
@@ -178,7 +207,7 @@
        * 获取佣金概览
        */
       getOverview() {
-        CommissionApi.overview()
+        return CommissionApi.overview()
           .then(result => {
             if (result.data) {
               this.overview = result.data
@@ -311,6 +340,51 @@
        */
       goRuleDesc(tab) {
         this.$navTo('subPages/commission/rules', tab ? { tab } : {})
+      },
+
+      /**
+       * 打开申请提现弹窗
+       */
+      openWithdraw() {
+        this.withdrawAmount = this.overview.amount || ''
+        this.showWithdraw = true
+      },
+
+      /**
+       * 关闭申请提现弹窗
+       */
+      closeWithdraw() {
+        this.showWithdraw = false
+      },
+
+      /**
+       * 提交提现申请（管理员审核后打款）
+       */
+      submitWithdraw() {
+        // 提现金额固定为全部可提现金额，不支持修改
+        const amount = parseFloat(this.overview.amount || '0')
+        if (!amount || amount <= 0) {
+          uni.showToast({ title: '暂无可提现金额', icon: 'none' })
+          return
+        }
+        if (this.submitting) {
+          return
+        }
+        this.submitting = true
+        CommissionApi.withdraw({ amount: amount.toFixed(2) })
+          .then((res) => {
+            this.showWithdraw = false
+            const repeated = res && res.data === false
+            const message = repeated ? '提现请求已经在审核中，请耐心等待' : '申请已提交，等待管理员审核'
+            // 先刷新数据再弹提示，避免加载动画覆盖toast
+            this.getOverview().finally(() => {
+              uni.showToast({ title: message, icon: 'none' })
+            })
+          })
+          .catch(() => {})
+          .finally(() => {
+            this.submitting = false
+          })
       }
     }
   }
@@ -377,6 +451,110 @@
     width: 1rpx;
     height: 40rpx;
     background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* 申请提现按钮 */
+  .withdraw-btn {
+    margin-top: 30rpx;
+    height: 72rpx;
+    line-height: 72rpx;
+    text-align: center;
+    background: #fff;
+    color: var(--theme-primary);
+    font-size: 28rpx;
+    font-weight: bold;
+    border-radius: 36rpx;
+  }
+
+  /* 申请提现弹窗 */
+  .withdraw-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .withdraw-dialog {
+    width: 560rpx;
+    background: #fff;
+    border-radius: 20rpx;
+    padding: 40rpx 36rpx 32rpx;
+  }
+
+  .withdraw-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 32rpx;
+  }
+
+  .withdraw-amount-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1rpx solid #eee;
+    padding-bottom: 12rpx;
+    margin-bottom: 16rpx;
+  }
+
+  .withdraw-symbol {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    margin-right: 8rpx;
+  }
+
+  .withdraw-input {
+    flex: 1;
+    font-size: 40rpx;
+    font-weight: bold;
+    color: #333;
+    height: 60rpx;
+    line-height: 60rpx;
+  }
+
+  .withdraw-tip {
+    font-size: 22rpx;
+    color: #999;
+    margin-bottom: 36rpx;
+  }
+
+  .withdraw-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .withdraw-cancel {
+    flex: 1;
+    height: 72rpx;
+    line-height: 72rpx;
+    text-align: center;
+    font-size: 28rpx;
+    color: #666;
+    background: #f5f5f5;
+    border-radius: 36rpx;
+    margin-right: 20rpx;
+  }
+
+  .withdraw-confirm {
+    flex: 1;
+    height: 72rpx;
+    line-height: 72rpx;
+    text-align: center;
+    font-size: 28rpx;
+    color: #fff;
+    background: var(--theme-primary);
+    border-radius: 36rpx;
+  }
+
+  .withdraw-confirm-disabled {
+    opacity: 0.6;
   }
 
   /* 推荐奖励区块 */

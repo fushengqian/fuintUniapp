@@ -58,12 +58,14 @@
       return {
         tabs: [
           { key: 'commission', name: '分佣提成' },
-          { key: 'recommend', name: '推荐奖励' }
+          { key: 'recommend', name: '推荐奖励' },
+          { key: 'withdraw', name: '提现规则' }
         ],
         activeTab: 'commission',
         ruleData: {
           commission: { sections: [], notes: [] },
-          recommend: { sections: [], notes: [] }
+          recommend: { sections: [], notes: [] },
+          withdraw: { sections: [], notes: [] }
         },
         loading: true
       }
@@ -112,7 +114,8 @@
             const data = result.data || {}
             this.ruleData = {
               commission: data.commission || { sections: [], notes: [] },
-              recommend: data.recommend || { sections: [], notes: [] }
+              recommend: data.recommend || { sections: [], notes: [] },
+              withdraw: data.withdraw || { sections: [], notes: [] }
             }
           })
           .catch(() => {})
